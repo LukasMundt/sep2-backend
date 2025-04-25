@@ -36,6 +36,7 @@ dependencies {
 sonar {
 	properties {
 		property("sonar.projectKey", "se2-backend")
+		property("sonar.projectName", "se2-backend")
 	}
 }
 
