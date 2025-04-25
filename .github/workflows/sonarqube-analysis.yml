@@ -1,4 +1,4 @@
-name: Build
+name: SonarQubeAnalysis
 
 on:
   pull_request:
