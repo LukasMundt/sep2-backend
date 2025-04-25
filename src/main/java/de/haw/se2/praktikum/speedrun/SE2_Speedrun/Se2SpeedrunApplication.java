@@ -9,5 +9,4 @@ public class Se2SpeedrunApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Se2SpeedrunApplication.class, args);
 	}
-
 }
