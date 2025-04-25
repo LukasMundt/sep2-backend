@@ -1,9 +1,13 @@
 name: Build
 
 on:
+  pull_request:
+    types:
+      - opened
+      - closed
   push:
-    branches:
-      - master
+    branches-ignore:
+      - main
 
 jobs:
   build:
