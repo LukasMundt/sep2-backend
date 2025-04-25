@@ -1,0 +1,12 @@
+{
+  "title": "SE2",
+  "version": "0.0.0",
+  "healthCheckPath": "/",
+  "httpPort": 80,
+  "addons": {
+    "localstorage": {},
+    "postgres": {}
+  },
+  "manifestVersion": 2,
+  "icon": "logo.png"
+}
