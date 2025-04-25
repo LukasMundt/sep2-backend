@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("org.sonarqube") version "6.1.0.5360"
 }
 
 group = "de.haw.se2.praktikum.speedrun"
@@ -29,6 +30,12 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "se2-backend")
+	}
 }
 
 tasks.withType<Test> {
