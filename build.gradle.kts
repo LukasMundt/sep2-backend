@@ -2,7 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.sonarqube") version "6.1.0.5360"
+	id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "de.haw.se2.praktikum.speedrun"
