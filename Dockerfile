@@ -25,6 +25,8 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
-ADD start.sh /app/pkg/
+ADD start.sh /app/code/
+# Ensure user can execute start.sh
+RUN chmod +x /app/code/start.sh
 
-CMD [ "/app/pkg/start.sh" ]
+CMD [ "/app/code/start.sh" ]
