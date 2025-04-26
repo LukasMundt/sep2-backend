@@ -38,5 +38,5 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://www.sonar.bennetkrzenzck.de #${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
         run: ./gradlew build sonar --info
