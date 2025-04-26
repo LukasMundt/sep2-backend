@@ -3,10 +3,10 @@ name: Docker Image CI Feature Branch
 on:
   push:
     branches-ignore:
-      - "master"
+      - "main"
   pull_request:
     branches-ignore:
-      - "master"
+      - "main"
 
 jobs:
   docker:
