@@ -1,0 +1,8 @@
+spring.application.name=SE2_Speedrun
+
+spring.datasource.url=jdbc:postgresql://${CLOUDRON_POSTGRESQL_HOST}:${CLOUDRON_POSTGRESQL_PORT}/${CLOUDRON_POSTGRESQL_DATABASE}
+spring.datasource.username=${CLOUDRON_POSTGRESQL_USERNAME}
+spring.datasource.password=${CLOUDRON_POSTGRESQL_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
