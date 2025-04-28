@@ -1,4 +1,4 @@
-package de.haw.se2.praktikum.speedrun.SE2_Speedrun;
+package de.haw.se2.praktikum.speedrun.se2_speedrun;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
