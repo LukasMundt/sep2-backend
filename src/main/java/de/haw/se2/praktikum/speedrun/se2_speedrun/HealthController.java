@@ -1,4 +1,4 @@
-package de.haw.se2.praktikum.speedrun.SE2_Speedrun;
+package de.haw.se2.praktikum.speedrun.se2_speedrun;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
