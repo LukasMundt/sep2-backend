@@ -11,11 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "our_users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Entity
 public class User {
 
@@ -37,6 +38,7 @@ public class User {
     @Email
     private String email;
 
+    @Column(name = "user_right")
     @Enumerated(EnumType.STRING)
     private Right right;
 }

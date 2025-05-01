@@ -17,9 +17,9 @@ public class LeaderboardEntry {
     @GeneratedValue
     private long id;
 
-    @Embedded
     @NonNull
     @NotNull
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @Embedded
