@@ -8,7 +8,6 @@ import lombok.*;
 import java.util.Date;
 
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,7 +17,7 @@ public class Leaderboard {
     @GeneratedValue
     private Long id;
 
-    @Embedded
+    @Enumerated(EnumType.STRING)
     @NonNull
     @NotNull
     private Category category;
