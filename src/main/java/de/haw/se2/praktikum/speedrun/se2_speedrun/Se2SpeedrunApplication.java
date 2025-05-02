@@ -2,7 +2,6 @@ package de.haw.se2.praktikum.speedrun.se2_speedrun;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class Se2SpeedrunApplication {
