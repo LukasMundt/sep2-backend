@@ -1,0 +1,34 @@
+name: Notify Jira on Branch Creation
+
+on:
+  create:
+    branches:
+      - '**'
+
+jobs:
+  notify-jira:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract branch name and generate subdomain
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          SAFE_BRANCH=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9-')
+          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "SUBDOMAIN=${SAFE_BRANCH}.backend.dev.${{ vars.ROOT_DOMAIN }}" >> $GITHUB_ENV
+
+      - name: Trigger Jira Automation Webhook
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Automation-Webhook-Token: ${{ secrets.JIRA_WEBHOOK_TOKEN }}" \
+            --data '{
+              "issues": ["${{env.BRANCH_NAME}}"],
+              "data": {
+                "backend_url": "https://${{env.SUBDOMAIN}}"
+              }
+            }' \
+            ${{ secrets.JIRA_WEBHOOK_URL }}
+        env:
+          JIRA_WEBHOOK_TOKEN: ${{ secrets.JIRA_WEBHOOK_TOKEN }}
+          JIRA_WEBHOOK_URL: ${{ secrets.JIRA_WEBHOOK_URL }}
