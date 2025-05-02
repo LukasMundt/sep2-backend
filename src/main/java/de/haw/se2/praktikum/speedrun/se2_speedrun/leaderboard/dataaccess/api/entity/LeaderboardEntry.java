@@ -3,6 +3,7 @@ package de.haw.se2.praktikum.speedrun.se2_speedrun.leaderboard.dataaccess.api.en
 import de.haw.se2.praktikum.speedrun.se2_speedrun.leaderboard.common.api.datatype.Runtime;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class LeaderboardEntry {
     @NonNull
     @NotNull
     @Temporal(TemporalType.DATE)
+    @Past
     private Date date;
 
     @Embedded
