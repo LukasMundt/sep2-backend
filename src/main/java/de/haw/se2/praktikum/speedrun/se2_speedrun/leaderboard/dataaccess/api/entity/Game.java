@@ -24,4 +24,12 @@ public class Game {
     @NotNull
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Leaderboard> leaderboards;
+
+    @NonNull
+    @NotNull
+    private String image_url;
+
+    @NonNull
+    @NotNull
+    private String slug;
 }
