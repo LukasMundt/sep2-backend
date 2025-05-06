@@ -27,7 +27,7 @@ public class Game {
 
     @NonNull
     @NotNull
-    private String image_url;
+    private String imageUrl;
 
     @NonNull
     @NotNull
