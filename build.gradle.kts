@@ -3,6 +3,10 @@ plugins {
 	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "4.4.1.3373"
+
+	//OpenApi
+	`java-library`
+	`maven-publish`
 }
 
 group = "de.haw.se2.praktikum.speedrun"
@@ -32,6 +36,18 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	//OpenApi
+	api("org.springframework.boot:spring-boot-starter-web")
+	api("org.springframework.data:spring-data-commons")
+	api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	api("com.google.code.findbugs:jsr305:3.0.2")
+	api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+	api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+	api("org.openapitools:jackson-databind-nullable:0.2.6")
+	api("org.springframework.boot:spring-boot-starter-validation")
+	api("com.fasterxml.jackson.core:jackson-databind")
+	//testImplementation("org.springframework.boot:spring.boot.starter.test")
 }
 
 sonar {
