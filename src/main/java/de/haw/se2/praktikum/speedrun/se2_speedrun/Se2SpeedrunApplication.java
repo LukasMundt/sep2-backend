@@ -7,7 +7,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
 
 @SpringBootApplication
 @ComponentScan(
-		basePackages = {"de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools", "de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.api" , "de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.configuration"},
+		basePackages = {"de.haw.se2.praktikum.speedrun"},
 		nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
 public class Se2SpeedrunApplication {
