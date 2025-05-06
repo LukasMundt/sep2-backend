@@ -1,0 +1,150 @@
+openapi: 3.0.4
+info:
+  title: Speedruns - OpenAPI 3.0
+  description: |-
+    Api für den vertikalen Prototypen
+  version: 0.0.2
+
+tags:
+  - name: leaderboard
+    description: All about the leaderboards
+
+
+paths:
+  /leaderboard/{game}/{category}:
+    get:
+      tags:
+        - leaderboard
+      summary: Get leaderboard by game and category.
+      description: Get leaderboard by game and category.
+      parameters:
+        - name: game 
+          in: path
+          description: the game of the leaderboard
+          required: true
+          schema:
+            type: string
+        - name: category 
+          in: path
+          description: the category of the leaderboard
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Leaderboard'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Leaderboard'
+        '404':
+          description: Game or category not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        name:
+          type: string
+          example: minecraft
+        image_url:
+          type: string
+        slug:
+          type: string
+          example: mncrf??
+        id:
+          type: integer
+          format: int64
+        leaderboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Leaderboard'
+      required:
+        - name
+        - image_url
+        - slug
+        - id
+    Leaderboard:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+        id:
+          type: integer
+          format: int64
+      required: 
+        - category
+        - id
+        
+    Entry:
+      type: object
+      properties:
+        speedrunner:
+          type: string
+          description:
+            name des Speedrunneraccounts, erstmal Platzhalter, später ist hier auch einen Enittät
+        date:
+          type: string
+          format: date-time
+        runtime: 
+          $ref: '#/components/schemas/Runtime'
+        id:
+          type: integer
+          format: int64
+      required:
+        - speedrunner
+        - date
+        - runtime
+        - id
+    
+    #Anderes
+    Category:
+      type: string
+      enum:
+        - ANY%
+        - ANY% GLITCHLESS
+        - ALL ARCHIEVMENTS
+        - ALL ADVANCEMENTS
+    Runtime:
+      type: object
+      properties:
+        hours:
+          type: integer
+        minutes:
+          type: integer
+        seconds:
+          type: integer
+        milliseconds:
+          type: integer
+      required:
+        - hours
+        - minutes
+        - seconds
+        - milliseconds
+      
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
