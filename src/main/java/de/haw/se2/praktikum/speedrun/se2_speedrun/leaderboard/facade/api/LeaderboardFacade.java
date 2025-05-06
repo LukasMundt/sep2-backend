@@ -3,8 +3,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.api;
+package de.haw.se2.praktikum.speedrun.se2_speedrun.leaderboard.facade.api;
 
+import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.api.ApiUtil;
 import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.Leaderboard;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
-import jakarta.validation.constraints.*;
 
 
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ import java.util.Optional;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "leaderboard", description = "All about the leaderboards")
-public interface LeaderboardApi {
+public interface LeaderboardFacade {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
