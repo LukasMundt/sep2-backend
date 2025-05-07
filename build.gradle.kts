@@ -44,7 +44,7 @@ dependencies {
 	//OpenApi
 	api("org.springframework.boot:spring-boot-starter-web")
 	api("org.springframework.data:spring-data-commons")
-	api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 	api("com.google.code.findbugs:jsr305:3.0.2")
 	api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 	api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
