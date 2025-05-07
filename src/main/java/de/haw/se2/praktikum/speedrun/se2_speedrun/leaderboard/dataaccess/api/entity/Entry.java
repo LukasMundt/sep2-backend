@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class LeaderboardEntry {
+public class Entry {
 
     @Id
     @GeneratedValue
@@ -30,6 +30,8 @@ public class LeaderboardEntry {
     @NotNull
     private Runtime runtime;
 
+    @NonNull
+    @NotNull
     @ManyToOne
     private Speedrunner speedrunner;
 }
