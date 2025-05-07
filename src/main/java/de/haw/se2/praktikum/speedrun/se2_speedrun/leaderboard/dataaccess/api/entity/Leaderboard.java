@@ -25,5 +25,5 @@ public class Leaderboard {
     @NonNull
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<LeaderboardEntry> entries;
+    private List<Entry> runs;
 }
