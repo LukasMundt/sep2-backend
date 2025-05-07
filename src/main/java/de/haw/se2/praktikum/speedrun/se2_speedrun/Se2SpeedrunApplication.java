@@ -6,10 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
 @SpringBootApplication
-@ComponentScan(
-		basePackages = {"de.haw.se2.praktikum.speedrun"},
-		nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
-)
 public class Se2SpeedrunApplication {
 
 	public static void main(String[] args) {
