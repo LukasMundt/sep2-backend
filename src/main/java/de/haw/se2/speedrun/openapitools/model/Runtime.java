@@ -1,17 +1,19 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.constraints.*;
-
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import jakarta.annotation.Generated;
+import lombok.Setter;
 
 /**
  * Runtime
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Setter
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Runtime {
 
   private Integer hours;
@@ -52,11 +54,7 @@ public class Runtime {
     return hours;
   }
 
-  public void setHours(Integer hours) {
-    this.hours = hours;
-  }
-
-  public Runtime minutes(Integer minutes) {
+    public Runtime minutes(Integer minutes) {
     this.minutes = minutes;
     return this;
   }
@@ -72,11 +70,7 @@ public class Runtime {
     return minutes;
   }
 
-  public void setMinutes(Integer minutes) {
-    this.minutes = minutes;
-  }
-
-  public Runtime seconds(Integer seconds) {
+    public Runtime seconds(Integer seconds) {
     this.seconds = seconds;
     return this;
   }
@@ -92,11 +86,7 @@ public class Runtime {
     return seconds;
   }
 
-  public void setSeconds(Integer seconds) {
-    this.seconds = seconds;
-  }
-
-  public Runtime milliseconds(Integer milliseconds) {
+    public Runtime milliseconds(Integer milliseconds) {
     this.milliseconds = milliseconds;
     return this;
   }
@@ -112,11 +102,7 @@ public class Runtime {
     return milliseconds;
   }
 
-  public void setMilliseconds(Integer milliseconds) {
-    this.milliseconds = milliseconds;
-  }
-
-  @Override
+    @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

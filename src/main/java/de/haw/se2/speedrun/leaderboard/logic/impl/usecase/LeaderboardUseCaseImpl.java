@@ -1,6 +1,5 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
-import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
@@ -34,7 +33,7 @@ public class LeaderboardUseCaseImpl implements LeaderboardUseCase {
                 .get()
                 .getLeaderboards()
                 .stream()
-                .filter(g -> g.getCategory().equals(Category.valueOf(category)))
+                .filter(g -> g.getCategory().equals(category))
                 .toList();
 
         if (categoryLeaderboards.isEmpty()) {

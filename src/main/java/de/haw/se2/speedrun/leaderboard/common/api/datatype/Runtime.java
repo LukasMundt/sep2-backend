@@ -8,9 +8,6 @@ import java.time.Duration;
 @Embeddable
 public record Runtime(Duration runDuration) {
 
-    public Runtime {
-    }
-
     public Runtime(int hour, int minute, int second, int millisecond) {
         this(Duration.ofHours(hour).plusMinutes(minute).plusSeconds(second).plusMillis(millisecond));
         if (hour < 0 || minute < 0 || minute > 59 || second < 0 || second > 59 || millisecond < 0 || millisecond > 999) {

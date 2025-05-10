@@ -1,23 +1,26 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+
 import jakarta.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
  * Gets or Sets Category
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public enum Category {
   
-  ANY_("ANY%"),
+  ANY_PERCENT("ANY_PERCENT"),
   
-  ANY_GLITCHLESS("ANY% GLITCHLESS"),
+  ANY_PERCENT_GLITCHLESS("ANY_PERCENT_GLITCHLESS"),
   
-  ALL_ARCHIEVMENTS("ALL ARCHIEVMENTS"),
+  ALL_ACHIEVEMENTS("ALL_ACHIEVEMENTS"),
   
-  ALL_ADVANCEMENTS("ALL ADVANCEMENTS");
+  ALL_ADVANCEMENTS("ALL_ADVANCEMENTS");
 
   private final String value;
 

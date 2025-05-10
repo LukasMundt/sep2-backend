@@ -1,30 +1,28 @@
 package de.haw.se2.speedrun.openapitools.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.OffsetDateTime;
-import java.util.Objects;
+import jakarta.annotation.Generated;
 
 /**
  * Entry
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Entry {
 
   private String speedrunner;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime date;
+  private Date date;
 
   private Runtime runtime;
-
-  private Long id;
 
   public Entry() {
     super();
@@ -33,11 +31,10 @@ public class Entry {
   /**
    * Constructor with only required parameters
    */
-  public Entry(String speedrunner, OffsetDateTime date, Runtime runtime, Long id) {
+  public Entry(String speedrunner, Date date, Runtime runtime) {
     this.speedrunner = speedrunner;
     this.date = date;
     this.runtime = runtime;
-    this.id = id;
   }
 
   public Entry speedrunner(String speedrunner) {
@@ -60,7 +57,7 @@ public class Entry {
     this.speedrunner = speedrunner;
   }
 
-  public Entry date(OffsetDateTime date) {
+  public Entry date(Date date) {
     this.date = date;
     return this;
   }
@@ -72,11 +69,11 @@ public class Entry {
   @NotNull @Valid 
   @Schema(name = "date", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("date")
-  public OffsetDateTime getDate() {
+  public Date getDate() {
     return date;
   }
 
-  public void setDate(OffsetDateTime date) {
+  public void setDate(Date date) {
     this.date = date;
   }
 
@@ -100,26 +97,6 @@ public class Entry {
     this.runtime = runtime;
   }
 
-  public Entry id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -131,13 +108,12 @@ public class Entry {
     Entry entry = (Entry) o;
     return Objects.equals(this.speedrunner, entry.speedrunner) &&
         Objects.equals(this.date, entry.date) &&
-        Objects.equals(this.runtime, entry.runtime) &&
-        Objects.equals(this.id, entry.id);
+        Objects.equals(this.runtime, entry.runtime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(speedrunner, date, runtime, id);
+    return Objects.hash(speedrunner, date, runtime);
   }
 
   @Override
@@ -147,7 +123,6 @@ public class Entry {
     sb.append("    speedrunner: ").append(toIndentedString(speedrunner)).append("\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    runtime: ").append(toIndentedString(runtime)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

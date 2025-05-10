@@ -1,20 +1,20 @@
 package de.haw.se2.speedrun.openapitools.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import jakarta.annotation.Generated;
 
 /**
  * Game
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Game {
 
   private String name;
@@ -22,8 +22,6 @@ public class Game {
   private String imageUrl;
 
   private String slug;
-
-  private Long id;
 
   @Valid
   private List<@Valid Leaderboard> leaderboards = new ArrayList<>();
@@ -35,11 +33,10 @@ public class Game {
   /**
    * Constructor with only required parameters
    */
-  public Game(String name, String imageUrl, String slug, Long id) {
+  public Game(String name, String imageUrl, String slug) {
     this.name = name;
     this.imageUrl = imageUrl;
     this.slug = slug;
-    this.id = id;
   }
 
   public Game name(String name) {
@@ -102,26 +99,6 @@ public class Game {
     this.slug = slug;
   }
 
-  public Game id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public Game leaderboards(List<@Valid Leaderboard> leaderboards) {
     this.leaderboards = leaderboards;
     return this;
@@ -162,13 +139,12 @@ public class Game {
     return Objects.equals(this.name, game.name) &&
         Objects.equals(this.imageUrl, game.imageUrl) &&
         Objects.equals(this.slug, game.slug) &&
-        Objects.equals(this.id, game.id) &&
         Objects.equals(this.leaderboards, game.leaderboards);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, imageUrl, slug, id, leaderboards);
+    return Objects.hash(name, imageUrl, slug, leaderboards);
   }
 
   @Override
@@ -178,7 +154,6 @@ public class Game {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    imageUrl: ").append(toIndentedString(imageUrl)).append("\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    leaderboards: ").append(toIndentedString(leaderboards)).append("\n");
     sb.append("}");
     return sb.toString();

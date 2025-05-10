@@ -1,28 +1,26 @@
 package de.haw.se2.speedrun.openapitools.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import jakarta.annotation.Generated;
 
 /**
  * Leaderboard
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Leaderboard {
 
   private Category category;
 
   @Valid
   private List<@Valid Entry> runs = new ArrayList<>();
-
-  private Long id;
 
   public Leaderboard() {
     super();
@@ -31,9 +29,8 @@ public class Leaderboard {
   /**
    * Constructor with only required parameters
    */
-  public Leaderboard(Category category, Long id) {
+  public Leaderboard(Category category) {
     this.category = category;
-    this.id = id;
   }
 
   public Leaderboard category(Category category) {
@@ -84,26 +81,6 @@ public class Leaderboard {
     this.runs = runs;
   }
 
-  public Leaderboard id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -114,13 +91,12 @@ public class Leaderboard {
     }
     Leaderboard leaderboard = (Leaderboard) o;
     return Objects.equals(this.category, leaderboard.category) &&
-        Objects.equals(this.runs, leaderboard.runs) &&
-        Objects.equals(this.id, leaderboard.id);
+        Objects.equals(this.runs, leaderboard.runs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(category, runs, id);
+    return Objects.hash(category, runs);
   }
 
   @Override
@@ -129,7 +105,6 @@ public class Leaderboard {
     sb.append("class Leaderboard {\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    runs: ").append(toIndentedString(runs)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
