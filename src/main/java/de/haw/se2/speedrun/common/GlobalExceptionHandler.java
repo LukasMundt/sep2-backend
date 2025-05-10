@@ -11,5 +11,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = EntityNotFoundException.class)
-    public void handleNotFoundException() {}
+    public void handleNotFoundException() {
+        //Empty for spring to use as an exception handler
+    }
 }

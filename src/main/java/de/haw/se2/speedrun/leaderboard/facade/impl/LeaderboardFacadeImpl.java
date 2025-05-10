@@ -1,6 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
-import de.haw.se2.speedrun.common.ModelMapper;
+import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.LeaderboardFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
 import de.haw.se2.speedrun.openapitools.model.Leaderboard;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LeaderboardFacadeImpl implements LeaderboardFacade {
 
     private final LeaderboardUseCase leaderboardUseCase;
-    private final ModelMapper mapper;
+    private final CustomizedModelMapper mapper;
 
     @Autowired
-    public LeaderboardFacadeImpl(LeaderboardUseCase leaderboardUseCase, ModelMapper mapper) {
+    public LeaderboardFacadeImpl(LeaderboardUseCase leaderboardUseCase, CustomizedModelMapper mapper) {
         this.leaderboardUseCase = leaderboardUseCase;
         this.mapper = mapper;
     }

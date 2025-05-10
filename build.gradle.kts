@@ -34,12 +34,12 @@ dependencies {
 	implementation("org.postgresql:postgresql:42.7.5")
 	implementation("org.jetbrains:annotations:26.0.2")
 	implementation("jakarta.validation:jakarta.validation-api:3.1.1")
+	implementation("org.modelmapper:modelmapper:3.2.3")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.h2database:h2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	implementation("org.modelmapper:modelmapper:3.2.3")
 
 	//OpenApi
 	api("org.springframework.boot:spring-boot-starter-web")

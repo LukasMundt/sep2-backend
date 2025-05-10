@@ -22,21 +22,30 @@ import java.util.Random;
 @RestController
 public class HealthController {
 
+    private final Random rng;
+
+    @Autowired
+    public HealthController(SpeedrunnerRepository speedrunnerRepository, GameRepository gameRepository,
+                            LeaderboardRepository leaderboardRepository, LeaderboardEntryRepository leaderboardEntryRepository) {
+        this.speedrunnerRepository = speedrunnerRepository;
+        this.gameRepository = gameRepository;
+        this.leaderboardRepository = leaderboardRepository;
+        this.leaderboardEntryRepository = leaderboardEntryRepository;
+        this.rng = new Random();
+    }
+
     @GetMapping("/up")
     public ResponseEntity<String> home() {
         return ResponseEntity.ok("OK");
     }
 
-    @Autowired
-    private LeaderboardEntryRepository leaderboardEntryRepository;
+    private final LeaderboardEntryRepository leaderboardEntryRepository;
 
-    @Autowired
-    private SpeedrunnerRepository speedrunnerRepository;
+    private final SpeedrunnerRepository speedrunnerRepository;
 
-    @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
-    @Autowired
+    final
     LeaderboardRepository leaderboardRepository;
 
     @GetMapping("/insertSampleData")
@@ -47,7 +56,6 @@ public class HealthController {
     }
 
     private Entry getEntry(){
-        Random rng = new Random();
         Entry entry = new Entry();
         entry.setDate(new Date());
         entry.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));

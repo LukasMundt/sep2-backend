@@ -7,8 +7,8 @@ import org.modelmapper.config.Configuration;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ModelMapper extends org.modelmapper.ModelMapper {
-    public ModelMapper() {
+public class CustomizedModelMapper extends org.modelmapper.ModelMapper {
+    public CustomizedModelMapper() {
         this.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
