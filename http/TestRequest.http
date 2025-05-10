@@ -1,0 +1,6 @@
+### GET request to example server
+GET http://localhost:8080/insertSampleData
+
+###
+
+GET http://localhost:8080/leaderboard/Minecraft/ANY_PERCENT
