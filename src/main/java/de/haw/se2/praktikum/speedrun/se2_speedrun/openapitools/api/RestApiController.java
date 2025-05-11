@@ -8,15 +8,15 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
-public class LeaderboardApiController implements LeaderboardApi {
+public class RestApiController implements RestApi {
 
     private final NativeWebRequest request;
 
     @Autowired
-    public LeaderboardApiController(NativeWebRequest request) {
+    public RestApiController(NativeWebRequest request) {
         this.request = request;
     }
 
