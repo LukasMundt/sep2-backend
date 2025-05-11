@@ -42,7 +42,7 @@ public class JwtUtil {
         try {
             parseClaims(token);
             Date expiration = parseDate(token);
-            if (expiration.after(new Date(System.currentTimeMillis()))) {
+            if (expiration.before(new Date(System.currentTimeMillis()))) {
                 return false;
             }
             return true;
