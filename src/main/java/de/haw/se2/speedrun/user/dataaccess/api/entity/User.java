@@ -38,4 +38,11 @@ public class User {
     @Column(name = "user_right")
     @Enumerated(EnumType.STRING)
     private Right right;
+
+    public String getRole() {
+        if (right == Right.ADMIN) {
+            return "ADMIN";
+        }
+        return "USER";
+    }
 }
