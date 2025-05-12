@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
-public class Entry {
+public class Run {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

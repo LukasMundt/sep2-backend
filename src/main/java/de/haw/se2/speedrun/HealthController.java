@@ -6,7 +6,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardEntryRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
@@ -27,11 +27,11 @@ public class HealthController {
 
     @Autowired
     public HealthController(SpeedrunnerRepository speedrunnerRepository, GameRepository gameRepository,
-                            LeaderboardRepository leaderboardRepository, LeaderboardEntryRepository leaderboardEntryRepository) {
+                            LeaderboardRepository leaderboardRepository, RunRepository runRepository) {
         this.speedrunnerRepository = speedrunnerRepository;
         this.gameRepository = gameRepository;
         this.leaderboardRepository = leaderboardRepository;
-        this.leaderboardEntryRepository = leaderboardEntryRepository;
+        this.runRepository = runRepository;
         this.rng = new Random();
     }
 
@@ -40,7 +40,7 @@ public class HealthController {
         return ResponseEntity.ok("OK");
     }
 
-    private final LeaderboardEntryRepository leaderboardEntryRepository;
+    private final RunRepository runRepository;
 
     private final SpeedrunnerRepository speedrunnerRepository;
 
@@ -61,7 +61,7 @@ public class HealthController {
         run.setDate(new Date());
         run.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
         run.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
-        leaderboardEntryRepository.save(run);
+        runRepository.save(run);
         return run;
     }
 
