@@ -21,7 +21,7 @@ public class Game {
 
     @NonNull
     @NotNull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Leaderboard> leaderboards;
 
     @NonNull
