@@ -61,6 +61,7 @@ public class HealthController {
         run.setDate(new Date());
         run.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
         run.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
+        run.setVerified(true);
         runRepository.save(run);
         return run;
     }

@@ -2,6 +2,7 @@ package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +23,7 @@ public class LeaderboardUseCaseImpl implements LeaderboardUseCase {
     }
 
     @Override
-    public Leaderboard getLeaderboard(String gameSlug, String categoryId) {
+    public List<Run> getVerifiedLeaderboardRuns(String gameSlug, String categoryId) {
         Optional<Game> leaderboardGame =  gameRepository.findBySlug(gameSlug);
 
         if (leaderboardGame.isEmpty()) {
@@ -40,6 +41,11 @@ public class LeaderboardUseCaseImpl implements LeaderboardUseCase {
             throw new EntityNotFoundException(categoryId);
         }
 
-        return categoryLeaderboards.getFirst();
+        return categoryLeaderboards
+                .getFirst()
+                .getRuns()
+                .stream()
+                .filter(Run::isVerified)
+                .toList();
     }
 }

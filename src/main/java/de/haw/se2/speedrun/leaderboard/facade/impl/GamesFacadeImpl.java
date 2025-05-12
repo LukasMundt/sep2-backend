@@ -1,7 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.facade.api.GamesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
@@ -53,13 +53,13 @@ public class GamesFacadeImpl implements GamesFacade {
 
     @Override
     public ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdLeaderboardGet(String gameSlug, String categoryId) {
-        Leaderboard leaderboard = leaderboardUseCase.getLeaderboard(gameSlug, categoryId);
+        List<Run> runs = leaderboardUseCase.getVerifiedLeaderboardRuns(gameSlug, categoryId);
 
-        List<RunDto> runs = leaderboard.getRuns()
+        List<RunDto> dto = runs
                 .stream()
-                .map(run -> mapper.map(run, RunDto.class))
+                .map(r -> mapper.map(r, RunDto.class))
                 .toList();
 
-        return new ResponseEntity<>(runs, HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

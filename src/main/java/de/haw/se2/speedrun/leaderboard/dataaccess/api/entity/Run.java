@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,8 +16,8 @@ import java.util.Date;
 public class Run {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NonNull
     @NotNull
@@ -33,4 +34,6 @@ public class Run {
     @NotNull
     @ManyToOne
     private Speedrunner speedrunner;
+
+    private boolean isVerified;
 }

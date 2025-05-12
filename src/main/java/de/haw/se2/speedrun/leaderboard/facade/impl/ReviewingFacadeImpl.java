@@ -1,7 +1,10 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
+import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,9 +16,25 @@ import java.util.List;
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
 public class ReviewingFacadeImpl implements ReviewingFacade {
 
+    private final RunReviewUseCase runReviewUseCase;
+    private final CustomizedModelMapper mapper;
+
+    @Autowired
+    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper customizedModelMapper) {
+        this.runReviewUseCase = runReviewUseCase;
+        this.mapper = customizedModelMapper;
+    }
+
     @Override
     public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedAllGet() {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        List<de.haw.se2.speedrun.leaderboard.common.api.datatype.RunReview> runReviews = runReviewUseCase.getUnreviewedRuns();
+
+        List<RunReview> runReviewDtos = runReviews
+                .stream()
+                .map(r -> mapper.map(r, RunReview.class))
+                .toList();
+
+        return new ResponseEntity<>(runReviewDtos, HttpStatus.OK);
     }
 
     @Override
