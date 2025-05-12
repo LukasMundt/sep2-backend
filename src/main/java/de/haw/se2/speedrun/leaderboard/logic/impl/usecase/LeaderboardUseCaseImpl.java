@@ -22,22 +22,22 @@ public class LeaderboardUseCaseImpl implements LeaderboardUseCase {
     }
 
     @Override
-    public Leaderboard getLeaderboard(String gameName, String category) {
-        Optional<Game> leaderboardGame =  gameRepository.findByName(gameName);
+    public Leaderboard getLeaderboard(String gameSlug, String categoryId) {
+        Optional<Game> leaderboardGame =  gameRepository.findBySlug(gameSlug);
 
         if (leaderboardGame.isEmpty()) {
-            throw new EntityNotFoundException(gameName);
+            throw new EntityNotFoundException(gameSlug);
         }
 
         List<Leaderboard> categoryLeaderboards =  leaderboardGame
                 .get()
                 .getLeaderboards()
                 .stream()
-                .filter(g -> g.getCategory().equals(category))
+                .filter(g -> g.getCategory().categoryId().equalsIgnoreCase(categoryId))
                 .toList();
 
         if (categoryLeaderboards.isEmpty()) {
-            throw new EntityNotFoundException(gameName);
+            throw new EntityNotFoundException(categoryId);
         }
 
         return categoryLeaderboards.getFirst();
