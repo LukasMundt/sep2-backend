@@ -3,8 +3,8 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.facade.api.RestApi;
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
 import de.haw.se2.speedrun.openapitools.model.Category;
 import de.haw.se2.speedrun.openapitools.model.GameDto;
@@ -16,29 +16,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
 public class LeaderboardFacadeImpl implements RestApi {
 
-    private final GameRepository gameRepository;
+    private final GameUseCase gameUseCase;
     private final LeaderboardUseCase leaderboardUseCase;
     private final CustomizedModelMapper mapper;
 
     @Autowired
-    public LeaderboardFacadeImpl(LeaderboardUseCase leaderboardUseCase, CustomizedModelMapper mapper, GameRepository gameRepository) {
+    public LeaderboardFacadeImpl(LeaderboardUseCase leaderboardUseCase, CustomizedModelMapper mapper, GameUseCase gameUseCase) {
         this.leaderboardUseCase = leaderboardUseCase;
         this.mapper = mapper;
-        this.gameRepository = gameRepository;
+        this.gameUseCase = gameUseCase;
     }
 
     @Override
     public ResponseEntity<List<GameDto>> restApiGamesAllGet() {
-        List<GameDto> gameDtos = gameRepository.findAll()
+        List<GameDto> gameDtos = gameUseCase.getAllGames()
                 .stream()
-                .map(g -> mapper.map(g, GameDto.class))
+                .map(gameDto -> mapper.map(gameDto, GameDto.class))
                 .toList();
 
         return new ResponseEntity<>(gameDtos, HttpStatus.OK);
@@ -46,6 +45,8 @@ public class LeaderboardFacadeImpl implements RestApi {
 
     @Override
     public ResponseEntity<List<Category>> restApiGamesGameSlugCategoriesGet(String gameSlug) {
+
+
         return new ResponseEntity<>(List.of(new Category()), HttpStatus.NOT_IMPLEMENTED);
     }
 
