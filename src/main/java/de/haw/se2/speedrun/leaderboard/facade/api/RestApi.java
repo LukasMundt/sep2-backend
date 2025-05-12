@@ -3,14 +3,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.api;
+package de.haw.se2.speedrun.leaderboard.facade.api;
 
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.Category;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.GameDto;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.RunDto;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.RunReview;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.TokenResponse;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.Credentials;
+import de.haw.se2.speedrun.openapitools.api.ApiUtil;
+import de.haw.se2.speedrun.openapitools.model.Category;
+import de.haw.se2.speedrun.openapitools.model.GameDto;
+import de.haw.se2.speedrun.openapitools.model.RunDto;
+import de.haw.se2.speedrun.openapitools.model.RunReview;
+import de.haw.se2.speedrun.openapitools.model.TokenResponse;
+import de.haw.se2.speedrun.openapitools.model.Credentials;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

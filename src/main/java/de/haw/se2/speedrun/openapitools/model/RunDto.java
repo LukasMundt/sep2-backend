@@ -1,34 +1,21 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
-import jakarta.validation.Valid;
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import jakarta.annotation.Generated;
-========
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.Objects;
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
 
 /**
  * RunDto
  */
 
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-08T16:37:51.806483709Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
-public class Entry {
-========
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class RunDto {
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
 
   private String speedrunner;
 
@@ -37,22 +24,14 @@ public class RunDto {
 
   private Runtime runtime;
 
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-  public Entry() {
-========
   public RunDto() {
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-  public Entry(String speedrunner, Date date, Runtime runtime) {
-========
   public RunDto(String speedrunner, Date date, Runtime runtime) {
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
     this.speedrunner = speedrunner;
     this.date = date;
     this.runtime = runtime;
@@ -67,7 +46,7 @@ public class RunDto {
    * Username of the speedrunner's account.
    * @return speedrunner
    */
-  @NotNull 
+  @NotNull
   @Schema(name = "speedrunner", description = "Username of the speedrunner's account.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("speedrunner")
   public String getSpeedrunner() {
@@ -78,11 +57,7 @@ public class RunDto {
     this.speedrunner = speedrunner;
   }
 
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-  public Entry date(Date date) {
-========
   public RunDto date(Date date) {
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
     this.date = date;
     return this;
   }
@@ -91,7 +66,7 @@ public class RunDto {
    * Get date
    * @return date
    */
-  @NotNull @Valid 
+  @NotNull @Valid
   @Schema(name = "date", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("date")
   public Date getDate() {
@@ -111,7 +86,7 @@ public class RunDto {
    * Get runtime
    * @return runtime
    */
-  @NotNull @Valid 
+  @NotNull @Valid
   @Schema(name = "runtime", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("runtime")
   public Runtime getRuntime() {
@@ -130,17 +105,10 @@ public class RunDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-<<<<<<<< HEAD:src/main/java/de/haw/se2/speedrun/openapitools/model/Entry.java
-    Entry entry = (Entry) o;
-    return Objects.equals(this.speedrunner, entry.speedrunner) &&
-        Objects.equals(this.date, entry.date) &&
-        Objects.equals(this.runtime, entry.runtime);
-========
     RunDto runDto = (RunDto) o;
     return Objects.equals(this.speedrunner, runDto.speedrunner) &&
-        Objects.equals(this.date, runDto.date) &&
-        Objects.equals(this.runtime, runDto.runtime);
->>>>>>>> SE2-22:src/main/java/de/haw/se2/speedrun/openapitools/model/RunDto.java
+            Objects.equals(this.date, runDto.date) &&
+            Objects.equals(this.runtime, runDto.runtime);
   }
 
   @Override
