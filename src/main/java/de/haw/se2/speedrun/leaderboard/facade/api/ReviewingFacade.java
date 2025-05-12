@@ -3,9 +3,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.api;
+package de.haw.se2.speedrun.leaderboard.facade.api;
 
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.RunReview;
+import de.haw.se2.speedrun.openapitools.api.ApiUtil;
+import de.haw.se2.speedrun.openapitools.model.RunReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,7 +32,7 @@ import java.util.Optional;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-12T11:35:57.825139837Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "reviewing", description = "Everything about the admin review process")
-public interface ReviewingApi {
+public interface ReviewingFacade {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
