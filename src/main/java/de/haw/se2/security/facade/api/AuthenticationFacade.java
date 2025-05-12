@@ -5,8 +5,9 @@
  */
 package de.haw.se2.security.facade.api;
 
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.Credentials;
-import de.haw.se2.praktikum.speedrun.se2_speedrun.openapitools.model.TokenResponse;
+import de.haw.se2.speedrun.openapitools.api.ApiUtil;
+import de.haw.se2.speedrun.openapitools.model.Credentials;
+import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
