@@ -12,3 +12,7 @@ GET http://localhost:8080/rest/api/games/all
 ### GET All categories of a game
 
 GET http://localhost:8080/rest/api/games/minecraft/categories
+
+### GET All unreviewed runs
+
+GET http://localhost:8080/rest/api/reviews/unreviewed/all
