@@ -1,5 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.dataaccess.api.entity;
 
+import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +18,11 @@ public class Leaderboard {
 
     @NonNull
     @NotNull
-    private String category;
+    @Embedded
+    private Category category;
 
     @NonNull
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Entry> runs;
+    private List<Run> runs;
 }
