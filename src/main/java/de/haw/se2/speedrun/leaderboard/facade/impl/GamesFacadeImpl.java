@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.facade.api.GamesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
@@ -43,9 +44,12 @@ public class GamesFacadeImpl implements GamesFacade {
 
     @Override
     public ResponseEntity<List<Category>> restApiGamesGameSlugCategoriesGet(String gameSlug) {
+        List<Category> categories = gameUseCase.getAllCategoriesOfGame(gameSlug)
+                .stream()
+                .map(c -> mapper.map(c, Category.class))
+                .toList();
 
-
-        return new ResponseEntity<>(List.of(new Category()), HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @Override

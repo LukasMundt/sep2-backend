@@ -8,3 +8,7 @@ GET http://localhost:8080/rest/api/games/minecraft/any_percent/leaderboard
 ### GET All Games
 
 GET http://localhost:8080/rest/api/games/all
+
+### GET All categories of a game
+
+GET http://localhost:8080/rest/api/games/minecraft/categories
