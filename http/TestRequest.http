@@ -3,4 +3,4 @@ GET http://localhost:8080/insertSampleData
 
 ###
 
-GET http://localhost:8080/leaderboard/Minecraft/ANY_PERCENT
+GET http://localhost:8080/rest/api/games/minecraft/any_percent/leaderboard
