@@ -1,7 +1,8 @@
 package de.haw.se2.speedrun;
 
+import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Entry;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
@@ -55,18 +56,18 @@ public class HealthController {
         return ResponseEntity.ok("OK");
     }
 
-    private Entry getEntry(){
-        Entry entry = new Entry();
-        entry.setDate(new Date());
-        entry.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
-        entry.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
-        leaderboardEntryRepository.save(entry);
-        return entry;
+    private Run getEntry(){
+        Run run = new Run();
+        run.setDate(new Date());
+        run.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
+        run.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
+        leaderboardEntryRepository.save(run);
+        return run;
     }
 
     private Leaderboard addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
-        leaderboard.setCategory("ANY_PERCENT");
+        leaderboard.setCategory(new Category("any_percent", "Any %"));
         leaderboard.setRuns(List.of(getEntry(), getEntry(), getEntry()));
         leaderboardRepository.save(leaderboard);
         return leaderboard;
