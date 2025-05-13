@@ -46,8 +46,7 @@ public class HealthController {
 
     private final GameRepository gameRepository;
 
-    final
-    LeaderboardRepository leaderboardRepository;
+    final LeaderboardRepository leaderboardRepository;
 
     @GetMapping("/insertSampleData")
     public ResponseEntity<String> test() {
@@ -61,7 +60,7 @@ public class HealthController {
         run.setDate(new Date());
         run.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
         run.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
-        run.setVerified(true);
+        run.setVerified(rng.nextDouble() < 0.7);
         runRepository.save(run);
         return run;
     }
@@ -69,7 +68,7 @@ public class HealthController {
     private Leaderboard addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category("any_percent", "Any %"));
-        leaderboard.setRuns(List.of(getEntry(), getEntry(), getEntry()));
+        leaderboard.setRuns(List.of(getEntry(), getEntry(), getEntry(), getEntry(), getEntry(), getEntry(), getEntry()));
         leaderboardRepository.save(leaderboard);
         return leaderboard;
     }

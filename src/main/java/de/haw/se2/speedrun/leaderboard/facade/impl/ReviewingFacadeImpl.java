@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
@@ -38,7 +39,8 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
     }
 
     @Override
-    public ResponseEntity<Void> restApiReviewsVerifyPost(String body){
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Void> restApiReviewsVerifyPost(String body) {
+        runReviewUseCase.verifyRun(UUID.fromString(body));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

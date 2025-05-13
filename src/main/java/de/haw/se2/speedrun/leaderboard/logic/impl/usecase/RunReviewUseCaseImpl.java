@@ -5,21 +5,28 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
     private final GameRepository gameRepository;
+    private final RunRepository runRepository;
 
     @Autowired
-    public RunReviewUseCaseImpl(GameRepository gameRepository) {
+    public RunReviewUseCaseImpl(GameRepository gameRepository, RunRepository runRepository) {
         this.gameRepository = gameRepository;
+        this.runRepository = runRepository;
     }
 
     @Override
@@ -50,5 +57,17 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
         }
 
         return runReviews;
+    }
+
+    @Transactional
+    @Override
+    public void verifyRun(UUID runId) {
+        Optional<Run> run = runRepository.getRunById(runId);
+
+        if(run.isEmpty()){
+            throw new EntityNotFoundException("Run with id " + runId + " not found");
+        }
+
+        run.get().setVerified(true);
     }
 }
