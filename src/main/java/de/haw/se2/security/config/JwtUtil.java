@@ -1,4 +1,4 @@
-package de.haw.se2.speedrun.security;
+package de.haw.se2.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

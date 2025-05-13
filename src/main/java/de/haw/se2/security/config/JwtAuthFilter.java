@@ -1,4 +1,4 @@
-package de.haw.se2.speedrun.security;
+package de.haw.se2.security.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

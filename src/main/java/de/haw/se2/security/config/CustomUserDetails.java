@@ -1,4 +1,4 @@
-package de.haw.se2.speedrun.security;
+package de.haw.se2.security.config;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

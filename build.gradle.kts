@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.jetbrains:annotations:26.0.2")
 	implementation("jakarta.validation:jakarta.validation-api:3.1.1")
 	implementation("org.modelmapper:modelmapper:3.2.3")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
