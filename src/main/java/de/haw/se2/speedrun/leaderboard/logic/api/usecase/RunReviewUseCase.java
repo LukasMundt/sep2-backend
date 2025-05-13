@@ -1,6 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.logic.api.usecase;
 
-import de.haw.se2.speedrun.leaderboard.common.api.datatype.RunReview;
+import de.haw.se2.speedrun.leaderboard.common.api.pojo.RunReview;
 
 import java.util.List;
 import java.util.UUID;

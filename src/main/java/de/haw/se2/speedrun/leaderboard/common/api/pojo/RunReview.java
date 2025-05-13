@@ -1,4 +1,4 @@
-package de.haw.se2.speedrun.leaderboard.common.api.datatype;
+package de.haw.se2.speedrun.leaderboard.common.api.pojo;
 
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import lombok.Data;

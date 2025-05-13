@@ -1,6 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
-import de.haw.se2.speedrun.leaderboard.common.api.datatype.RunReview;
+import de.haw.se2.speedrun.leaderboard.common.api.pojo.RunReview;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;

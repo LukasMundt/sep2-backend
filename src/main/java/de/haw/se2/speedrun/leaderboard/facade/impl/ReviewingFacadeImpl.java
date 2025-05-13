@@ -28,7 +28,7 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
 
     @Override
     public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedAllGet() {
-        List<de.haw.se2.speedrun.leaderboard.common.api.datatype.RunReview> runReviews = runReviewUseCase.getUnreviewedRuns();
+        List<de.haw.se2.speedrun.leaderboard.common.api.pojo.RunReview> runReviews = runReviewUseCase.getUnreviewedRuns();
 
         List<RunReview> runReviewDtos = runReviews
                 .stream()
