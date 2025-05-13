@@ -14,10 +14,14 @@ import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    @Autowired
-    private AdministratorRepository administratorRepository;
-    @Autowired
-    private SpeedrunnerRepository speedrunnerRepository;
+
+    private final AdministratorRepository administratorRepository;
+    private final SpeedrunnerRepository speedrunnerRepository;
+
+    public CustomUserDetailsService(AdministratorRepository administratorRepository, SpeedrunnerRepository speedrunnerRepository) {
+        this.administratorRepository = administratorRepository;
+        this.speedrunnerRepository = speedrunnerRepository;
+    }
 
 
     @Override
