@@ -11,6 +11,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @RestController
@@ -59,7 +61,14 @@ public class HealthController {
         Run run = new Run();
         run.setDate(new Date());
         run.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
-        run.setSpeedrunner(rng.nextDouble() > 0.5 ? speedrunnerRepository.findByUsername("Speedrunner 1").get() : speedrunnerRepository.findByUsername("Speedrunner 2").get());
+
+        Optional<Speedrunner> spr1 = speedrunnerRepository.findByUsername("Speedrunner 1");
+        Optional<Speedrunner> spr2 = speedrunnerRepository.findByUsername("Speedrunner 2");
+        if(spr1.isEmpty() || spr2.isEmpty()){
+            throw new EntityNotFoundException("Fetter fehler lol");
+        }
+
+        run.setSpeedrunner(rng.nextDouble() > 0.5 ? spr1.get() : spr2.get());
         run.setVerified(rng.nextDouble() < 0.7);
         runRepository.save(run);
         return run;
