@@ -65,7 +65,7 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
         Optional<Run> run = runRepository.getRunById(runId);
 
         if(run.isEmpty()){
-            throw new EntityNotFoundException("Run with id " + runId + " not found");
+            throw new EntityNotFoundException("Run with UUID " + runId + " not found");
         }
 
         run.get().setVerified(true);
