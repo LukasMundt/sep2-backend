@@ -50,7 +50,10 @@ public class SecurityConfig {
                 "/insertSampleData",
                         "/rest/api/games/*/*/leaderboard",
                         "/rest/api/games/all",
-                        "/rest/api/games/*/categories")
+                        "/rest/api/games/*/categories",
+                        "/swagger-ui/**",
+                        "/up",
+                        "/v3/api-docs*/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -62,8 +65,9 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin").hasAuthority("ADMIN")
-                        .requestMatchers("/user").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/rest/api/reviews/unreviewed/all").hasAuthority("ADMIN")
+                        .requestMatchers("/rest/api/reviews/verify").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/rest/auth").hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/token").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/token"))
