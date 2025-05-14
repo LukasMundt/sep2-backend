@@ -30,6 +30,8 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -46,14 +48,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
-        http.securityMatcher(
-                "/insertSampleData",
-                        "/rest/api/games/*/*/leaderboard",
-                        "/rest/api/games/all",
-                        "/rest/api/games/*/categories",
-                        "/swagger-ui/**",
-                        "/up",
-                        "/v3/api-docs*/**")
+        http.securityMatcher(getPublicMatchers())
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -121,5 +116,17 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
+    }
+
+    private static RequestMatcher getPublicMatchers() {
+        return new OrRequestMatcher(
+                new AntPathRequestMatcher("/insertSampleData"),
+                new AntPathRequestMatcher("/rest/api/games/*/*/leaderboard"),
+                new AntPathRequestMatcher("/rest/api/games/all"),
+                new AntPathRequestMatcher("/rest/api/games/*/categories"),
+                new AntPathRequestMatcher("/swagger-ui/**"),
+                new AntPathRequestMatcher("/up"),
+                new AntPathRequestMatcher("/v3/api-docs*/**")
+        );
     }
 }
