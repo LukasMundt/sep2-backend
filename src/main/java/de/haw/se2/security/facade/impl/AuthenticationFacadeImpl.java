@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-
 @RestController
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
 public class AuthenticationFacadeImpl implements AuthenticationFacade {

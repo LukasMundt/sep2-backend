@@ -51,7 +51,7 @@ public class HealthController {
     final LeaderboardRepository leaderboardRepository;
 
     @GetMapping("/insertSampleData")
-    public ResponseEntity<String> test() {
+    public ResponseEntity<String> insertSampleData() {
         addThreeUsers();
         addGames();
         return ResponseEntity.ok("OK");

@@ -40,6 +40,10 @@ import java.security.interfaces.RSAPublicKey;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
+    private static final String ADMIN_ROLE = "ADMIN";
+    private static final String USER_ROLE = "USER";
+
     @Value("${jwt.public.key}")
     private RSAPublicKey publicKey;
 
@@ -61,9 +65,10 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/rest/api/reviews/unreviewed/all").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/rest/api/reviews/verify").hasAuthority("ADMIN")
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/rest/api/reviews/unreviewed/all").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/rest/api/reviews/verify").hasAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/rest/auth").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth"))
@@ -82,11 +87,11 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(
                 User.withUsername("user")
                         .password(passwordEncoder().encode("123456789"))
-                        .authorities("USER")
+                        .authorities(USER_ROLE)
                         .build(),
                 User.withUsername("admin")
                         .password(passwordEncoder().encode("123456789"))
-                        .authorities("ADMIN")
+                        .authorities(ADMIN_ROLE)
                         .build()
         );
     }

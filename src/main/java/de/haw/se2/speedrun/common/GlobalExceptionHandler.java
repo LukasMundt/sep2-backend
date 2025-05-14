@@ -14,4 +14,10 @@ public class GlobalExceptionHandler {
     public void handleNotFoundException() {
         //Empty for spring to use as an exception handler
     }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = RuntimeException.class)
+    public void handleRuntimeException() {
+        //Empty for spring to use as an exception handler
+    }
 }
