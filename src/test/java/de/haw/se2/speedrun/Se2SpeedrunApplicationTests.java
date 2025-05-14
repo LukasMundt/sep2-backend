@@ -10,6 +10,7 @@ class Se2SpeedrunApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//Ensure, the spring application context loads correctly
 	}
 
 }
