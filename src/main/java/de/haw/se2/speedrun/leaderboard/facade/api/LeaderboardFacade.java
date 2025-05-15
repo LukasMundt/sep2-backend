@@ -7,12 +7,14 @@ package de.haw.se2.speedrun.leaderboard.facade.api;
 
 import de.haw.se2.speedrun.openapitools.api.ApiUtil;
 import de.haw.se2.speedrun.openapitools.model.Leaderboard;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
 
@@ -28,6 +30,11 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Optional;
 
+@OpenAPIDefinition(
+        servers = {
+                @Server(url = "https://vertikalerprototyp.backend.dev.lukas-mundt.de")
+        }
+)
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-06T09:14:52.282358031Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "leaderboard", description = "All about the leaderboards")
