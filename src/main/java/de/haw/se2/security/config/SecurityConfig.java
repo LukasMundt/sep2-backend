@@ -137,9 +137,10 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/rest/api/games/*/*/leaderboard"),
                 new AntPathRequestMatcher("/rest/api/games/all"),
                 new AntPathRequestMatcher("/rest/api/games/*/categories"),
-                new AntPathRequestMatcher("/swagger-ui/**"),
+                new AntPathRequestMatcher("/swagger-ui*/**"),
                 new AntPathRequestMatcher("/up"),
-                new AntPathRequestMatcher("/v3/api-docs*/**")
+                new AntPathRequestMatcher("/v3/api-docs*/**"),
+                new AntPathRequestMatcher("/")
         );
     }
 }
