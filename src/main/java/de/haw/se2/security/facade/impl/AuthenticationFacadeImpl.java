@@ -37,6 +37,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     @Override
     public ResponseEntity<Void> restAuthDelete() {
         //https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html#customizing-logout-uris
+
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
