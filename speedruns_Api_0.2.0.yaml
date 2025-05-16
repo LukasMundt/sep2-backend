@@ -391,14 +391,14 @@ components:
     Category:
       type: object
       properties:
-        id:
+        categoryId:
           type: string
           example: ANY_PERCENT
         label:
           type: string
           example: Any %
       required:
-        - id
+        - categoryId
         - label
         
     Runtime:

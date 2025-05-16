@@ -14,7 +14,7 @@ import java.util.Objects;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Category {
 
-  private String id;
+  private String categoryId;
 
   private String label;
 
@@ -25,13 +25,13 @@ public class Category {
   /**
    * Constructor with only required parameters
    */
-  public Category(String id, String label) {
-    this.id = id;
+  public Category(String categoryId, String label) {
+    this.categoryId = categoryId;
     this.label = label;
   }
 
-  public Category id(String id) {
-    this.id = id;
+  public Category id(String categoryId) {
+    this.categoryId = categoryId;
     return this;
   }
 
@@ -42,12 +42,12 @@ public class Category {
   @NotNull 
   @Schema(name = "id", example = "ANY_PERCENT", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
-  public String getId() {
-    return id;
+  public String getCategoryId() {
+    return categoryId;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setCategoryId(String categoryId) {
+    this.categoryId = categoryId;
   }
 
   public Category label(String label) {
@@ -79,20 +79,20 @@ public class Category {
       return false;
     }
     Category category = (Category) o;
-    return Objects.equals(this.id, category.id) &&
+    return Objects.equals(this.categoryId, category.categoryId) &&
         Objects.equals(this.label, category.label);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, label);
+    return Objects.hash(categoryId, label);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Category {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    id: ").append(toIndentedString(categoryId)).append("\n");
     sb.append("    label: ").append(toIndentedString(label)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -2,7 +2,7 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.CategoriesFacade;
-import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.CategoryUseCase;
 import de.haw.se2.speedrun.openapitools.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,17 +17,17 @@ import java.util.List;
 public class CategoriesFacadeImpl implements CategoriesFacade {
 
     private final CustomizedModelMapper mapper;
-    private final GameUseCase gameUseCase;
+    private final CategoryUseCase categoryUseCase;
 
     @Autowired
-    public CategoriesFacadeImpl(CustomizedModelMapper modelMapper, GameUseCase gameUseCase) {
+    public CategoriesFacadeImpl(CustomizedModelMapper modelMapper, CategoryUseCase categoryUseCase) {
         this.mapper = modelMapper;
-        this.gameUseCase = gameUseCase;
+        this.categoryUseCase = categoryUseCase;
     }
 
     @Override
     public ResponseEntity<List<Category>> restApiGamesGameSlugCategoriesGet(String gameSlug) {
-        List<Category> categories = gameUseCase.getAllCategoriesOfGame(gameSlug)
+        List<Category> categories = categoryUseCase.getCategories(gameSlug)
                 .stream()
                 .map(c -> mapper.map(c, Category.class))
                 .toList();
@@ -37,11 +37,16 @@ public class CategoriesFacadeImpl implements CategoriesFacade {
 
     @Override
     public ResponseEntity<Void> restApiGamesGameSlugCategoriesPost(String gameSlug, Category category) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        de.haw.se2.speedrun.leaderboard.common.api.datatype.Category convertedCategory = mapper.map(category, de.haw.se2.speedrun.leaderboard.common.api.datatype.Category.class);
+
+        categoryUseCase.addCategory(gameSlug, convertedCategory);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> restApiGamesGameSlugCategoryIdDelete(String gameSlug, String categoryId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        categoryUseCase.deleteCategory(gameSlug, categoryId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
