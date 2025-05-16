@@ -53,16 +53,6 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
 
-    public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
-        http.securityMatcher(getPublicMatchers())
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -161,25 +151,5 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
-    }
-
-    private static RequestMatcher getPublicMatchers() {
-        return new OrRequestMatcher(
-                new AntPathRequestMatcher("/insertSampleData"),
-                new AntPathRequestMatcher("/up"),
-
-                new AntPathRequestMatcher("/rest/api/games/*/*/leaderboard"),
-                new AntPathRequestMatcher("/rest/api/games/*/categories"),
-
-                new AntPathRequestMatcher("/rest/auth/register"),
-                new AntPathRequestMatcher("/rest/auth/login"),
-
-                new AntPathRequestMatcher("/rest/api/games/*"),
-                new AntPathRequestMatcher("/rest/api/games/all"),
-
-                new AntPathRequestMatcher("/swagger-ui*/**"),
-                new AntPathRequestMatcher("/v3/api-docs*/**"),
-                new AntPathRequestMatcher("/")
-        );
     }
 }
