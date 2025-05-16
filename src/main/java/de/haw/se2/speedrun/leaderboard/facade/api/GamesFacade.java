@@ -92,7 +92,7 @@ public interface GamesFacade {
         tags = { "games" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the GameDto for the given game slug.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = GameDto.class)))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = GameDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "Returned if the game slug were not found.")
         }
@@ -103,13 +103,13 @@ public interface GamesFacade {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<GameDto>> restApiGamesGameSlugGet(
+    default ResponseEntity<GameDto> restApiGamesGameSlugGet(
         @Parameter(name = "gameSlug", description = "", required = true, in = ParameterIn.PATH) @PathVariable("gameSlug") String gameSlug
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"imageUrl\" : \"imageUrl\", \"name\" : \"minecraft\", \"slug\" : \"slug\" }, { \"imageUrl\" : \"imageUrl\", \"name\" : \"minecraft\", \"slug\" : \"slug\" } ]";
+                    String exampleString = "{ \"imageUrl\" : \"imageUrl\", \"name\" : \"minecraft\", \"slug\" : \"slug\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
