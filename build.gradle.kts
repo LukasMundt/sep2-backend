@@ -27,20 +27,34 @@ configurations {
 repositories {
 	mavenCentral()
 }
+var postgresqlVersion = "42.7.5"
+var jetbrainsAnnotationsVersion = "26.0.2"
+var jakartaValidationVersion = "3.1.1"
+val modelMapperVersion = "3.2.3"
+val jsonWebTokenVersion = "0.11.5"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.postgresql:postgresql:42.7.5")
+	implementation("org.postgresql:postgresql:$postgresqlVersion")
+	implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+	implementation("jakarta.validation:jakarta.validation-api:$jakartaValidationVersion")
+	implementation("org.modelmapper:modelmapper:$modelMapperVersion")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("io.jsonwebtoken:jjwt-api:$jsonWebTokenVersion")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonWebTokenVersion")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jsonWebTokenVersion")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("com.h2database:h2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 	//OpenApi
 	api("org.springframework.boot:spring-boot-starter-web")
 	api("org.springframework.data:spring-data-commons")
-	api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	api("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 	api("com.google.code.findbugs:jsr305:3.0.2")
 	api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 	api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

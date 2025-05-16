@@ -6,3 +6,8 @@ spring.datasource.password=${CLOUDRON_POSTGRESQL_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+jwt.private.key=classpath:jwtKey.key
+jwt.public.key=classpath:jwtKey.pub
+
+logging.level.org.springframework.security=DEBUG

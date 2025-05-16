@@ -1,0 +1,25 @@
+### GET Insert example data
+GET http://localhost:8080/insertSampleData
+
+### GET Leaderboard of {game} minecraft and {category} kategorie
+
+GET http://localhost:8080/rest/api/games/minecraft/any_percent/leaderboard
+
+### GET All Games
+
+GET http://localhost:8080/rest/api/games/all
+
+### GET All categories of a game
+
+GET http://localhost:8080/rest/api/games/minecraft/categories
+
+### GET All unreviewed runs
+
+GET http://localhost:8080/rest/api/reviews/unreviewed/all
+
+### POST Set unreviewed run as reviewed. After that, the run should be viewable on the leaderboard
+
+POST http://localhost:8080/rest/api/reviews/verify
+Content-Type: application/json
+
+89c3f6c0-de6b-461b-8e73-2f02d5e3ef8c
