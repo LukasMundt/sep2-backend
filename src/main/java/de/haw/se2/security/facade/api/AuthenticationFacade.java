@@ -10,6 +10,7 @@ import de.haw.se2.speedrun.openapitools.model.Credentials;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,11 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import java.util.List;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-12T11:35:57.825139837Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
-@Tag(name = "authentication", description = "All about the authentication")
+@Tag(name = "authentication", description = "All about the authentication.")
 public interface AuthenticationFacade {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -38,43 +40,10 @@ public interface AuthenticationFacade {
     }
 
     /**
-     * DELETE /rest/auth : user logout
-     * Logs the current user out, destroying the existing token, if any.
-     *
-     * @return Returned if the user was successfully logged out. (status code 204)
-     *         or Returned if the caller is not authenticated. (status code 401)
-     */
-    @Operation(
-        operationId = "restAuthDelete",
-        summary = "user logout",
-        description = "Logs the current user out, destroying the existing token, if any.",
-        tags = { "authentication" },
-        responses = {
-            @ApiResponse(responseCode = "204", description = "Returned if the user was successfully logged out."),
-            @ApiResponse(responseCode = "401", description = "Returned if the caller is not authenticated.")
-        },
-        security = {
-            @SecurityRequirement(name = "bearerAuth")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/rest/auth"
-    )
-    
-    default ResponseEntity<Void> restAuthDelete(
-        
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
      * GET /rest/auth : user login info
      * Returns information about the currently authenticated user&#39;s token.
      *
-     * @return Returned if the caller is authenticated. (status code 200)
+     * @return Returns the authorities if the caller is authenticated. (status code 200)
      *         or Returned if the caller is not authenticated. (status code 401)
      */
     @Operation(
@@ -83,7 +52,9 @@ public interface AuthenticationFacade {
         description = "Returns information about the currently authenticated user's token.",
         tags = { "authentication" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Returned if the caller is authenticated."),
+            @ApiResponse(responseCode = "200", description = "Returns the authorities if the caller is authenticated.", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))
+            }),
             @ApiResponse(responseCode = "401", description = "Returned if the caller is not authenticated.")
         },
         security = {
@@ -92,19 +63,29 @@ public interface AuthenticationFacade {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/rest/auth"
+        value = "/rest/auth",
+        produces = { "application/json" }
     )
     
-    default ResponseEntity<Void> restAuthGet(
+    default ResponseEntity<List<String>> restAuthGet(
         
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ \"[\"Admin\",\"User\"]\", \"[\"Admin\",\"User\"]\" ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
 
     /**
-     * POST /rest/auth : user login
+     * POST /rest/auth/login : user login
      * Creates a new token for a user.
      *
      * @param credentials  (required)
@@ -112,7 +93,7 @@ public interface AuthenticationFacade {
      *         or Returned if the login fails due to invalid credentials. (status code 401)
      */
     @Operation(
-        operationId = "restAuthPost",
+        operationId = "restAuthLoginPost",
         summary = "user login",
         description = "Creates a new token for a user.",
         tags = { "authentication" },
@@ -125,23 +106,90 @@ public interface AuthenticationFacade {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/rest/auth",
+        value = "/rest/auth/login",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<TokenResponse> restAuthPost(
+    default ResponseEntity<TokenResponse> restAuthLoginPost(
         @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody Credentials credentials
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"access_token\" : \"access_token\", \"token_type\" : \"Bearer\", \"expires_in\" : 3600 }";
+                    String exampleString = "{ \"expiresIn\" : 3600, \"accessToken\" : \"accessToken\", \"tokenType\" : \"Bearer\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * POST /rest/auth/logout : user logout
+     * Logs the current user out, destroying the existing token, if any.
+     *
+     * @return Returned if the user was successfully logged out. (status code 200)
+     *         or Returned if the caller is not authenticated. (status code 401)
+     */
+    @Operation(
+        operationId = "restAuthLogoutPost",
+        summary = "user logout",
+        description = "Logs the current user out, destroying the existing token, if any.",
+        tags = { "authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Returned if the user was successfully logged out."),
+            @ApiResponse(responseCode = "401", description = "Returned if the caller is not authenticated.")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/rest/auth/logout"
+    )
+    
+    default ResponseEntity<Void> restAuthLogoutPost(
+        
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * POST /rest/auth/register : user registration
+     * Registers a new user in the system.
+     *
+     * @param credentials  (required)
+     * @return Returned if the user was successfully registered. (status code 200)
+     *         or Returned if the user is already registered. (status code 409)
+     *         or Returned if the password doesn’t fulfill the requirements. (status code 422)
+     */
+    @Operation(
+        operationId = "restAuthRegisterPost",
+        summary = "user registration",
+        description = "Registers a new user in the system.",
+        tags = { "authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Returned if the user was successfully registered."),
+            @ApiResponse(responseCode = "409", description = "Returned if the user is already registered."),
+            @ApiResponse(responseCode = "422", description = "Returned if the password doesn’t fulfill the requirements.")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/rest/auth/register",
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<Void> restAuthRegisterPost(
+        @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody Credentials credentials
+    ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

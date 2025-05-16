@@ -1,6 +1,5 @@
 package de.haw.se2.security.facade.impl;
 
-import de.haw.se2.security.facade.api.AuthenticationFacade;
 import de.haw.se2.speedrun.openapitools.model.Credentials;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,6 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
-import de.haw.se2.speedrun.leaderboard.facade.api.GamesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
 import de.haw.se2.speedrun.openapitools.model.Category;

@@ -6,9 +6,9 @@
 package de.haw.se2.speedrun.leaderboard.facade.api;
 
 import de.haw.se2.speedrun.openapitools.api.ApiUtil;
-import de.haw.se2.speedrun.openapitools.model.RunReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,10 +17,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
+import de.haw.se2.speedrun.openapitools.model.RunReview;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,9 +31,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-12T11:35:57.825139837Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
-@Tag(name = "reviewing", description = "Everything about the admin review process")
+@Tag(name = "reviewing", description = "All about the admin review process.")
 public interface ReviewingFacade {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -39,16 +41,18 @@ public interface ReviewingFacade {
     }
 
     /**
-     * GET /rest/api/reviews/unreviewed/all : Get a list of all unreviewed runs.
-     * Get a list of all unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.
+     * GET /rest/api/reviews/unreviewed/{gameSlug}/{categoryId} : Gets a list of unreviewed runs by game and category.
+     * Get a list of unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.
      *
+     * @param gameSlug  (required)
+     * @param categoryId the category of the leaderboard (required)
      * @return Returns a list of all unreviewed runs (status code 200)
      *         or Returned if the caller is not authenticated. (status code 401)
      */
     @Operation(
-        operationId = "restApiReviewsUnreviewedAllGet",
-        summary = "Get a list of all unreviewed runs.",
-        description = "Get a list of all unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.",
+        operationId = "restApiReviewsUnreviewedGameSlugCategoryIdGet",
+        summary = "Gets a list of unreviewed runs by game and category.",
+        description = "Get a list of unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.",
         tags = { "reviewing" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns a list of all unreviewed runs", content = {
@@ -62,12 +66,13 @@ public interface ReviewingFacade {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/rest/api/reviews/unreviewed/all",
+        value = "/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<RunReview>> restApiReviewsUnreviewedAllGet(
-        
+    default ResponseEntity<List<RunReview>> restApiReviewsUnreviewedGameSlugCategoryIdGet(
+        @Parameter(name = "gameSlug", description = "", required = true, in = ParameterIn.PATH) @PathVariable("gameSlug") String gameSlug,
+        @Parameter(name = "categoryId", description = "the category of the leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("categoryId") String categoryId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -84,7 +89,7 @@ public interface ReviewingFacade {
 
 
     /**
-     * POST /rest/api/reviews/verify : Verifies a unreviewed run.
+     * PATCH /rest/api/reviews/verify : Verifies a unreviewed run.
      * Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.
      *
      * @param body  (required)
@@ -93,7 +98,7 @@ public interface ReviewingFacade {
      *         or Returned if the uuid is not found. (status code 404)
      */
     @Operation(
-        operationId = "restApiReviewsVerifyPost",
+        operationId = "restApiReviewsVerifyPatch",
         summary = "Verifies a unreviewed run.",
         description = "Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.",
         tags = { "reviewing" },
@@ -107,12 +112,12 @@ public interface ReviewingFacade {
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
+        method = RequestMethod.PATCH,
         value = "/rest/api/reviews/verify",
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<Void> restApiReviewsVerifyPost(
+    default ResponseEntity<Void> restApiReviewsVerifyPatch(
         @Parameter(name = "body", description = "", required = true) @Valid @RequestBody String body
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);

@@ -3,8 +3,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package de.haw.se2.speedrun.openapitools.api;
+package de.haw.se2.speedrun.leaderboard.facade.api;
 
+import de.haw.se2.speedrun.openapitools.api.ApiUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,7 +34,7 @@ import java.util.Optional;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "runs", description = "All about the runs.")
-public interface RunsApi {
+public interface RunsFacade {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
