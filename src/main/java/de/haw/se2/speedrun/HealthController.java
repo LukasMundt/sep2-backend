@@ -86,7 +86,7 @@ public class HealthController {
         Game game1 = new Game();
         game1.setName("Minecraft");
         game1.setSlug("minecraft");
-        game1.setImageUrl("testurl");
+        game1.setImageUrl("/games/minecraft.avif");
         game1.setLeaderboards(List.of(addLeaderboards()));
         gameRepository.save(game1);
     }
