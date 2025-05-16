@@ -1,6 +1,5 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
-import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
@@ -18,12 +17,10 @@ import java.util.UUID;
 public class ReviewingFacadeImpl implements ReviewingFacade {
 
     private final RunReviewUseCase runReviewUseCase;
-    private final CustomizedModelMapper mapper;
 
     @Autowired
-    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper customizedModelMapper) {
+    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase) {
         this.runReviewUseCase = runReviewUseCase;
-        this.mapper = customizedModelMapper;
     }
 
     @Override

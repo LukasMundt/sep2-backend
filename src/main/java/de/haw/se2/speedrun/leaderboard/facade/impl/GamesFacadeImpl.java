@@ -1,13 +1,9 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.facade.api.GamesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
-import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
-import de.haw.se2.speedrun.openapitools.model.Category;
 import de.haw.se2.speedrun.openapitools.model.GameDto;
-import de.haw.se2.speedrun.openapitools.model.RunDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +17,10 @@ import java.util.List;
 public class GamesFacadeImpl implements GamesFacade {
 
     private final GameUseCase gameUseCase;
-    private final LeaderboardUseCase leaderboardUseCase;
     private final CustomizedModelMapper mapper;
 
     @Autowired
-    public GamesFacadeImpl(LeaderboardUseCase leaderboardUseCase, CustomizedModelMapper mapper, GameUseCase gameUseCase) {
-        this.leaderboardUseCase = leaderboardUseCase;
+    public GamesFacadeImpl(CustomizedModelMapper mapper, GameUseCase gameUseCase) {
         this.mapper = mapper;
         this.gameUseCase = gameUseCase;
     }
