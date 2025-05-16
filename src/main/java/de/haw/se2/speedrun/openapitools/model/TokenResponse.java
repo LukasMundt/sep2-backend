@@ -3,6 +3,7 @@ package de.haw.se2.speedrun.openapitools.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Generated;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Objects;
@@ -11,14 +12,25 @@ import java.util.Objects;
  * TokenResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class TokenResponse {
 
-  private @Nullable String accessToken;
+  private String accessToken;
 
   private @Nullable String tokenType;
 
   private @Nullable Integer expiresIn;
+
+  public TokenResponse() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public TokenResponse(String accessToken) {
+    this.accessToken = accessToken;
+  }
 
   public TokenResponse accessToken(String accessToken) {
     this.accessToken = accessToken;
@@ -29,9 +41,9 @@ public class TokenResponse {
    * Get accessToken
    * @return accessToken
    */
-  
-  @Schema(name = "access_token", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("access_token")
+  @NotNull 
+  @Schema(name = "accessToken", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("accessToken")
   public String getAccessToken() {
     return accessToken;
   }
@@ -50,8 +62,8 @@ public class TokenResponse {
    * @return tokenType
    */
   
-  @Schema(name = "token_type", example = "Bearer", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("token_type")
+  @Schema(name = "tokenType", example = "Bearer", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("tokenType")
   public String getTokenType() {
     return tokenType;
   }
@@ -70,8 +82,8 @@ public class TokenResponse {
    * @return expiresIn
    */
   
-  @Schema(name = "expires_in", example = "3600", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("expires_in")
+  @Schema(name = "expiresIn", example = "3600", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("expiresIn")
   public Integer getExpiresIn() {
     return expiresIn;
   }

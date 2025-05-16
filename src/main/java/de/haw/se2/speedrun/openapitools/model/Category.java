@@ -3,7 +3,7 @@ package de.haw.se2.speedrun.openapitools.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Generated;
-import org.springframework.lang.Nullable;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -11,12 +11,24 @@ import java.util.Objects;
  * Category
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class Category {
 
-  private @Nullable String id;
+  private String id;
 
-  private @Nullable String label;
+  private String label;
+
+  public Category() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public Category(String id, String label) {
+    this.id = id;
+    this.label = label;
+  }
 
   public Category id(String id) {
     this.id = id;
@@ -27,8 +39,8 @@ public class Category {
    * Get id
    * @return id
    */
-  
-  @Schema(name = "id", example = "ANY_PERCENT", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "id", example = "ANY_PERCENT", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
   public String getId() {
     return id;
@@ -47,8 +59,8 @@ public class Category {
    * Get label
    * @return label
    */
-  
-  @Schema(name = "label", example = "Any %", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "label", example = "Any %", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("label")
   public String getLabel() {
     return label;

@@ -14,7 +14,7 @@ import java.util.Objects;
  * RunDto
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class RunDto {
 
   private String speedrunner;
@@ -46,7 +46,7 @@ public class RunDto {
    * Username of the speedrunner's account.
    * @return speedrunner
    */
-  @NotNull
+  @NotNull 
   @Schema(name = "speedrunner", description = "Username of the speedrunner's account.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("speedrunner")
   public String getSpeedrunner() {
@@ -66,7 +66,7 @@ public class RunDto {
    * Get date
    * @return date
    */
-  @NotNull @Valid
+  @NotNull @Valid 
   @Schema(name = "date", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("date")
   public Date getDate() {
@@ -86,7 +86,7 @@ public class RunDto {
    * Get runtime
    * @return runtime
    */
-  @NotNull @Valid
+  @NotNull @Valid 
   @Schema(name = "runtime", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("runtime")
   public Runtime getRuntime() {
@@ -107,8 +107,8 @@ public class RunDto {
     }
     RunDto runDto = (RunDto) o;
     return Objects.equals(this.speedrunner, runDto.speedrunner) &&
-            Objects.equals(this.date, runDto.date) &&
-            Objects.equals(this.runtime, runDto.runtime);
+        Objects.equals(this.date, runDto.date) &&
+        Objects.equals(this.runtime, runDto.runtime);
   }
 
   @Override

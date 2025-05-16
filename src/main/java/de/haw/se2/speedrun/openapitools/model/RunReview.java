@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
-import org.springframework.lang.Nullable;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -12,16 +12,30 @@ import java.util.Objects;
  * RunReview
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-11T18:39:45.042073870Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class RunReview {
 
-  private @Nullable String gameName;
+  private String gameName;
 
-  private @Nullable String categoryLabel;
+  private String categoryLabel;
 
-  private @Nullable String uuid;
+  private String uuid;
 
-  private @Nullable RunDto run;
+  private RunDto run;
+
+  public RunReview() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public RunReview(String gameName, String categoryLabel, String uuid, RunDto run) {
+    this.gameName = gameName;
+    this.categoryLabel = categoryLabel;
+    this.uuid = uuid;
+    this.run = run;
+  }
 
   public RunReview gameName(String gameName) {
     this.gameName = gameName;
@@ -32,8 +46,8 @@ public class RunReview {
    * Get gameName
    * @return gameName
    */
-  
-  @Schema(name = "gameName", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "gameName", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("gameName")
   public String getGameName() {
     return gameName;
@@ -52,8 +66,8 @@ public class RunReview {
    * Get categoryLabel
    * @return categoryLabel
    */
-  
-  @Schema(name = "categoryLabel", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "categoryLabel", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("categoryLabel")
   public String getCategoryLabel() {
     return categoryLabel;
@@ -72,8 +86,8 @@ public class RunReview {
    * Get uuid
    * @return uuid
    */
-  
-  @Schema(name = "uuid", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "uuid", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("uuid")
   public String getUuid() {
     return uuid;
@@ -92,8 +106,8 @@ public class RunReview {
    * Get run
    * @return run
    */
-  @Valid 
-  @Schema(name = "run", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "run", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("run")
   public RunDto getRun() {
     return run;
