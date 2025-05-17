@@ -1,6 +1,8 @@
 package de.haw.se2.speedrun.common;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
+import de.haw.se2.speedrun.openapitools.model.RunDto;
 import org.modelmapper.Converter;
 import org.modelmapper.config.Configuration;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,12 @@ public class CustomizedModelMapper extends org.modelmapper.ModelMapper {
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
         configureRuntime();
+        configureSpeedrunner();
+    }
+
+    private void configureSpeedrunner() {
+        this.typeMap(Run.class, RunDto.class)
+                .addMapping(source -> source.getSpeedrunner().getUsername(), RunDto::setSpeedrunner);
     }
 
     private void configureRuntime(){
@@ -24,7 +32,14 @@ public class CustomizedModelMapper extends org.modelmapper.ModelMapper {
                 .milliseconds(context.getSource().runDuration().toMillisPart());
         };
 
+        Converter<de.haw.se2.speedrun.openapitools.model.Runtime, Runtime> runtimeConverterDto = context -> {
+            de.haw.se2.speedrun.openapitools.model.Runtime r = context.getSource();
+            return new Runtime(r.getHours(), r.getMinutes(), r.getSeconds(), r.getMilliseconds());
+        };
+
         this.createTypeMap(Runtime.class, de.haw.se2.speedrun.openapitools.model.Runtime.class)
                 .setConverter(runtimeToDtoConverter);
+        this.createTypeMap(de.haw.se2.speedrun.openapitools.model.Runtime.class, Runtime.class)
+                .setConverter(runtimeConverterDto);
     }
 }

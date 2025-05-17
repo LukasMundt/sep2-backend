@@ -1,5 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
+import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
@@ -17,15 +18,23 @@ import java.util.UUID;
 public class ReviewingFacadeImpl implements ReviewingFacade {
 
     private final RunReviewUseCase runReviewUseCase;
+    private final CustomizedModelMapper mapper;
 
     @Autowired
-    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase) {
+    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper mapper) {
         this.runReviewUseCase = runReviewUseCase;
+        this.mapper = mapper;
     }
 
     @Override
     public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedGameSlugCategoryIdGet(String gameSlug, String categoryId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        List<de.haw.se2.speedrun.leaderboard.common.api.pojo.RunReview> runs = runReviewUseCase.getUnreviewedRuns(gameSlug, categoryId);
+        List<RunReview> dtos = runs
+                .stream()
+                .map(run -> mapper.map(run, RunReview.class))
+                .toList();
+
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @Override

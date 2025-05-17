@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RunReviewUseCase {
-    List<RunReview> getUnreviewedRuns();
+    List<RunReview> getUnreviewedRuns(String gameSlug, String categoryId);
     void verifyRun(UUID runId);
 }

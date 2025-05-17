@@ -45,4 +45,9 @@ public class User {
         }
         return "USER";
     }
+
+    @Override
+    public String toString() {
+        return this.username;
+    }
 }
