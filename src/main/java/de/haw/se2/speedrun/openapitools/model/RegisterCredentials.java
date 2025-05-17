@@ -1,36 +1,39 @@
 package de.haw.se2.speedrun.openapitools.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Generated;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Objects;
 
 /**
- * Credentials
+ * RegisterCredentials
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
-public class Credentials {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-17T08:46:35.398598281Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+public class RegisterCredentials {
 
   private String username;
 
   private String password;
 
-  public Credentials() {
+  private String email;
+
+  public RegisterCredentials() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public Credentials(String username, String password) {
+  public RegisterCredentials(String username, String password, String email) {
     this.username = username;
     this.password = password;
+    this.email = email;
   }
 
-  public Credentials username(String username) {
+  public RegisterCredentials username(String username) {
     this.username = username;
     return this;
   }
@@ -39,7 +42,7 @@ public class Credentials {
    * Get username
    * @return username
    */
-  @NotNull 
+  @NotNull
   @Schema(name = "username", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("username")
   public String getUsername() {
@@ -50,7 +53,7 @@ public class Credentials {
     this.username = username;
   }
 
-  public Credentials password(String password) {
+  public RegisterCredentials password(String password) {
     this.password = password;
     return this;
   }
@@ -70,6 +73,26 @@ public class Credentials {
     this.password = password;
   }
 
+  public RegisterCredentials email(String email) {
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * Get email
+   * @return email
+   */
+  @NotNull 
+  @Schema(name = "email", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("email")
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -78,22 +101,24 @@ public class Credentials {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Credentials credentials = (Credentials) o;
-    return Objects.equals(this.username, credentials.username) &&
-        Objects.equals(this.password, credentials.password);
+    RegisterCredentials registerCredentials = (RegisterCredentials) o;
+    return Objects.equals(this.username, registerCredentials.username) &&
+        Objects.equals(this.password, registerCredentials.password) &&
+        Objects.equals(this.email, registerCredentials.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password);
+    return Objects.hash(username, password, email);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Credentials {\n");
+    sb.append("class RegisterCredentials {\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

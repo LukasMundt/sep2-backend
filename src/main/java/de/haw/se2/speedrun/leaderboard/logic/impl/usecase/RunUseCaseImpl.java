@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -91,11 +92,13 @@ public class RunUseCaseImpl implements RunUseCase {
         if(otherRunFromSpeedrunner.isEmpty()) {
             //Speedrunner never submitted a run before
             addRun(leaderboard.get(), speedrunner.get(), date, runtime);
-        } else if(otherRunFromSpeedrunner.get().getRuntime().runDuration().compareTo(runtime.runDuration()) < 0) {
+        } else if(otherRunFromSpeedrunner.get().getRuntime().runDuration().compareTo(runtime.runDuration()) > 0) {
             //Speedrunner has a run on this leaderboard, but the newly submitted time is faster
             //Remove old run and add the new run
             removeRun(leaderboard.get(), otherRunFromSpeedrunner.get());
             addRun(leaderboard.get(), speedrunner.get(), date, runtime);
+        } else {
+            throw new NotAcceptableStatusException("Speedrunner already has a faster time on the leaderboard!");
         }
     }
 

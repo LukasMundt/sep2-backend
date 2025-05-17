@@ -1,7 +1,8 @@
 package de.haw.se2.security.facade.impl;
 
 import de.haw.se2.security.facade.api.AuthenticationFacade;
-import de.haw.se2.speedrun.openapitools.model.Credentials;
+import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
+import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,8 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @Override
-    public ResponseEntity<TokenResponse> restAuthLoginPost(Credentials credentials) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
+    public ResponseEntity<TokenResponse> restAuthLoginPost(LoginCredentials credentials) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
 
         Instant now = Instant.now();
@@ -77,7 +78,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @Override
-    public ResponseEntity<Void> restAuthRegisterPost(Credentials credentials) {
+    public ResponseEntity<Void> restAuthRegisterPost(RegisterCredentials credentials) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }
