@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface GameUseCase {
     List<Game> getAllGames();
+    Game getGameBySlug(String gameSlug);
 }

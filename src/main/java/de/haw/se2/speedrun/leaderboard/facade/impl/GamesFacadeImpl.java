@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.facade.api.GamesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
 import de.haw.se2.speedrun.openapitools.model.GameDto;
@@ -37,6 +38,9 @@ public class GamesFacadeImpl implements GamesFacade {
 
     @Override
     public ResponseEntity<GameDto> restApiGamesGameSlugGet(String gameSlug) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Game game = gameUseCase.getGameBySlug(gameSlug);
+
+        GameDto gameDto = mapper.map(game, GameDto.class);
+        return new ResponseEntity<>(gameDto, HttpStatus.OK);
     }
 }
