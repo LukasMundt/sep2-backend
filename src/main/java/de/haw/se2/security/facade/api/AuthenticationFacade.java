@@ -6,7 +6,8 @@
 package de.haw.se2.security.facade.api;
 
 import de.haw.se2.speedrun.openapitools.api.ApiUtil;
-import de.haw.se2.speedrun.openapitools.model.Credentials;
+import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
+import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -112,7 +113,7 @@ public interface AuthenticationFacade {
     )
     
     default ResponseEntity<TokenResponse> restAuthLoginPost(
-        @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody Credentials credentials
+        @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody LoginCredentials credentials
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -188,7 +189,7 @@ public interface AuthenticationFacade {
     )
     
     default ResponseEntity<Void> restAuthRegisterPost(
-        @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody Credentials credentials
+        @Parameter(name = "Credentials", description = "", required = true) @Valid @RequestBody RegisterCredentials credentials
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

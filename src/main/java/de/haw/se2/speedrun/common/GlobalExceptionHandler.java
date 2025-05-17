@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = EntityExistsException.class)
     public void handleEntityExistsException() {
        // Empty for spring to use as an exception handler
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(value = NotAcceptableStatusException.class)
+    public void handleNotAcceptableStatusException() {
+        //Empty for spring to use as an exception handler
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

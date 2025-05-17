@@ -104,11 +104,11 @@ public class SecurityConfig {
     @Bean
     UserDetailsService users() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("user")
+                User.withUsername("user@user.de")
                         .password(passwordEncoder().encode("123456789"))
                         .authorities(USER_ROLE)
                         .build(),
-                User.withUsername("admin")
+                User.withUsername("admin@admin.de")
                         .password(passwordEncoder().encode("123456789"))
                         .authorities(ADMIN_ROLE)
                         .build()

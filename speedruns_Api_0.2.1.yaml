@@ -119,7 +119,9 @@ paths:
         '401':
           description: Returned if the caller is not authenticated.
         '404':
-          description: Returned if the game slug or category were not found.
+          description: Returned if the game slug, category or Speedrunner username were not found.
+        '406':
+          description: Returned if the speedrunner already has a faster run time on the leaderboard
         '422':
           description: Returned if the runtime doesn’t fulfill the requirements.
 
@@ -289,7 +291,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Credentials"
+              $ref: "#/components/schemas/LoginCredentials"
       responses:
         '200':
           description: Returns information about the caller's token if the caller is authenticated. 
@@ -323,7 +325,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Credentials"
+              $ref: "#/components/schemas/RegisterCredentials"
       responses:
         '200':
           description: Returned if the user was successfully registered.
@@ -431,19 +433,31 @@ components:
       required:
         - accessToken
         
-    Credentials:
+    RegisterCredentials:
       type: object
       properties:
         username:
           type: string
         password:
           type: string
+        email:
+          type: string
       required:
         - username
+        - password
+        - email
+    LoginCredentials:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
         - password
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-

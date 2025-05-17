@@ -1,9 +1,10 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
+import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.facade.api.RunsFacade;
-import de.haw.se2.speedrun.leaderboard.logic.api.usecase.LeaderboardUseCase;
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,29 +19,38 @@ import java.util.List;
 public class RunsFacadeImpl implements RunsFacade {
 
     private final CustomizedModelMapper mapper;
-    private final LeaderboardUseCase leaderboardUseCase;
+    private final RunUseCase runUseCase;
 
     @Autowired
-    public RunsFacadeImpl(CustomizedModelMapper mapper, LeaderboardUseCase leaderboardUseCase) {
+    public RunsFacadeImpl(CustomizedModelMapper mapper, RunUseCase runUseCase) {
         this.mapper = mapper;
-        this.leaderboardUseCase = leaderboardUseCase;
+        this.runUseCase = runUseCase;
     }
 
     @Override
     public ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdLeaderboardGet(String gameSlug, String categoryId) {
-        List<Run> runs = leaderboardUseCase.getVerifiedLeaderboardRuns(gameSlug, categoryId);
+        List<Run> runs = runUseCase.getVerifiedLeaderboardRuns(gameSlug, categoryId);
 
-        List<RunDto> dto = runs
+        List<RunDto> dtos = runs
                 .stream()
                 .map(r -> mapper.map(r, RunDto.class))
                 .toList();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunDto runDto) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Runtime runtime = new Runtime(
+                runDto.getRuntime().getHours(),
+                runDto.getRuntime().getMinutes(),
+                runDto.getRuntime().getSeconds(),
+                runDto.getRuntime().getMilliseconds()
+        );
+
+        runUseCase.addUnverifiedRun(gameSlug, categoryId, runDto.getSpeedrunner(), runDto.getDate(), runtime);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
