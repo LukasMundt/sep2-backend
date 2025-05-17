@@ -6,9 +6,6 @@
 package de.haw.se2.speedrun.leaderboard.facade.api;
 
 import de.haw.se2.speedrun.openapitools.api.ApiUtil;
-import de.haw.se2.speedrun.openapitools.model.Category;
-import de.haw.se2.speedrun.openapitools.model.GameDto;
-import de.haw.se2.speedrun.openapitools.model.RunDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -18,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
+import de.haw.se2.speedrun.openapitools.model.GameDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +28,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-12T11:35:57.825139837Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-16T13:03:18.760533262Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
-@Tag(name = "games", description = "All about the games")
+@Tag(name = "games", description = "All about the games.")
 public interface GamesFacade {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -80,83 +78,38 @@ public interface GamesFacade {
 
 
     /**
-     * GET /rest/api/games/{gameSlug}/categories : Get available categories by game.
-     * Get available categories by game.
+     * GET /rest/api/games/{gameSlug} : Get game by game slug.
+     * Get game by game slug.
      *
      * @param gameSlug  (required)
-     * @return Returns all available categories for the given game. (status code 200)
-     *         or Returned if the game were not found. (status code 404)
+     * @return Returns the GameDto for the given game slug. (status code 200)
+     *         or Returned if the game slug were not found. (status code 404)
      */
     @Operation(
-        operationId = "restApiGamesGameSlugCategoriesGet",
-        summary = "Get available categories by game.",
-        description = "Get available categories by game.",
+        operationId = "restApiGamesGameSlugGet",
+        summary = "Get game by game slug.",
+        description = "Get game by game slug.",
         tags = { "games" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Returns all available categories for the given game.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Category.class)))
+            @ApiResponse(responseCode = "200", description = "Returns the GameDto for the given game slug.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = GameDto.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Returned if the game were not found.")
+            @ApiResponse(responseCode = "404", description = "Returned if the game slug were not found.")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/rest/api/games/{gameSlug}/categories",
+        value = "/rest/api/games/{gameSlug}",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<Category>> restApiGamesGameSlugCategoriesGet(
+    default ResponseEntity<GameDto> restApiGamesGameSlugGet(
         @Parameter(name = "gameSlug", description = "", required = true, in = ParameterIn.PATH) @PathVariable("gameSlug") String gameSlug
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"id\" : \"ANY_PERCENT\", \"label\" : \"Any %\" }, { \"id\" : \"ANY_PERCENT\", \"label\" : \"Any %\" } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /rest/api/games/{gameSlug}/{categoryId}/leaderboard : Get leaderboard by game and category.
-     * Get leaderboard by game and category.
-     *
-     * @param gameSlug the game of the leaderboard (required)
-     * @param categoryId the category of the leaderboard (required)
-     * @return Returns a list of runs that are representing the leaderboard. (status code 200)
-     *         or Returned if the game or category were not found. (status code 404)
-     */
-    @Operation(
-        operationId = "restApiGamesGameSlugCategoryIdLeaderboardGet",
-        summary = "Get leaderboard by game and category.",
-        description = "Get leaderboard by game and category.",
-        tags = { "games" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Returns a list of runs that are representing the leaderboard.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = RunDto.class)))
-            }),
-            @ApiResponse(responseCode = "404", description = "Returned if the game or category were not found.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/rest/api/games/{gameSlug}/{categoryId}/leaderboard",
-        produces = { "application/json" }
-    )
-    
-    default ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdLeaderboardGet(
-        @Parameter(name = "gameSlug", description = "the game of the leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("gameSlug") String gameSlug,
-        @Parameter(name = "categoryId", description = "the category of the leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("categoryId") String categoryId
-    ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } }, { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } } ]";
+                    String exampleString = "{ \"imageUrl\" : \"imageUrl\", \"name\" : \"minecraft\", \"slug\" : \"slug\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

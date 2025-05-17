@@ -50,7 +50,7 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
                     runReview.setRun(run);
                     runReview.setUuid(run.getId());
                     runReview.setGameName(game.getName());
-                    runReview.setCategoryLabel(leaderboard.getCategory().label());
+                    runReview.setCategoryLabel(leaderboard.getCategory().getLabel());
                     runReviews.add(runReview);
                 }
             }

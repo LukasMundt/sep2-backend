@@ -35,19 +35,19 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @Override
-    public ResponseEntity<Void> restAuthDelete() {
+    public ResponseEntity<Void> restAuthLogoutPost() {
         //https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html#customizing-logout-uris
 
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
-    public ResponseEntity<Void> restAuthGet(){
+    public ResponseEntity<List<String>> restAuthGet(){
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
-    public ResponseEntity<TokenResponse> restAuthPost(Credentials credentials) {
+    public ResponseEntity<TokenResponse> restAuthLoginPost(Credentials credentials) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
 
@@ -74,5 +74,10 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
         tokenResponse.setTokenType("Bearer");
 
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> restAuthRegisterPost(Credentials credentials) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

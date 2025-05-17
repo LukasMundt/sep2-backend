@@ -1,6 +1,5 @@
 package de.haw.se2.speedrun.leaderboard.facade.impl;
 
-import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
@@ -18,28 +17,19 @@ import java.util.UUID;
 public class ReviewingFacadeImpl implements ReviewingFacade {
 
     private final RunReviewUseCase runReviewUseCase;
-    private final CustomizedModelMapper mapper;
 
     @Autowired
-    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper customizedModelMapper) {
+    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase) {
         this.runReviewUseCase = runReviewUseCase;
-        this.mapper = customizedModelMapper;
     }
 
     @Override
-    public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedAllGet() {
-        List<de.haw.se2.speedrun.leaderboard.common.api.pojo.RunReview> runReviews = runReviewUseCase.getUnreviewedRuns();
-
-        List<RunReview> runReviewDtos = runReviews
-                .stream()
-                .map(r -> mapper.map(r, RunReview.class))
-                .toList();
-
-        return new ResponseEntity<>(runReviewDtos, HttpStatus.OK);
+    public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedGameSlugCategoryIdGet(String gameSlug, String categoryId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
-    public ResponseEntity<Void> restApiReviewsVerifyPost(String body) {
+    public ResponseEntity<Void> restApiReviewsVerifyPatch(String body) {
         runReviewUseCase.verifyRun(UUID.fromString(body));
         return new ResponseEntity<>(HttpStatus.OK);
     }

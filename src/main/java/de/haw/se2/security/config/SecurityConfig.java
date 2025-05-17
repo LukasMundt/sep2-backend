@@ -9,7 +9,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -32,9 +31,6 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -53,33 +49,54 @@ public class SecurityConfig {
     private RSAPrivateKey privateKey;
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
-        http.securityMatcher(getPublicMatchers())
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/rest/api/reviews/unreviewed/all").hasAuthority(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.POST, "/rest/api/reviews/verify").hasAuthority(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.POST, "/rest/auth").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth"))
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/insertSampleData",
+                                "/up",
+                                "/rest/api/games/*/categories",
+                                "/rest/api/games/*/*/leaderboard",
+                                "/rest/auth/register",
+                                "/rest/auth/login",
+                                "/rest/api/games/*",
+                                "/rest/api/games/all",
+                                "/swagger-ui*/**",
+                                "/v3/api-docs*/**",
+                                "/"
+                        ).permitAll()
+
+                        //User access
+                        .requestMatchers("/rest/api/games/*/*/submit").hasAuthority(USER_ROLE)
+                        .requestMatchers("/rest/auth", "/rest/auth/logout").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
+
+                        //Admin access
+                        .requestMatchers("/rest/api/reviews/verify").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers("/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/rest/api/games/*/categories").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers("/rest/api/games/*/categories/*").hasAuthority(ADMIN_ROLE)
+
+                        // ab in die firewall mit dem rest alla
+                        .anyRequest().authenticated()
+                )
+
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth/login"))
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+
+                .formLogin(AbstractHttpConfigurer::disable)
+
+                .httpBasic(Customizer.withDefaults())
+
+                .oauth2ResourceServer(oauth -> oauth
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                )
+
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                );
+
 
         return http.build();
     }
@@ -129,18 +146,5 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
-    }
-
-    private static RequestMatcher getPublicMatchers() {
-        return new OrRequestMatcher(
-                new AntPathRequestMatcher("/insertSampleData"),
-                new AntPathRequestMatcher("/rest/api/games/*/*/leaderboard"),
-                new AntPathRequestMatcher("/rest/api/games/all"),
-                new AntPathRequestMatcher("/rest/api/games/*/categories"),
-                new AntPathRequestMatcher("/swagger-ui*/**"),
-                new AntPathRequestMatcher("/up"),
-                new AntPathRequestMatcher("/v3/api-docs*/**"),
-                new AntPathRequestMatcher("/")
-        );
     }
 }

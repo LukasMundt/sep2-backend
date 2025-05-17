@@ -34,7 +34,7 @@ public class LeaderboardUseCaseImpl implements LeaderboardUseCase {
                 .get()
                 .getLeaderboards()
                 .stream()
-                .filter(g -> g.getCategory().categoryId().equalsIgnoreCase(categoryId))
+                .filter(g -> g.getCategory().getCategoryId().equalsIgnoreCase(categoryId))
                 .toList();
 
         if (categoryLeaderboards.isEmpty()) {
