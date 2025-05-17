@@ -41,12 +41,7 @@ public class RunsFacadeImpl implements RunsFacade {
 
     @Override
     public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunDto runDto) {
-        Runtime runtime = new Runtime(
-                runDto.getRuntime().getHours(),
-                runDto.getRuntime().getMinutes(),
-                runDto.getRuntime().getSeconds(),
-                runDto.getRuntime().getMilliseconds()
-        );
+        Runtime runtime = mapper.map(runDto.getRuntime(), Runtime.class);
 
         runUseCase.addUnverifiedRun(gameSlug, categoryId, runDto.getSpeedrunner(), runDto.getDate(), runtime);
 

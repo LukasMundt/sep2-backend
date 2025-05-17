@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,33 +29,36 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
     }
 
     @Override
-    public List<RunReview> getUnreviewedRuns() {
-        List<Game> games = gameRepository.findAll();
-
-        List<RunReview> runReviews = new ArrayList<>();
-
-        for(Game game : games) {
-            List<Leaderboard> leaderboards = game.getLeaderboards();
-
-            for(Leaderboard leaderboard : leaderboards) {
-                List<Run> unverifiedRuns = leaderboard
-                        .getRuns()
-                        .stream()
-                        .filter(r -> !r.isVerified())
-                        .toList();
-
-                for(Run run : unverifiedRuns) {
-                    RunReview runReview = new RunReview();
-                    runReview.setRun(run);
-                    runReview.setUuid(run.getId());
-                    runReview.setGameName(game.getName());
-                    runReview.setCategoryLabel(leaderboard.getCategory().getLabel());
-                    runReviews.add(runReview);
-                }
-            }
+    public List<RunReview> getUnreviewedRuns(String gameSlug, String categoryId) {
+        Optional<Game> game = gameRepository.findBySlug(gameSlug);
+        if (game.isEmpty()){
+            throw new EntityNotFoundException(String.format("Game '%s' not found", gameSlug));
         }
 
-        return runReviews;
+        Optional<Leaderboard> leaderboard = game.get()
+                .getLeaderboards()
+                .stream()
+                .filter(l -> l.getCategory()
+                        .getCategoryId()
+                        .equalsIgnoreCase(categoryId))
+                .findFirst();
+
+        if(leaderboard.isEmpty()){
+            throw new EntityNotFoundException(String.format("Leaderboard of category '%s' not found", categoryId));
+        }
+
+        return leaderboard.get()
+                .getRuns()
+                .stream()
+                .filter(r -> !r.isVerified())
+                .map(r -> {
+                    RunReview runReview = new RunReview();
+                    runReview.setRun(r);
+                    runReview.setUuid(r.getId());
+                    runReview.setGameName(gameSlug);
+                    runReview.setCategoryLabel(categoryId);
+                    return runReview;
+                }).toList();
     }
 
     @Transactional
@@ -68,6 +70,7 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
             throw new EntityNotFoundException("Run with UUID " + runId + " not found");
         }
 
-        run.get().setVerified(true);
+        run.get()
+                .setVerified(true);
     }
 }
