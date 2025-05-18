@@ -1,7 +1,6 @@
 package de.haw.se2.security.common.pojo;
 
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
-import jakarta.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

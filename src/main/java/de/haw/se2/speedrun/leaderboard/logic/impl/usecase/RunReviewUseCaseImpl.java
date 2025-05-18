@@ -33,25 +33,10 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
     @Override
     public List<RunReview> getUnreviewedRuns(String gameSlug, String categoryId) {
-        Optional<Game> game = gameRepository.findBySlug(gameSlug);
-        if (game.isEmpty()){
-            throw new EntityNotFoundException(String.format("Game '%s' not found", gameSlug));
-        }
+        Game game = getGame(gameSlug);
+        Leaderboard leaderboard = getLeaderboard(game, categoryId);
 
-        Optional<Leaderboard> leaderboard = game.get()
-                .getLeaderboards()
-                .stream()
-                .filter(l -> l.getCategory()
-                        .getCategoryId()
-                        .equalsIgnoreCase(categoryId))
-                .findFirst();
-
-        if(leaderboard.isEmpty()){
-            throw new EntityNotFoundException(String.format("Leaderboard of category '%s' not found", categoryId));
-        }
-
-        return leaderboard.get()
-                .getRuns()
+        return leaderboard.getRuns()
                 .stream()
                 .filter(r -> !r.isVerified())
                 .map(r -> {
@@ -67,29 +52,64 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
     @Transactional
     @Override
     public void verifyRun(UUID runId) {
+        Run run = getRun(runId);
+        Leaderboard leaderboard = getLeaderboardByRun(run);
+
+        Optional<Run> previousRunToDelete = leaderboard
+                .getRuns()
+                .stream()
+                .filter(r -> r.getSpeedrunner()
+                        .getId()
+                        .equals(run.getSpeedrunner().getId())
+                        &&
+                        r.isVerified())
+                .findFirst();
+
+        previousRunToDelete.ifPresent(previousRun -> leaderboard.getRuns().remove(previousRun));
+
+        run.setVerified(true);
+    }
+
+    private Game getGame(String gameSlug) {
+        Optional<Game> game = gameRepository.findBySlug(gameSlug);
+        if (game.isEmpty()){
+            throw new EntityNotFoundException(String.format("Game '%s' not found", gameSlug));
+        }
+
+        return game.get();
+    }
+
+    private Leaderboard getLeaderboard(Game game, String categoryId) {
+        Optional<Leaderboard> leaderboard = game.getLeaderboards()
+                .stream()
+                .filter(l -> l.getCategory()
+                        .getCategoryId()
+                        .equalsIgnoreCase(categoryId))
+                .findFirst();
+
+        if(leaderboard.isEmpty()){
+            throw new EntityNotFoundException(String.format("Leaderboard of category '%s' not found", categoryId));
+        }
+
+        return leaderboard.get();
+    }
+
+    private Leaderboard getLeaderboardByRun(Run run) {
+        Optional<Leaderboard> leaderboard = leaderboardRepository.findLeaderboardByRunsContaining(run);
+        if(leaderboard.isEmpty()){
+            throw new EntityNotFoundException(String.format("Leaderboard of run '%s' is not found", run.getId().toString()));
+        }
+
+        return leaderboard.get();
+    }
+
+    private Run getRun(UUID runId){
         Optional<Run> run = runRepository.getRunById(runId);
 
         if(run.isEmpty()){
             throw new EntityNotFoundException("Run with UUID " + runId + " not found");
         }
 
-        //If there was a previous run, remove it
-        Optional<Leaderboard> leaderboard = leaderboardRepository.findLeaderboardByRunsContaining(run.get());
-        if(leaderboard.isEmpty()){
-            throw new EntityNotFoundException(String.format("Leaderboard of run '%s' is not found", runId.toString()));
-        }
-
-        Optional<Run> previousRunToDelte = leaderboard.get()
-                .getRuns()
-                .stream()
-                .filter(r -> r.getSpeedrunner()
-                        .getId()
-                        .equals(run.get().getSpeedrunner().getId()) && r.isVerified())
-                .findFirst();
-
-        previousRunToDelte.ifPresent(previousRun -> leaderboard.get().getRuns().remove(previousRun));
-
-        run.get()
-                .setVerified(true);
+        return run.get();
     }
 }
