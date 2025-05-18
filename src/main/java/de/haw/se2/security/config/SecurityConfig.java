@@ -80,7 +80,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth/login"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth/login", "/rest/auth/register"))
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
