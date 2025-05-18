@@ -5,6 +5,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,11 +21,13 @@ import java.util.UUID;
 public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
     private final GameRepository gameRepository;
+    private final LeaderboardRepository leaderboardRepository;
     private final RunRepository runRepository;
 
     @Autowired
-    public RunReviewUseCaseImpl(GameRepository gameRepository, RunRepository runRepository) {
+    public RunReviewUseCaseImpl(GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository) {
         this.gameRepository = gameRepository;
+        this.leaderboardRepository = leaderboardRepository;
         this.runRepository = runRepository;
     }
 
@@ -69,6 +72,22 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
         if(run.isEmpty()){
             throw new EntityNotFoundException("Run with UUID " + runId + " not found");
         }
+
+        //If there was a previous run, remove it
+        Optional<Leaderboard> leaderboard = leaderboardRepository.findLeaderboardByRunsContaining(run.get());
+        if(leaderboard.isEmpty()){
+            throw new EntityNotFoundException(String.format("Leaderboard of run '%s' is not found", runId.toString()));
+        }
+
+        Optional<Run> previousRunToDelte = leaderboard.get()
+                .getRuns()
+                .stream()
+                .filter(r -> r.getSpeedrunner()
+                        .getId()
+                        .equals(run.get().getSpeedrunner().getId()) && r.isVerified())
+                .findFirst();
+
+        previousRunToDelte.ifPresent(previousRun -> leaderboard.get().getRuns().remove(previousRun));
 
         run.get()
                 .setVerified(true);

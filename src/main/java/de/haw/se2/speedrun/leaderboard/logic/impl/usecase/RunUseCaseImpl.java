@@ -84,26 +84,31 @@ public class RunUseCaseImpl implements RunUseCase {
         List<Run> runs = leaderboard.get().getRuns();
 
         //Does the speedrunner already have another run on this leaderboard?
-        Optional<Run> otherRunFromSpeedrunner = runs.stream()
+        List<Run> otherRunsFromSpeedrunner = runs.stream()
                 .filter(r -> r
                         .getSpeedrunner()
                         .getId().equals(speedrunner.get().getId()))
-                .findFirst();
-        if(otherRunFromSpeedrunner.isEmpty()) {
-            //Speedrunner never submitted a run before
-            addRun(leaderboard.get(), speedrunner.get(), date, runtime);
-        } else if(otherRunFromSpeedrunner.get().getRuntime().runDuration().compareTo(runtime.runDuration()) > 0) {
-            //Speedrunner has a run on this leaderboard, but the newly submitted time is faster
-            //Remove old run and add the new run
-            removeRun(leaderboard.get(), otherRunFromSpeedrunner.get());
-            addRun(leaderboard.get(), speedrunner.get(), date, runtime);
-        } else {
-            throw new NotAcceptableStatusException("Speedrunner already has a faster time on the leaderboard!");
-        }
-    }
+                .toList();
 
-    private void removeRun(Leaderboard leaderboard, Run run) {
-        leaderboard.getRuns().remove(run);
+        if(otherRunsFromSpeedrunner.isEmpty()) {
+            //Speedrunner never submitted a run
+            addRun(leaderboard.get(), speedrunner.get(), date, runtime);
+            return;
+        }
+
+        Optional<Run> unsubmittedRun = otherRunsFromSpeedrunner.stream().filter(r -> !r.isVerified()).findFirst();
+
+        if(otherRunsFromSpeedrunner.stream().anyMatch(r -> r.getRuntime().runDuration().compareTo(runtime.runDuration()) <= 0)) {
+            // Any run on this leaderboard, submitted or not, is faster than this newly submitted run.
+            throw new NotAcceptableStatusException("Speedrunner already has a faster time on the leaderboard or submitted a faster time!");
+        } else {
+            if(unsubmittedRun.isEmpty()){
+                addRun(leaderboard.get(), speedrunner.get(), date, runtime);
+            } else {
+                leaderboard.get().getRuns().remove(unsubmittedRun.get());
+                addRun(leaderboard.get(), speedrunner.get(), date, runtime);
+            }
+        }
     }
 
     private void addRun(Leaderboard leaderboard, Speedrunner speedrunner, Date date, Runtime runtime) {
