@@ -11,13 +11,18 @@ import lombok.Data;
 @Data
 public class RegisterCredentials {
 
+    public static final String PASSWORD_REGEX_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+
     @NotNull
     @Size(min = 3, max = 32)
     @UsernameNotInUse
     private String username;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")
+    @Pattern(regexp = PASSWORD_REGEX_PATTERN)
+    // Limit password length, as BCrypt can theoretically have collisions for data bigger than 72 Bytes
+    //https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    @Size(min = 8, max = 72)
     private String password;
 
     @NotNull
