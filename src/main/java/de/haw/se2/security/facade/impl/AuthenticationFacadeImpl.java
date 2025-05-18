@@ -1,6 +1,8 @@
 package de.haw.se2.security.facade.impl;
 
 import de.haw.se2.security.facade.api.AuthenticationFacade;
+import de.haw.se2.security.logic.api.RegisterUseCase;
+import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
 import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
@@ -26,13 +28,17 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     private final AuthenticationManager authenticationManager;
     private final JwtEncoder jwtEncoder;
+    private final RegisterUseCase registerUseCase;
+    private final CustomizedModelMapper mapper;
 
     private static final int HOUR_IN_SECONDS = 60 * 60;
 
     @Autowired
-    public AuthenticationFacadeImpl(AuthenticationManager authenticationManager, JwtEncoder jwtEncoder) {
+    public AuthenticationFacadeImpl(AuthenticationManager authenticationManager, JwtEncoder jwtEncoder, RegisterUseCase registerUseCase, CustomizedModelMapper mapper) {
         this.authenticationManager = authenticationManager;
         this.jwtEncoder = jwtEncoder;
+        this.registerUseCase = registerUseCase;
+        this.mapper = mapper;
     }
 
     @Override
@@ -79,6 +85,9 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     @Override
     public ResponseEntity<Void> restAuthRegisterPost(RegisterCredentials credentials) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        de.haw.se2.security.common.pojo.RegisterCredentials registerCredentials = mapper.map(credentials, de.haw.se2.security.common.pojo.RegisterCredentials.class);
+        registerUseCase.registerUser(registerCredentials);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
