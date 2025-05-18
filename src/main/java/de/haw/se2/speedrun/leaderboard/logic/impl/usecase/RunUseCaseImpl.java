@@ -14,13 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.NotAcceptableStatusException;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @Component
 public class RunUseCaseImpl implements RunUseCase {
@@ -52,6 +54,7 @@ public class RunUseCaseImpl implements RunUseCase {
                 .getRuns()
                 .stream()
                 .filter(Run::isVerified)
+                .sorted(Comparator.comparingLong(e -> e.getRuntime().runDuration().getSeconds()))
                 .toList();
     }
 
@@ -137,7 +140,7 @@ public class RunUseCaseImpl implements RunUseCase {
 
     private void validateAuthenticatedUserIsSameAsInRun(Speedrunner speedrunner) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof UserDetails userDetails && !userDetails.getUsername().equals(speedrunner.getEmail())) {
+        if (authentication instanceof JwtAuthenticationToken token && !token.getName().equals(speedrunner.getEmail())) {
             throw new LockedException("User provided for speedrun submission and authenticated speedrunner differ!");
         }
     }
