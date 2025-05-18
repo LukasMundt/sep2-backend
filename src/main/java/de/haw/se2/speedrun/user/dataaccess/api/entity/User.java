@@ -24,6 +24,7 @@ public class User {
     @NonNull
     @NotNull
     @Size(min = 3, max = 50)
+    @Column(unique = true)
     private String username;
 
     @NonNull
@@ -33,6 +34,7 @@ public class User {
     @NonNull
     @NotNull
     @Email
+    @Column(unique = true)
     private String email;
 
     @Column(name = "user_right")
