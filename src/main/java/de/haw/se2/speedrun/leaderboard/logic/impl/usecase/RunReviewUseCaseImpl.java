@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,7 +47,11 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
                     runReview.setGameName(gameSlug);
                     runReview.setCategoryLabel(categoryId);
                     return runReview;
-                }).toList();
+                })
+                .sorted(Comparator.comparingLong(rr -> rr.getRun()
+                        .getDate()
+                        .getTime()))
+                .toList();
     }
 
     @Transactional
