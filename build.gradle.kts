@@ -30,7 +30,7 @@ repositories {
 var postgresqlVersion = "42.7.5"
 var jetbrainsAnnotationsVersion = "26.0.2"
 val modelMapperVersion = "3.2.3"
-val jsonWebTokenVersion = "0.11.5"
+val rometoolsVersion = "2.1.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -41,9 +41,7 @@ dependencies {
 	implementation("org.postgresql:postgresql:$postgresqlVersion")
 	implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 	implementation("org.modelmapper:modelmapper:$modelMapperVersion")
-	implementation("io.jsonwebtoken:jjwt-api:$jsonWebTokenVersion")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonWebTokenVersion")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jsonWebTokenVersion")
+	implementation("com.rometools:rome:$rometoolsVersion")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

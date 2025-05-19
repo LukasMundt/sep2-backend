@@ -72,6 +72,8 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
         previousRunToDelete.ifPresent(previousRun -> leaderboard.getRuns().remove(previousRun));
 
+
+
         run.setVerified(true);
     }
 

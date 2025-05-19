@@ -1,0 +1,55 @@
+package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
+
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
+import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
+import de.haw.se2.speedrun.user.dataaccess.api.repo.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
+
+@Component
+public class RssFeedUseCaseImpl implements RssFeedUseCase{
+
+    private final UserRepository userRepository;
+    private final RssFeedViewer rssFeedViewer;
+    //TODO: Adopt to api changes
+    private final String baseUrl = "/getFeed/";
+
+    @Autowired
+    public RssFeedUseCaseImpl(UserRepository userRepository, RssFeedViewer rssFeedViewer) {
+        this.userRepository = userRepository;
+        this.rssFeedViewer = rssFeedViewer;
+    }
+
+    @Override
+    public String getFeedUrl() {
+        String id = getUserId();
+        return baseUrl + id;
+    }
+
+    @Override
+    public ModelAndView getFeedView(String id) {
+        ModelAndView modelAndView = new ModelAndView(rssFeedViewer);
+        modelAndView.addObject("id", id);
+        return modelAndView;
+    }
+
+    private String getUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken token) {
+            Optional<User> user = userRepository.findByEmail(token.getName());
+            if(user.isPresent()) {
+                return user.get().getId().toString();
+            }
+        }
+
+        throw new InsufficientAuthenticationException("No JWT token found");
+    }
+}

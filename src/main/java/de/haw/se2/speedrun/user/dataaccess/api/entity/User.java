@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.util.UUID;
+
 import static de.haw.se2.security.common.pojo.RegisterCredentials.PASSWORD_REGEX_PATTERN;
 
 @Data
@@ -21,8 +23,8 @@ import static de.haw.se2.security.common.pojo.RegisterCredentials.PASSWORD_REGEX
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NonNull
     @NotNull
