@@ -29,6 +29,7 @@ public class Leaderboard {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
+    @OrderBy("runtime asc")
     @BatchSize(size = 100)
     private List<Run> runs;
 }

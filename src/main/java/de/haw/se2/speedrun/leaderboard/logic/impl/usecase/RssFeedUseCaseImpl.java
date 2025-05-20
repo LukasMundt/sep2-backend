@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import java.util.Optional;
 
@@ -35,10 +36,10 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
     }
 
     @Override
-    public ModelAndView getFeedView(String id) {
+    public View getFeedView(String id) {
         ModelAndView modelAndView = new ModelAndView(rssFeedViewer);
         modelAndView.addObject("id", id);
-        return modelAndView;
+        return modelAndView.getView();
     }
 
     private String getUserId() {
