@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -44,13 +45,15 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     @Override
     public ResponseEntity<Void> restAuthLogoutPost() {
         //https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html#customizing-logout-uris
-
+        //TODO: Remove in the next api version
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
     public ResponseEntity<List<String>> restAuthGet(){
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        return new ResponseEntity<>(authorities, HttpStatus.OK);
     }
 
     @Override
