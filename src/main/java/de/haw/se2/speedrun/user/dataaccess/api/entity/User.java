@@ -4,10 +4,13 @@ import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+
+import static de.haw.se2.security.common.pojo.RegisterCredentials.PASSWORD_REGEX_PATTERN;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +32,9 @@ public class User {
 
     @NonNull
     @NotNull
+    @Pattern(regexp = PASSWORD_REGEX_PATTERN)
+    //Only allow (BCrypt) hashed values in the DB
+    @Size(min = 60, max = 60)
     private String password;
 
     @NonNull
@@ -40,13 +46,6 @@ public class User {
     @Column(name = "user_right")
     @Enumerated(EnumType.STRING)
     private Right right;
-
-    public String getRole() {
-        if (right == Right.ADMIN) {
-            return "ADMIN";
-        }
-        return "USER";
-    }
 
     @Override
     public String toString() {

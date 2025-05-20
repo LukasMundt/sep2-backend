@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @OpenAPIDefinition(
 		servers = {
-				@Server(url = "https://SE2-20.backend.dev.lukas-mundt.de")
+				@Server(url = "https://se2-9-und-se2-10-credentials-mit-denen-aus-der-db-abgleichen.backend.dev.lukas-mundt.de")
 		}
 )
 @SpringBootApplication

@@ -15,11 +15,11 @@ public class EmailNotRegisteredValidator implements ConstraintValidator<EmailNot
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.isEmpty()) {
+    public boolean isValid(String email, ConstraintValidatorContext context) {
+        if (email == null || email.isEmpty()) {
             return true;
         }
 
-        return !userRepository.existsByEmail(value);
+        return !userRepository.existsByEmail(email);
     }
 }

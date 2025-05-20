@@ -30,7 +30,7 @@ public class Category {
     this.label = label;
   }
 
-  public Category id(String categoryId) {
+  public Category categoryId(String categoryId) {
     this.categoryId = categoryId;
     return this;
   }
@@ -40,8 +40,8 @@ public class Category {
    * @return id
    */
   @NotNull 
-  @Schema(name = "id", example = "ANY_PERCENT", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
+  @Schema(name = "categoryId", example = "ANY_PERCENT", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("categoryId")
   public String getCategoryId() {
     return categoryId;
   }

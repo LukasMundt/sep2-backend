@@ -15,11 +15,11 @@ public class UsernameNotInUseValidator implements ConstraintValidator<UsernameNo
     }
 
     @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        if (s == null || s.isEmpty()) {
+    public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
+        if (username == null || username.isEmpty()) {
             return true;
         }
 
-        return !userRepository.existsByUsername(s);
+        return !userRepository.existsByUsername(username);
     }
 }

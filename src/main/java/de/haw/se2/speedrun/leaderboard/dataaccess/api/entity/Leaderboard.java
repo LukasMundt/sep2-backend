@@ -3,6 +3,7 @@ package de.haw.se2.speedrun.leaderboard.dataaccess.api.entity;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,6 +24,11 @@ public class Leaderboard {
 
     @NonNull
     @NotNull
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @BatchSize(size = 100)
     private List<Run> runs;
 }
