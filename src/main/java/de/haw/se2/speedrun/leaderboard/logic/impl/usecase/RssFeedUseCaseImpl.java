@@ -5,6 +5,7 @@ import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.UserRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
@@ -34,10 +35,11 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
         return baseUrl + id;
     }
 
+    @SneakyThrows
     @Override
     public String getFeedView(String id) {
-        Feed feed = rssFeedViewer.buildFeed(id);
-        return feed.toString();
+        String feed = rssFeedViewer.buildFeed(id);
+        return feed;
     }
 
     private String getUserId() {

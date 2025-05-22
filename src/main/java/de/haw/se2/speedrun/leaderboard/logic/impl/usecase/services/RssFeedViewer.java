@@ -2,15 +2,22 @@ package de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services;
 
 import com.rometools.rome.feed.atom.Entry;
 import com.rometools.rome.feed.atom.Feed;
+import com.rometools.rome.feed.rss.Channel;
+import com.rometools.rome.feed.rss.Item;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.WireFeedOutput;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 @Component
@@ -25,32 +32,40 @@ public class RssFeedViewer {
         this.runRepository = runRepository;
     }
 
-    public Feed buildFeed(String id) {
-        Feed feed = new Feed();
+    @SneakyThrows
+    public String buildFeed(String id) throws FeedException, IOException {
+        Channel feed = new Channel("rss_2.0");
         Speedrunner speedrunner = getSpeedrunner(id);
+        feed.setDescription("RSS Feed");
+        feed.setLink("http//localhost");
         feed.setTitle("Hallo, " + speedrunner.getUsername());
         feed.setLanguage("DE");
-        feed.setModified(new Date());
-        feed.setEntries(buildFeedEntries(id));
-        return feed;
+        feed.setPubDate(new Date());
+        feed.setItems(buildFeedEntries(id));
+
+        WireFeedOutput output = new WireFeedOutput();
+        StringWriter writer = new StringWriter();
+        output.output(feed, writer);
+
+        return writer.toString();
     }
 
-    private List<Entry> buildFeedEntries(String id) {
+    private List<Item> buildFeedEntries(String id) {
         Speedrunner speedrunner = getSpeedrunner(id);
         List<Run> runs = runRepository.findAllById(speedrunner.getNewFasterPlayers().stream().map(FasterInformation::runId).toList());
         List<Speedrunner> speedrunners = runs.stream().map(Run::getSpeedrunner).toList();
 
-        List<Entry> entries = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
         for(int i = 0; i < speedrunners.size(); i++) {
             Run run = runs.get(i);
             Speedrunner sp = speedrunners.get(i);
-            Entry Entry = new Entry();
-            Entry.setTitle("Überboten von: " + sp.getUsername() + "mit einer Zeit von: " + run.getRuntime().runDuration().toString());
-            Entry.setUpdated(new Date());
-            entries.add(Entry);
+            Item item = new Item();
+            item.setTitle("Überboten von: " + sp.getUsername() + "mit einer Zeit von: " + run.getRuntime().runDuration().toString());
+            item.setPubDate(new Date());
+            items.add(item);
         }
 
-        return entries;
+        return items;
     }
 
     private Speedrunner getSpeedrunner(String id) {
