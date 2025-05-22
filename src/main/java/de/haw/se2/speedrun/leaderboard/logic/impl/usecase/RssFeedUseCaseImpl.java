@@ -1,5 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
+import com.rometools.rome.feed.atom.Feed;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
@@ -10,8 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import java.util.Optional;
 
@@ -36,10 +35,9 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
     }
 
     @Override
-    public View getFeedView(String id) {
-        ModelAndView modelAndView = new ModelAndView(rssFeedViewer);
-        modelAndView.addObject("id", id);
-        return modelAndView.getView();
+    public String getFeedView(String id) {
+        Feed feed = rssFeedViewer.buildFeed(id);
+        return feed.toString();
     }
 
     private String getUserId() {

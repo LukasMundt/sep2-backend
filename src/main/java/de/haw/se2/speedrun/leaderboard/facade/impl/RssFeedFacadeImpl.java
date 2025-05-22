@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.View;
 
 @Controller
 public class RssFeedFacadeImpl implements RssFeedFacade {
@@ -24,7 +23,7 @@ public class RssFeedFacadeImpl implements RssFeedFacade {
     }
 
     @Override
-    public ResponseEntity<View> getFeedView(String id) {
+    public ResponseEntity<String> getFeedView(String id) {
         return new ResponseEntity<>(rssFeedUseCase.getFeedView(id), HttpStatus.OK);
     }
 }
