@@ -94,7 +94,7 @@ public class HealthController {
         run1.setVerified(true);
         run2.setVerified(true);
         runRepository.saveAll(List.of(run1, run2));
-        return List.of(run1, run2);
+        return runRepository.findAll();
     }
 
     private Leaderboard addLeaderboards() {
@@ -110,7 +110,7 @@ public class HealthController {
         game1.setName("Minecraft");
         game1.setSlug("minecraft");
         game1.setImageUrl("/games/minecraft.avif");
-        game1.setLeaderboards(List.of(addLeaderboards()));
+        game1.setLeaderboards(leaderboardRepository.findAll());
         gameRepository.save(game1);
     }
 
