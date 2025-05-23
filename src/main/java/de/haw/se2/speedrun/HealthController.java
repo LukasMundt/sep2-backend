@@ -66,6 +66,15 @@ public class HealthController {
         return ResponseEntity.ok("OK");
     }
 
+    //Scary deletion block. Use at own risk ( ⚆ _ ⚆ )
+    public void deleteSampleData() {
+        runRepository.deleteAll();
+        leaderboardRepository.deleteAll();
+        gameRepository.deleteAll();
+        administratorRepository.deleteAll();
+        speedrunnerRepository.deleteAll();
+    }
+
     private List<Run> getEntrys(){
         Run run1 = new Run();
         Run run2 = new Run();
