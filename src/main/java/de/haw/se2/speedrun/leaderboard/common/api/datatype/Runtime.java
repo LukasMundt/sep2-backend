@@ -17,6 +17,11 @@ public record Runtime(Duration runDuration) {
 
     @Override
     public @NotNull String toString() {
-        return runDuration.toString();
+        long hours = runDuration.toHours();
+        long minutes = runDuration.toMinutesPart();
+        long seconds = runDuration.toSecondsPart();
+        long millis = runDuration.toMillisPart();
+
+        return String.format("%02d:%02d:%02d:%03d", hours, minutes, seconds, millis);
     }
 }

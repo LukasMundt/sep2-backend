@@ -1,6 +1,5 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
-import com.rometools.rome.feed.atom.Feed;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
@@ -38,8 +37,7 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
     @SneakyThrows
     @Override
     public String getFeedView(String id) {
-        String feed = rssFeedViewer.buildFeed(id);
-        return feed;
+        return rssFeedViewer.buildFeed(id);
     }
 
     private String getUserId() {
