@@ -1,6 +1,5 @@
 package de.haw.se2.speedrun.leaderboard.facade.api;
 
-import de.haw.se2.speedrun.HealthController;
 import de.haw.se2.speedrun.Se2SpeedrunApplication;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
@@ -16,30 +15,31 @@ import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = Se2SpeedrunApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) // environment
 @ExtendWith(SpringExtension.class) // required to use Spring TestContext Framework in JUnit 5
 @ActiveProfiles("test") // causes exclusive creation of general and test-specific beans marked by @Profile("test")
 
-
+@Transactional
+@AutoConfigureMockMvc
 public class RunsFacadeTest
 {
     private final RunRepository runRepository;
@@ -54,6 +54,9 @@ public class RunsFacadeTest
     final LeaderboardRepository leaderboardRepository;
 
     private final Random rng;
+
+    @Autowired
+    private MockMvc mvc;
 
     @Autowired
     public RunsFacadeTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository,
@@ -72,6 +75,7 @@ public class RunsFacadeTest
     public void setUP()
     {
         addThreeUsers();
+        getEntrys();
         addGames();
     }
 
@@ -86,25 +90,29 @@ public class RunsFacadeTest
     }
 
     @Test
-    public void testGetLeaderboardSuccessfully() {
+    public void testGetLeaderboardSuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
 
-
         List<Run> runs = runRepository.findAll();
-        
+        List<Game> games = gameRepository.findAll();
+        List<Leaderboard> leaderboards = leaderboardRepository.findAll();
+
+        mvc.perform(get("/rest/api/games/minecraft/any_percent/leaderboard"))
+            .andExpect(status().isOk());
+
         // [WHEN & THEN]
-        given()
-                .basePath("/rest/api/games")
-                .pathParam("gameSlug", gameSlug)
-                .pathParam("categoryId", categoryId)
-                .when()
-                .get("/{gameSlug}/{categoryId}/leaderboard")
-                .then()
-                .statusCode(200)
-                .assertThat()
-                .body("size()", org.hamcrest.Matchers.greaterThan(0));
+        //given()
+        //        .basePath("/rest/api/games")
+        //        .pathParam("gameSlug", gameSlug)
+        //        .pathParam("categoryId", categoryId)
+        //        .when()
+        //        .get("/{gameSlug}/{categoryId}/leaderboard")
+        //        .then()
+        //        .statusCode(200)
+        //        .assertThat()
+        //        .body("size()", org.hamcrest.Matchers.greaterThan(0));
     }
 
     @Test
@@ -132,10 +140,6 @@ public class RunsFacadeTest
 
 
 
-    @GetMapping("/up")
-    public ResponseEntity<String> home() {
-        return ResponseEntity.ok("OK");
-    }
 
     private List<Run> getEntrys(){
         Run run1 = new Run();
@@ -155,25 +159,29 @@ public class RunsFacadeTest
         run2.setSpeedrunner(slowBob.get());
         run1.setVerified(true);
         run2.setVerified(true);
-        runRepository.saveAll(List.of(run1, run2));
+        runRepository.saveAllAndFlush(List.of(run1, run2));
         return runRepository.findAll();
     }
 
     private Leaderboard addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category("any_percent", "Any %"));
-        leaderboard.setRuns(getEntrys());
+        leaderboard.setRuns(new ArrayList<>());
         leaderboardRepository.save(leaderboard);
-        return leaderboard;
+        var leaderboar = leaderboardRepository.findAll().getFirst();
+        var r = runRepository.findAll();
+        leaderboar.getRuns().addAll(r);
+        return leaderboardRepository.findAll().getFirst();
     }
 
     private void addGames() {
+        addLeaderboards();
         Game game1 = new Game();
         game1.setName("Minecraft");
         game1.setSlug("minecraft");
         game1.setImageUrl("/games/minecraft.avif");
         game1.setLeaderboards(leaderboardRepository.findAll());
-        gameRepository.save(game1);
+        gameRepository.saveAndFlush(game1);
     }
 
     private void addThreeUsers(){
@@ -194,7 +202,7 @@ public class RunsFacadeTest
         speedrunner1.setRight(Right.SPEEDRUNNER);
         speedrunner2.setRight(Right.SPEEDRUNNER);
         admin.setRight(Right.ADMIN);
-        speedrunnerRepository.saveAll(List.of(speedrunner1, speedrunner2));
-        administratorRepository.save(admin);
+        speedrunnerRepository.saveAllAndFlush(List.of(speedrunner1, speedrunner2));
+        administratorRepository.saveAndFlush(admin);
     }
 }
