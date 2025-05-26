@@ -27,6 +27,8 @@ configurations {
 repositories {
 	mavenCentral()
 }
+
+val apacheCommonsEmailVersion = "1.9.0"
 var postgresqlVersion = "42.7.5"
 var jetbrainsAnnotationsVersion = "26.0.2"
 val modelMapperVersion = "3.2.3"
@@ -38,6 +40,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("commons-validator:commons-validator:$apacheCommonsEmailVersion")
 	implementation("org.postgresql:postgresql:$postgresqlVersion")
 	implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 	implementation("org.modelmapper:modelmapper:$modelMapperVersion")

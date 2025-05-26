@@ -1,5 +1,7 @@
 package de.haw.se2.security.facade.impl;
 
+import de.haw.se2.security.common.validations.exceptions.EmailAlreadyInUseException;
+import de.haw.se2.security.common.validations.exceptions.UsernameAlreadyInUseException;
 import de.haw.se2.security.facade.api.AuthenticationFacade;
 import de.haw.se2.security.logic.api.RegisterUseCase;
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
@@ -17,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -92,5 +95,17 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
         registerUseCase.registerUser(registerCredentials);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<String> handleEmailAlreadyInUseException(EmailAlreadyInUseException e) {
+        //TODO: When the new api from stian is done, implement the right error handling here
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @ExceptionHandler(UsernameAlreadyInUseException.class)
+    public ResponseEntity<String> handleUsernameAlreadyInUseException(UsernameAlreadyInUseException e) {
+        //TODO: When the new api from stian is done, implement the right error handling here
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
     }
 }

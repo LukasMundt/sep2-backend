@@ -2,10 +2,7 @@ package de.haw.se2.speedrun.user.dataaccess.api.entity;
 
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -40,6 +37,7 @@ public class User {
     @NonNull
     @NotNull
     @Email
+    @NotEmpty
     @Column(unique = true)
     private String email;
 
