@@ -61,7 +61,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     @Override
     public ResponseEntity<TokenResponse> restAuthLoginPost(LoginCredentials credentials) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(credentials.getEmail().toLowerCase(), credentials.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
 
         Instant now = Instant.now();

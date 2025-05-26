@@ -23,7 +23,7 @@ public class EmailValidAndNotUsedValidator implements ConstraintValidator<EmailV
             throw new EmailInvalidException("Email is not valid");
         }
 
-        if (userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email.toLowerCase())) {
             throw new EmailAlreadyInUseException(email);
         }
 
