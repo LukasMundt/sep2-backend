@@ -20,7 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = Se2SpeedrunApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -59,5 +61,43 @@ public class CategoriesFacadeTest extends BaseTest {
         // [WHEN & THEN]
         mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddCategoryBadRequest() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String invalidRequestBody = "{ \"invalidField\": \"value\" }"; // Invalid JSON structure
+
+        // [WHEN & THEN]
+        mvc.perform(post("/rest/api/games/{gameSlug}/categories", gameSlug)
+                        .with(user("The admin").password("123456Aa").roles("ADMIN")) // Authenticate as "Admin"
+                        .contentType("application/json")
+                        .content(invalidRequestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    // TODO Berechtigungen zum Löschen fehlen
+    @Test
+    public void testDeleteCategorySuccessfully() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String categoryId = "any_percent";
+
+        // Ensure the category exists before deletion
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk());
+
+        // [WHEN & THEN] Delete the category
+        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId))
+                .andExpect(status().isNoContent());
+
+        // Verify the category no longer exists
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    String response = result.getResponse().getContentAsString();
+                    assertFalse(response.contains(categoryId), "Category should be deleted");
+                });
     }
 }

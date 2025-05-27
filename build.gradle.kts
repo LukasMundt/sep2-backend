@@ -49,8 +49,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.h2database:h2")
 	testImplementation("io.rest-assured:rest-assured:5.3.0")
+	testImplementation ("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 
 	//OpenApi
 	api("org.springframework.boot:spring-boot-starter-web")
