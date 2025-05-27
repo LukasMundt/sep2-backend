@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EmailNotRegisteredValidator.class)
-public @interface EmailNotRegistered {
+@Constraint(validatedBy = EmailValidAndNotUsedValidator.class)
+public @interface EmailValidAndNotUsed {
     String message() default "Email is already registered";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

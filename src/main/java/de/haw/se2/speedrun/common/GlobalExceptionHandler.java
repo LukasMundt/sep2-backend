@@ -2,9 +2,8 @@ package de.haw.se2.speedrun.common;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,25 +15,10 @@ import org.springframework.web.server.NotAcceptableStatusException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
-        if(ex.getConstraintViolations()
-                .stream()
-                .anyMatch(error -> error.getPropertyPath()
-                        .toString()
-                        .contains("username")
-                        ||
-                        error.getPropertyPath()
-                                .toString()
-                                .contains("email")
-                )
-        ) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
-        } else if(ex.getConstraintViolations().stream().anyMatch(error -> error.getPropertyPath().toString().contains("passowrd"))){
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ValidationException.class)
+    public void handleConstraintViolationException() {
+        //Empty for spring to use as an exception handler
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
