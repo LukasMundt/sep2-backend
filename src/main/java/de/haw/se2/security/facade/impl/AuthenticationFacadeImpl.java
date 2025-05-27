@@ -46,13 +46,6 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @Override
-    public ResponseEntity<Void> restAuthLogoutPost() {
-        //https://docs.spring.io/spring-security/reference/servlet/authentication/logout.html#customizing-logout-uris
-        //TODO: Remove in the next api version
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @Override
     public ResponseEntity<List<String>> restAuthGet(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<String> authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
