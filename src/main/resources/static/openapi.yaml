@@ -1,0 +1,517 @@
+openapi: 3.0.4
+info:
+  title: Speedruns - OpenAPI 3.0
+  description: |-
+  
+  version: 0.2.3
+
+tags:
+  - name: games
+    description: All about the games.
+  - name: runs
+    description: All about the runs.
+  - name: categories
+    description: All about the categories.
+  - name: reviewing
+    description: All about the admin review process.
+  - name: authentication
+    description: All about the authentication.
+  - name: RSSFeed
+    description: All about the RSS Feed
+
+
+paths:
+  /rest/api/games/all:
+    get:
+      tags:
+        - games
+      summary: Get all available games.
+      description: Get all available games.
+      responses:
+        '200':
+          description: Returns all available games.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameDto"
+  /rest/api/games/{gameSlug}:
+    get:
+      tags:
+       - games
+      summary: Get game by game slug.
+      description: Get game by game slug.
+      parameters:
+        - name: gameSlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the GameDto for the given game slug.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameDto"
+
+        '404':
+          description: Returned if the game slug were not found.
+  /rest/api/games/{gameSlug}/{categoryId}/leaderboard:
+    get:
+      tags:
+        - runs
+      summary: Get leaderboard by game slug and category.
+      description: Get leaderboard by game slug and category. The leaderboard is already sorted by runtime.
+      parameters:
+        - name: gameSlug 
+          in: path
+          description: the game of the leaderboard
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          description: the category of the leaderboard
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a sorted list of runs that are representing the leaderboard.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RunDto"
+        '404':
+          description: Returned if the game slug or category were not found.
+  /rest/api/games/{gameSlug}/{categoryId}/submit:
+    post: 
+      tags:
+        - runs
+      summary: Submit a new run by game and category.
+      description: Submit a new run by game and category.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameSlug 
+          in: path
+          description: the game of the leaderboard
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          description: the category of the leaderboard
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunSubmit'
+      responses:
+        '200':
+          description: Returned if the run is submitted.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '404':
+          description: Returned if the game slug, category or Speedrunner username were not found.
+        '406':
+          description: Returned if the speedrunner already has a faster run time on the leaderboard
+        '422':
+          description: Returned if the runtime doesn’t fulfill the requirements.
+
+  /rest/api/games/{gameSlug}/categories:
+    get:
+      tags:
+        - categories
+      summary: Get available categories by game slug.
+      description: Get available categories by game slug.
+      parameters:
+        - name: gameSlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns all available categories for the given game slug.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Category"
+
+        '404':
+          description: Returned if the game slug were not found.
+    post:
+      tags:
+        - categories
+      summary: Adds a new category for a game.
+      description: Adds a new category for a game. The id has to be unique. Only users with admin rights are allowed to add a new category.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameSlug
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        '200':
+          description: Returned if the category was successfully added.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '409':
+          description: Returned if the id is not unique.
+  /rest/api/games/{gameSlug}/{categoryId}:
+    delete:
+      tags:
+        - categories
+      summary: Deletes an existing category for a game.
+      description: Deletes an existing category for a game. The id has to exist. Only users with admin rights are allowed to delete a category.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameSlug
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          description: the category of the leaderboard
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Returned if the category was successfully deleted.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '404':
+          description: Returned if the id is not found.
+
+  /rest/api/reviews/unreviewed/{gameSlug}/{categoryId}:
+    get:
+      tags:
+        - reviewing
+      summary: Get a list of unreviewed runs by game and category.
+      description: Get a list of unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameSlug
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          description: the category of the leaderboard
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a list of all unreviewed runs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RunReview"
+        '401':
+          description: Returned if the caller is not authenticated.
+  /rest/api/reviews/verify:
+    patch:
+      tags:
+        - reviewing
+      summary: Verifies a unreviewed run.
+      description: Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              description: uuid of the game
+              example: uuid
+              
+
+      responses:
+        '200':
+          description: Returned if the run is successfully verified.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '404':
+          description: Returned if the uuid is not found.
+  /rest/auth:
+    get:
+      tags:
+        - authentication
+      summary: user login info
+      description: Returns information about the currently authenticated user's token.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Returns the authorities if the caller is authenticated.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: [Admin, User]
+                  
+        '401':
+          description: Returned if the caller is not authenticated.
+  /rest/auth/login:
+    post:
+      tags:
+        - authentication
+      summary: user login
+      description: Creates a new token for a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginCredentials"
+      responses:
+        '200':
+          description: Returns information about the caller's token if the caller is authenticated. 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        '401':
+          description: Returned if the login fails due to invalid credentials.
+  /rest/auth/register:
+    post:
+      tags:
+        - authentication
+      summary: user registration
+      description: Registers a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterCredentials"
+      responses:
+        '200':
+          description: Returned if the user was successfully registered.
+        '409':
+          description: Returned if the user is already registered.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterError"
+        '422':
+          description: Returned if the password, email or username doesn’t fulfill the requirements.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterError"
+          
+  /rest/rss/getFeedUrl:
+    get:
+      tags:
+        - RSSFeed
+      summary: Get the RSS Feed URL.
+      description: Get the RSS Feed URL.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Returns the RSS Feed URL if the caller is authenticated.
+          content:
+            application/json:
+              schema:
+                type: string
+                  
+        '401':
+          description: Returned if the caller is not authenticated.
+  /rest/rss/getFeed/{id}:
+    get:
+      tags:
+        - RSSFeed
+      summary: Get the RSS Feed.
+      description: Get the RSS Feed to the given id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the RSS Feed to the given id.
+          content:
+            application/xml:
+              schema:
+                type: string
+                  
+        '404':
+          description: Returned if the id is not found.
+   
+
+components:
+  schemas:
+    #Dto
+    RunDto:
+      type: object
+      properties:
+        speedrunner:
+          type: string
+          description: Username of the speedrunner's account.
+        date:
+          type: string
+          format: date-time
+        runtime: 
+          $ref: '#/components/schemas/Runtime'
+      required:
+        - speedrunner
+        - date
+        - runtime
+    GameDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: minecraft
+        slug:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - name
+        - imageUrl
+        - slug
+        
+    RunReview:
+      type: object
+      properties:
+        gameName:
+          type: string
+        categoryLabel:
+          type: string
+        uuid:
+          type: string
+        run:
+          $ref: '#/components/schemas/RunDto'
+      required:
+        - gameName
+        - categoryLabel
+        - uuid
+        - run
+          
+    RunSubmit:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        runtime: 
+          $ref: '#/components/schemas/Runtime'
+      required:
+        - date
+        - runtime
+    
+    #Other
+    Category:
+      type: object
+      properties:
+        categoryId:
+          type: string
+          example: ANY_PERCENT
+        label:
+          type: string
+          example: Any %
+      required:
+        - categoryId
+        - label
+        
+    Runtime:
+      type: object
+      properties:
+        hours:
+          type: integer
+        minutes:
+          type: integer
+        seconds:
+          type: integer
+        milliseconds:
+          type: integer
+      required:
+        - hours
+        - minutes
+        - seconds
+        - milliseconds
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          type: integer
+          example: 3600
+      required:
+        - accessToken
+    RegisterError:
+      type: object
+      properties:
+        usernameError: 
+          type: string
+        emailError:
+          type: string
+        passwordError:
+          type: string
+    RegisterCredentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+      required:
+        - username
+        - password
+        - email
+    LoginCredentials:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
