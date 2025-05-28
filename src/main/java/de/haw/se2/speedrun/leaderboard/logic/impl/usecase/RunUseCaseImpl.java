@@ -11,10 +11,8 @@ import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.NotAcceptableStatusException;
 
@@ -60,10 +58,10 @@ public class RunUseCaseImpl implements RunUseCase {
 
     @Transactional
     @Override
-    public void addUnverifiedRun(String gameSlug, String categoryId, String speedrunnerUsername, Date date, Runtime runtime) {
+    public void addUnverifiedRun(String gameSlug, String categoryId, Date date, Runtime runtime) {
         Game game = getGame(gameSlug);
         Leaderboard leaderboard = getLeaderboard(game, categoryId);
-        Speedrunner speedrunner = getSpeedrunner(speedrunnerUsername);
+        Speedrunner speedrunner = getSpeedrunner();
         List<Run> runs = leaderboard.getRuns();
 
         //Does the speedrunner already have another run on this leaderboard?
@@ -126,22 +124,16 @@ public class RunUseCaseImpl implements RunUseCase {
         return leaderboard.get();
     }
 
-    private Speedrunner getSpeedrunner(String speedrunnerUsername) {
-        Optional<Speedrunner> speedrunner = speedrunnerRepository.findByUsername(speedrunnerUsername);
+    private Speedrunner getSpeedrunner() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String speedrunnerUsername = authentication.getName();
+        Optional<Speedrunner> speedrunner = speedrunnerRepository.findByEmail(speedrunnerUsername);
 
         if(speedrunner.isEmpty()) {
             throw new EntityNotFoundException(String.format("Speedrunner '%s' not found", speedrunnerUsername));
         }
 
-        validateAuthenticatedUserIsSameAsInRun(speedrunner.get());
-
         return speedrunner.get();
-    }
-
-    private void validateAuthenticatedUserIsSameAsInRun(Speedrunner speedrunner) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof JwtAuthenticationToken token && !token.getName().equals(speedrunner.getEmail())) {
-            throw new LockedException("User provided for speedrun submission and authenticated speedrunner differ!");
-        }
     }
 }

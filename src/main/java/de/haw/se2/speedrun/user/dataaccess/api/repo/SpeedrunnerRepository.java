@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface SpeedrunnerRepository extends JpaRepository<Speedrunner, Long> {
     Optional<Speedrunner> findByUsername(String name);
+    Optional<Speedrunner> findByEmail(String email);
 }

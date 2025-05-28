@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface RunUseCase {
     List<Run> getVerifiedLeaderboardRuns(String game, String category);
-    void addUnverifiedRun(String gameSlug, String categoryId, String speedrunnerUsername, Date date, Runtime runtime);
+    void addUnverifiedRun(String gameSlug, String categoryId, Date date, Runtime runtime);
 }

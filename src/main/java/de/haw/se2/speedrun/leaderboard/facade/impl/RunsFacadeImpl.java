@@ -46,7 +46,7 @@ public class RunsFacadeImpl implements RunsFacade {
         Runtime runtime = mapper.map(runSubmit.getRuntime(), Runtime.class);
 
         //TODO Speedrunner anhand vom token erkennen
-        runUseCase.addUnverifiedRun(gameSlug, categoryId, "UNKOWN SPEEDRUNNER", runSubmit.getDate(), runtime);
+        runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runtime);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
