@@ -45,9 +45,7 @@ public class RunsFacadeImpl implements RunsFacade {
     public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunSubmit runSubmit) {
         Runtime runtime = mapper.map(runSubmit.getRuntime(), Runtime.class);
 
-        //TODO Speedrunner anhand vom token erkennen
         runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runtime);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
