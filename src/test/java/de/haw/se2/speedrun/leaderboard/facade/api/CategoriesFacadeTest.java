@@ -1,9 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.facade.api;
 
 import de.haw.se2.speedrun.Se2SpeedrunApplication;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
@@ -15,13 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,7 +42,6 @@ public class CategoriesFacadeTest extends BaseTest {
     public void testGetCategorySuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
-        String categoryId = "any_percent";
 
         // [WHEN & THEN]
         mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
@@ -57,12 +51,40 @@ public class CategoriesFacadeTest extends BaseTest {
     @Test
     public void testGetCategoryNotFound() throws Exception {
         // [GIVEN]
-        String gameSlug = "nonexistent_game";
+        String gameSlug = "minecraftasd";
 
         // [WHEN & THEN]
         mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
                 .andExpect(status().isNotFound());
     }
+
+    /*
+    @Test
+    public void testGetCategoryNotAuthenticated2() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String categoryId = "nonexistent_category";
+
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
+        // [WHEN & THEN]
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetCategoryNotAuthenticated() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String categoryId = "any_percent";
+
+        // [WHEN & THEN]
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId))
+                .andExpect(status().isNotFound());
+    }
+
+     */
 
     @Test
     public void testAddCategoryBadRequest() throws Exception {
@@ -72,8 +94,6 @@ public class CategoriesFacadeTest extends BaseTest {
 
         String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
 
-        System.out.println(token);
-
         // [WHEN & THEN]
         mvc.perform(post("/rest/api/games/{gameSlug}/categories", gameSlug)
                         .header("Authorization", "Bearer " + token)
@@ -82,20 +102,70 @@ public class CategoriesFacadeTest extends BaseTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // TODO Berechtigungen zum Löschen fehlen
+    /*
+    @Test
+    public void testDeleteCategoryBadRequest() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String categoryId = "";
+
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
+        // Ensure the category exists before deletion attempt
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk());
+
+        // [WHEN & THEN] Delete the category
+        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isBadRequest());
+
+        // Ensure the category still exists after broken deletion attempt
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk());
+    }
+
+     */
+
+    @Test
+    public void testDeleteCategoryIdNotFound() throws Exception {
+        // [GIVEN]
+        String gameSlug = "minecraft";
+        String categoryId = "totaly_not_a_valid_id";
+
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
+        // Ensure the category exists before deletion attempt
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk());
+
+        // [WHEN & THEN] Delete the category
+        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+
+        // Ensure the category still exists after broken deletion attempt
+        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
+                .andExpect(status().isOk());
+    }
+
+
     @Test
     public void testDeleteCategorySuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
 
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
         // Ensure the category exists before deletion
         mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
                 .andExpect(status().isOk());
 
         // [WHEN & THEN] Delete the category
-        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId))
-                .andExpect(status().isNoContent());
+        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
 
         // Verify the category no longer exists
         mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
