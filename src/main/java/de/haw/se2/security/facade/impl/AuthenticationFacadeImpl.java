@@ -12,8 +12,6 @@ import de.haw.se2.speedrun.openapitools.model.RegisterError;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -143,7 +141,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
                         + "\n" + violation.getMessage());
                 default ->
                         throw new IllegalStateException("Unexpected value: " + violation.getPropertyPath().toString());
-            };
+            }
         }
 
         return new ResponseEntity<>(registerError, HttpStatus.UNPROCESSABLE_ENTITY);
