@@ -1,13 +1,19 @@
 package de.haw.se2.security.facade.impl;
 
 import de.haw.se2.security.common.validations.exceptions.EmailAlreadyInUseException;
+import de.haw.se2.security.common.validations.exceptions.EmailInvalidException;
 import de.haw.se2.security.common.validations.exceptions.UsernameAlreadyInUseException;
 import de.haw.se2.security.facade.api.AuthenticationFacade;
 import de.haw.se2.security.logic.api.RegisterUseCase;
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
 import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
+import de.haw.se2.speedrun.openapitools.model.RegisterError;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,14 +97,55 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
-    public ResponseEntity<String> handleEmailAlreadyInUseException(EmailAlreadyInUseException e) {
-        //TODO: When the new api from stian is done, implement the right error handling here
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<RegisterError> handleEmailAlreadyInUseException(EmailAlreadyInUseException e) {
+        RegisterError registerError = new RegisterError();
+        registerError.setEmailError(e.getMessage());
+
+        return new ResponseEntity<>(registerError, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UsernameAlreadyInUseException.class)
-    public ResponseEntity<String> handleUsernameAlreadyInUseException(UsernameAlreadyInUseException e) {
-        //TODO: When the new api from stian is done, implement the right error handling here
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<RegisterError> handleUsernameAlreadyInUseException(UsernameAlreadyInUseException e) {
+        RegisterError registerError = new RegisterError();
+        registerError.setUsernameError(e.getMessage());
+
+        return new ResponseEntity<>(registerError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(EmailInvalidException.class)
+    public ResponseEntity<RegisterError> handleInvalidEmailException(EmailInvalidException e) {
+        RegisterError registerError = new RegisterError();
+        registerError.setEmailError(e.getMessage());
+
+        return new ResponseEntity<>(registerError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<RegisterError> handleValidationException(ConstraintViolationException e){
+        RegisterError registerError = new RegisterError();
+
+        for(ConstraintViolation<?> violation : e.getConstraintViolations()){
+            switch (violation.getPropertyPath().toString().toLowerCase()){
+                case String s when s.endsWith("password") && registerError.getPasswordError() == null ->
+                    registerError.setPasswordError(violation.getMessage());
+                case String s when s.endsWith("password") && registerError.getPasswordError() != null ->
+                    registerError.setPasswordError(registerError.getPasswordError()
+                        + "\n" + violation.getMessage());
+                case String s when s.endsWith("username") && registerError.getUsernameError() == null ->
+                    registerError.setUsernameError(violation.getMessage());
+                case String s when s.endsWith("username") && registerError.getUsernameError() == null ->
+                    registerError.setUsernameError(registerError.getUsernameError()
+                        + "\n" + violation.getMessage());
+                case String s when s.endsWith("email") && registerError.getEmailError() == null ->
+                        registerError.setEmailError(violation.getMessage());
+                case String s when s.endsWith("email") && registerError.getEmailError() != null ->
+                    registerError.setEmailError(registerError.getEmailError()
+                        + "\n" + violation.getMessage());
+                default ->
+                        throw new IllegalStateException("Unexpected value: " + violation.getPropertyPath().toString());
+            };
+        }
+
+        return new ResponseEntity<>(registerError, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }
