@@ -17,10 +17,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public abstract class BaseTest
 {
@@ -69,6 +73,22 @@ public abstract class BaseTest
         speedrunnerRepository.deleteAll();
     }
 
+    protected String getAccessToken(String email, String password, MockMvc mvc) throws Exception {
+        var result = mvc.perform(post("/rest/auth/login")
+                .content("{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        var lambdaContext = new Object() {
+            String token;
+        };
+
+        result.andExpect(status().isOk()).andExpect(r -> {
+            lambdaContext.token = r.getResponse().getContentAsString().split(",")[0].split(":")[1].replace("\"", "");
+        });
+
+        return lambdaContext.token;
+    }
 
     protected List<Run> getEntrys(){
         Run run1 = new Run();

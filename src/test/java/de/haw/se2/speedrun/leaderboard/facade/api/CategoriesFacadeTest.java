@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -69,9 +70,13 @@ public class CategoriesFacadeTest extends BaseTest {
         String gameSlug = "minecraft";
         String invalidRequestBody = "{ \"invalidField\": \"value\" }"; // Invalid JSON structure
 
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
+        System.out.println(token);
+
         // [WHEN & THEN]
         mvc.perform(post("/rest/api/games/{gameSlug}/categories", gameSlug)
-                        .with(user("The admin").password("123456Aa").roles("ADMIN")) // Authenticate as "Admin"
+                        .header("Authorization", "Bearer " + token)
                         .contentType("application/json")
                         .content(invalidRequestBody))
                 .andExpect(status().isBadRequest());
