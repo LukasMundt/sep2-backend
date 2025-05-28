@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.AuthenticationAPI;
 
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -80,5 +81,41 @@ public class RegisterAPITest {
                         .content(speedrunnerDetails))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
+    }
+
+    @Test
+    public void regiserWithInvalidEmailTest() throws Exception {
+        String speedrunnerDetails = """
+                {
+                  "username": "testA",
+                  "password": "123456Aa",
+                  "email": "test@test"
+                }""";
+        mockMvc.perform(post(REGISTER_URL)
+                        .contentType("application/json")
+                        .content(speedrunnerDetails))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+        speedrunnerDetails = """
+                {
+                  "username": "testB",
+                  "password": "123456Aa",
+                  "email": ""
+                }""";
+        mockMvc.perform(post(REGISTER_URL)
+                        .contentType("application/json")
+                        .content(speedrunnerDetails))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+    }
+    @AfterEach
+    public void cleanUp() {
+        if (speedrunnerRepository.findByUsername("testA").isPresent()) {
+            speedrunnerRepository.delete(speedrunnerRepository.findByUsername("testA").get());
+        }
+        if (speedrunnerRepository.findByUsername("testB").isPresent()) {
+            speedrunnerRepository.delete(speedrunnerRepository.findByUsername("testB").get());
+        }
     }
 }
