@@ -58,12 +58,7 @@ public class RssFeedViewer {
 
     @SneakyThrows
     private String getEmptyFeed() {
-        Channel feed = new Channel();
-        feed.setTitle("Speedrun");
-        feed.setLink("https://speedrun.haw.de/speedrun/");
-        feed.setDescription("Speedrun Feed");
-        feed.setEncoding("UTF-8");
-        feed.setLanguage("en");
+        Channel feed = buildFeedMetaData();
         return writeFeed(feed);
     }
 
@@ -87,6 +82,7 @@ public class RssFeedViewer {
                 Game game = getGame(leaderboard);
                 items.add(formatItem(fasterRun, ownSlowerRun, game, leaderboard, speedrunner));
             } catch (Exception ignored) {
+                // Skip old Leaderboards/Run/Games that aren't found in DB. Probably already deleted
             }
         }
 

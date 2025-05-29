@@ -19,8 +19,6 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
 
     private final UserRepository userRepository;
     private final RssFeedViewer rssFeedViewer;
-    //TODO: Adopt to api changes
-    private final String baseUrl = "/getFeed/";
 
     @Autowired
     public RssFeedUseCaseImpl(UserRepository userRepository, RssFeedViewer rssFeedViewer) {
@@ -31,6 +29,7 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
     @Override
     public String getFeedUrl() {
         String id = getUserId();
+        String baseUrl = "/rest/rss/getFeed/";
         return baseUrl + id;
     }
 

@@ -61,7 +61,7 @@ public class SecurityConfig {
                                 "/swagger-ui*/**",
                                 "/v3/api-docs*/**",
                                 "/openapi.yaml",
-                                "/getFeed/*",
+                                "/rest/rss/getFeed/*",
                                 "/"
                         ).permitAll()
 

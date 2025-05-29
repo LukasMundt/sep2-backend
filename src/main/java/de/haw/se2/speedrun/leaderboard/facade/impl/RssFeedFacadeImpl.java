@@ -20,12 +20,12 @@ public class RssFeedFacadeImpl implements RssFeedFacade {
     }
 
     @Override
-    public ResponseEntity<String> getFeedUrl() {
+    public ResponseEntity<String> restRssGetFeedUrlGet() {
         return new ResponseEntity<>(rssFeedUseCase.getFeedUrl(), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<String> getFeedView(String id) {
+    public ResponseEntity<String> restRssGetFeedIdGet(String id) {
         return new ResponseEntity<>(rssFeedUseCase.getFeedView(id), HttpStatus.OK);
     }
 
