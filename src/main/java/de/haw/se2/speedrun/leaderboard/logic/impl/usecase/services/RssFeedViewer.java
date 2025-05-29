@@ -27,6 +27,7 @@ import java.util.*;
 @Component
 public class RssFeedViewer {
 
+    public static final String NOT_FOUND = " not found";
     private final SpeedrunnerRepository speedrunnerRepository;
     private final RunRepository runRepository;
     private final LeaderboardRepository leaderboardRepository;
@@ -126,7 +127,7 @@ public class RssFeedViewer {
 
         Optional<Speedrunner> speedrunner = speedrunnerRepository.findById(UUID.fromString(id));
         if (speedrunner.isEmpty()) {
-            throw new EntityNotFoundException("Speed runner with id " + id + " not found");
+            throw new EntityNotFoundException("Speed runner with id " + id + NOT_FOUND);
         }
 
         return speedrunner.get();
@@ -135,7 +136,7 @@ public class RssFeedViewer {
     private Leaderboard getLeaderboard(Run run) {
         Optional<Leaderboard> leaderboard = leaderboardRepository.findLeaderboardByRunsContaining(run);
         if (leaderboard.isEmpty()) {
-            throw new EntityNotFoundException("Run with id " + run.getId() + " not found");
+            throw new EntityNotFoundException("Run with id " + run.getId() + NOT_FOUND);
         }
 
         return leaderboard.get();
@@ -144,7 +145,7 @@ public class RssFeedViewer {
     private Game getGame(Leaderboard leaderboard) {
         Optional<Game> game = gameRepository.findGameByLeaderboardsContaining(leaderboard);
         if (game.isEmpty()) {
-            throw new EntityNotFoundException("Game of Leaderboard with id " + leaderboard.getId() + " not found");
+            throw new EntityNotFoundException("Game of Leaderboard with id " + leaderboard.getId() + NOT_FOUND);
         }
 
         return game.get();
@@ -167,6 +168,6 @@ public class RssFeedViewer {
             return run.get();
         }
 
-        throw new EntityNotFoundException("Run from Speedrunner " + speedrunner.getId() + " not found");
+        throw new EntityNotFoundException("Run from Speedrunner " + speedrunner.getId() + NOT_FOUND);
     }
 }
