@@ -19,53 +19,30 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * RunDto
+ * RunSubmit
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-27T20:21:07.566967269Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
-public class RunDto {
-
-  private String speedrunner;
+public class RunSubmit {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private Date date;
 
   private Runtime runtime;
 
-  public RunDto() {
+  public RunSubmit() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public RunDto(String speedrunner, Date date, Runtime runtime) {
-    this.speedrunner = speedrunner;
+  public RunSubmit(Date date, Runtime runtime) {
     this.date = date;
     this.runtime = runtime;
   }
 
-  public RunDto speedrunner(String speedrunner) {
-    this.speedrunner = speedrunner;
-    return this;
-  }
-
-  /**
-   * Username of the speedrunner's account.
-   * @return speedrunner
-   */
-  @NotNull 
-  @Schema(name = "speedrunner", description = "Username of the speedrunner's account.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("speedrunner")
-  public String getSpeedrunner() {
-    return speedrunner;
-  }
-
-  public void setSpeedrunner(String speedrunner) {
-    this.speedrunner = speedrunner;
-  }
-
-  public RunDto date(Date date) {
+  public RunSubmit date(Date date) {
     this.date = date;
     return this;
   }
@@ -85,7 +62,7 @@ public class RunDto {
     this.date = date;
   }
 
-  public RunDto runtime(Runtime runtime) {
+  public RunSubmit runtime(Runtime runtime) {
     this.runtime = runtime;
     return this;
   }
@@ -113,22 +90,20 @@ public class RunDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RunDto runDto = (RunDto) o;
-    return Objects.equals(this.speedrunner, runDto.speedrunner) &&
-        Objects.equals(this.date, runDto.date) &&
-        Objects.equals(this.runtime, runDto.runtime);
+    RunSubmit runSubmit = (RunSubmit) o;
+    return Objects.equals(this.date, runSubmit.date) &&
+        Objects.equals(this.runtime, runSubmit.runtime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(speedrunner, date, runtime);
+    return Objects.hash(date, runtime);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RunDto {\n");
-    sb.append("    speedrunner: ").append(toIndentedString(speedrunner)).append("\n");
+    sb.append("class RunSubmit {\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    runtime: ").append(toIndentedString(runtime)).append("\n");
     sb.append("}");

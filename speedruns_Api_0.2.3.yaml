@@ -3,7 +3,7 @@ info:
   title: Speedruns - OpenAPI 3.0
   description: |-
   
-  version: 0.2.0
+  version: 0.2.3
 
 tags:
   - name: games
@@ -16,6 +16,8 @@ tags:
     description: All about the admin review process.
   - name: authentication
     description: All about the authentication.
+  - name: RSSFeed
+    description: All about the RSS Feed
 
 
 paths:
@@ -112,7 +114,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RunDto'
+              $ref: '#/components/schemas/RunSubmit'
       responses:
         '200':
           description: Returned if the run is submitted.
@@ -207,7 +209,7 @@ paths:
     get:
       tags:
         - reviewing
-      summary: Gets a list of unreviewed runs by game and category.
+      summary: Get a list of unreviewed runs by game and category.
       description: Get a list of unreviewed runs. Only users with admin rights are allowed to get all unreviewed runs.
       security:
         - bearerAuth: []
@@ -301,19 +303,6 @@ paths:
                 $ref: "#/components/schemas/TokenResponse"
         '401':
           description: Returned if the login fails due to invalid credentials.
-  /rest/auth/logout:
-    post:
-      tags:
-        - authentication
-      summary: user logout
-      description: Logs the current user out, destroying the existing token, if any.
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Returned if the user was successfully logged out.
-        '401':
-          description: Returned if the caller is not authenticated.
   /rest/auth/register:
     post:
       tags:
@@ -331,11 +320,58 @@ paths:
           description: Returned if the user was successfully registered.
         '409':
           description: Returned if the user is already registered.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterError"
         '422':
-          description: Returned if the password doesn’t fulfill the requirements.
+          description: Returned if the password, email or username doesn’t fulfill the requirements.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterError"
           
-
-    
+  /rest/rss/getFeedUrl:
+    get:
+      tags:
+        - RSSFeed
+      summary: Get the RSS Feed URL.
+      description: Get the RSS Feed URL.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Returns the RSS Feed URL if the caller is authenticated.
+          content:
+            application/json:
+              schema:
+                type: string
+                  
+        '401':
+          description: Returned if the caller is not authenticated.
+  /rest/rss/getFeed/{id}:
+    get:
+      tags:
+        - RSSFeed
+      summary: Get the RSS Feed.
+      description: Get the RSS Feed to the given id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the RSS Feed to the given id.
+          content:
+            application/xml:
+              schema:
+                type: string
+                  
+        '404':
+          description: Returned if the id is not found.
+   
 
 components:
   schemas:
@@ -387,7 +423,17 @@ components:
         - uuid
         - run
           
-    
+    RunSubmit:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        runtime: 
+          $ref: '#/components/schemas/Runtime'
+      required:
+        - date
+        - runtime
     
     #Other
     Category:
@@ -432,7 +478,15 @@ components:
           example: 3600
       required:
         - accessToken
-        
+    RegisterError:
+      type: object
+      properties:
+        usernameError: 
+          type: string
+        emailError:
+          type: string
+        passwordError:
+          type: string
     RegisterCredentials:
       type: object
       properties:

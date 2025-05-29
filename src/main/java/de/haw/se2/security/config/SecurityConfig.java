@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 "/rest/api/games/all",
                                 "/swagger-ui*/**",
                                 "/v3/api-docs*/**",
+                                "/openapi.yaml",
                                 "/"
                         ).permitAll()
 

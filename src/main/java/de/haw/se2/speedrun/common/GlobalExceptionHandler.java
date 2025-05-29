@@ -5,7 +5,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -42,12 +41,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(value = NotAcceptableStatusException.class)
     public void handleNotAcceptableStatusException() {
-        //Empty for spring to use as an exception handler
-    }
-
-    @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT)
-    @ExceptionHandler(value = LockedException.class)
-    public void handleLockedException() {
         //Empty for spring to use as an exception handler
     }
 
