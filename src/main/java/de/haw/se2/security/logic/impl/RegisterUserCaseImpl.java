@@ -29,7 +29,7 @@ public class RegisterUserCaseImpl implements RegisterUseCase {
     @Override
     public void registerUser(@Valid RegisterCredentials registerCredentials) {
         Speedrunner speedrunner = new Speedrunner();
-        speedrunner.setEmail(registerCredentials.getEmail());
+        speedrunner.setEmail(registerCredentials.getEmail().toLowerCase());
         speedrunner.setUsername(registerCredentials.getUsername());
         speedrunner.setPassword(passwordEncoder.encode(registerCredentials.getPassword()));
         speedrunner.setRight(Right.SPEEDRUNNER);

@@ -60,8 +60,9 @@ public class SecurityConfig {
                                 "/rest/api/games/all",
                                 "/swagger-ui*/**",
                                 "/v3/api-docs*/**",
-                                "/",
-                                "/getFeed/*"
+                                "/openapi.yaml",
+                                "/getFeed/*",
+                                "/"
                         ).permitAll()
 
                         //User access
@@ -79,11 +80,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
+                .logout(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth/login", "/rest/auth/register"))
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .formLogin(AbstractHttpConfigurer::disable)
 
                 .httpBasic(Customizer.withDefaults())
 

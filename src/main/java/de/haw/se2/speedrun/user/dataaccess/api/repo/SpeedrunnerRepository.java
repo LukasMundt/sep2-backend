@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface SpeedrunnerRepository extends JpaRepository<Speedrunner, UUID> {
     Optional<Speedrunner> findByUsername(String name);
+    Optional<Speedrunner> findByEmail(String email);
 }

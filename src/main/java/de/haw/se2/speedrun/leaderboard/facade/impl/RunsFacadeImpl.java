@@ -6,6 +6,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.facade.api.RunsFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunDto;
+import de.haw.se2.speedrun.openapitools.model.RunSubmit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,12 +40,12 @@ public class RunsFacadeImpl implements RunsFacade {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
+
     @Override
-    public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunDto runDto) {
-        Runtime runtime = mapper.map(runDto.getRuntime(), Runtime.class);
+    public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunSubmit runSubmit) {
+        Runtime runtime = mapper.map(runSubmit.getRuntime(), Runtime.class);
 
-        runUseCase.addUnverifiedRun(gameSlug, categoryId, runDto.getSpeedrunner(), runDto.getDate(), runtime);
-
+        runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runtime);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
