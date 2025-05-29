@@ -1,9 +1,11 @@
 package de.haw.se2.speedrun.user.dataaccess.api.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -11,4 +13,6 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("SPEEDRUNNER")
 public class Speedrunner extends User {
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<FasterInformation> newFasterPlayers;
 }

@@ -8,6 +8,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
+import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,20 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
         previousRunToDelete.ifPresent(previousRun -> leaderboard.getRuns().remove(previousRun));
 
+        addThisFasterRunToSlowerRuns(run.getSpeedrunner().getId(), run, leaderboard);
+
         run.setVerified(true);
+    }
+
+    private void addThisFasterRunToSlowerRuns(UUID speedrunnerId, Run run, Leaderboard leaderboard) {
+        List<Run> runs = leaderboard.getRuns();
+        runs.stream()
+                .filter(r -> r.getRuntime().runDuration().compareTo(run.getRuntime().runDuration()) > 0 && r.isVerified())
+                .limit(50)
+                .forEach(r -> r.getSpeedrunner()
+                        .getNewFasterPlayers()
+                        .add(new FasterInformation(speedrunnerId, run.getId()))
+                );
     }
 
     private Game getGame(String gameSlug) {

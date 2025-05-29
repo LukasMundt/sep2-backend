@@ -61,11 +61,13 @@ public class SecurityConfig {
                                 "/swagger-ui*/**",
                                 "/v3/api-docs*/**",
                                 "/openapi.yaml",
+                                "/rest/rss/getFeed/*",
                                 "/"
                         ).permitAll()
 
                         //User access
                         .requestMatchers("/rest/api/games/*/*/submit").hasAuthority(USER_ROLE)
+                        .requestMatchers("/getFeedUrl").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
                         .requestMatchers("/rest/auth", "/rest/auth/logout").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
 
                         //Admin access
