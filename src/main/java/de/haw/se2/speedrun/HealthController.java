@@ -167,7 +167,7 @@ public class HealthController {
         Game game2 = new Game();
         game2.setName("Mario Kart 8 Deluxe");
         game2.setSlug("mario-kart-8-deluxe");
-        game2.setImageUrl("/games/marioKart8Deluxe.png");
+        game2.setImageUrl("/games/mario_kart_8_deluxe.png");
         game2.setLeaderboards(List.of(
                 addLeaderboard("48_tracks", "48 Tracks"),
                 addLeaderboard("48_tracks_dlc", "48 Tracks DLC"),
@@ -178,7 +178,7 @@ public class HealthController {
         Game game3 = new Game();
         game3.setName("Hollow Knight");
         game3.setSlug("hollow-knight");
-        game3.setImageUrl("/games/hollowKnight.png");
+        game3.setImageUrl("/games/hollow_knight.png");
         game3.setLeaderboards(List.of(
                 addLeaderboard(any_percent, any_percent_symbol),
                 addLeaderboard("all_skills", "All Skills"),
@@ -190,7 +190,7 @@ public class HealthController {
         Game game4 = new Game();
         game4.setName("Portal 2");
         game4.setSlug("portal-2");
-        game4.setImageUrl("/games/portal2.png");
+        game4.setImageUrl("/games/portal_2.png");
         game4.setLeaderboards(List.of(
                 addLeaderboard("single_player", "Single Player"),
                 addLeaderboard("coop", "Coop"),
@@ -214,7 +214,7 @@ public class HealthController {
         Game game6 = new Game();
         game6.setName("The Simpsons: Hit & Run");
         game6.setSlug("the-simpsons-hit-and-run");
-        game6.setImageUrl("/games/theSimpsonsHitAndRun.png");
+        game6.setImageUrl("/games/the_simpsons_hit_and_run.png");
         game6.setLeaderboards(List.of(
                 addLeaderboard(any_percent, any_percent_symbol),
                 addLeaderboard("100_percent", "100%"),
@@ -225,7 +225,7 @@ public class HealthController {
         Game game7 = new Game();
         game7.setName("Super Mario 64");
         game7.setSlug("super-mario-64");
-        game7.setImageUrl("/games/superMario64.png");
+        game7.setImageUrl("/games/super_mario_64.png");
         game7.setLeaderboards(List.of(
                 addLeaderboard("120_star", "120 Star"),
                 addLeaderboard("70_star", "70 Star"),
@@ -237,7 +237,7 @@ public class HealthController {
         Game game8 = new Game();
         game8.setName("Dark Souls III");
         game8.setSlug("dark-souls-3");
-        game8.setImageUrl("/games/darkSouls3.png");
+        game8.setImageUrl("/games/dark_souls_3.png");
         game8.setLeaderboards(List.of(
                 addLeaderboard(any_percent, any_percent_symbol),
                 addLeaderboard("all_bosses", "All Bosses"),
