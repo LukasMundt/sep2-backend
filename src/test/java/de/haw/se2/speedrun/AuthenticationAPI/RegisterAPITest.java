@@ -1,11 +1,16 @@
 package de.haw.se2.speedrun.AuthenticationAPI;
 
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
+import de.haw.se2.speedrun.leaderboard.facade.api.BaseTest;
+import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,13 +18,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RegisterAPITest {
+public class RegisterAPITest extends BaseTest {
     @Autowired
     private SpeedrunnerRepository speedrunnerRepository;
     @Autowired
     private MockMvc mockMvc;
     private static final String REGISTER_URL = "/rest/auth/register";
-
+    @Autowired
+    public RegisterAPITest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder) {
+        super(speedrunnerRepository, administratorRepository, gameRepository, leaderboardRepository, runRepository, passwordEncoder);
+    }
 
 
     @Test
@@ -35,7 +43,6 @@ public class RegisterAPITest {
                         .content(speedrunnerDetails))
                 .andExpect(status().isOk())
                 .andReturn();
-        speedrunnerRepository.delete(speedrunnerRepository.findByUsername("test").get());
     }
 
     @Test
@@ -109,13 +116,5 @@ public class RegisterAPITest {
                 .andReturn();
 
     }
-    @AfterEach
-    public void cleanUp() {
-        if (speedrunnerRepository.findByUsername("testA").isPresent()) {
-            speedrunnerRepository.delete(speedrunnerRepository.findByUsername("testA").get());
-        }
-        if (speedrunnerRepository.findByUsername("testB").isPresent()) {
-            speedrunnerRepository.delete(speedrunnerRepository.findByUsername("testB").get());
-        }
-    }
+
 }

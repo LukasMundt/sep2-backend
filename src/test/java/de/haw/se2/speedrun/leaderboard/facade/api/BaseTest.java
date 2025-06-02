@@ -16,16 +16,16 @@ import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Transactional
 public abstract class BaseTest
 {
 
@@ -54,7 +54,6 @@ public abstract class BaseTest
         this.rng = new Random();
         this.passwordEncoder = passwordEncoder;
     }
-
     @BeforeEach
     public void setUP()
     {
@@ -111,7 +110,6 @@ public abstract class BaseTest
         runRepository.saveAllAndFlush(List.of(run1, run2));
         return runRepository.findAll();
     }
-
     protected Leaderboard addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category("any_percent", "Any %"));
@@ -122,7 +120,6 @@ public abstract class BaseTest
         leaderboar.getRuns().addAll(r);
         return leaderboardRepository.findAll().getFirst();
     }
-
     protected void addGames() {
         addLeaderboards();
         Game game1 = new Game();
@@ -132,7 +129,6 @@ public abstract class BaseTest
         game1.setLeaderboards(leaderboardRepository.findAll());
         gameRepository.saveAndFlush(game1);
     }
-
     protected void addThreeUsers(){
         String passwordEncrypted = passwordEncoder.encode("123456Aa");
 

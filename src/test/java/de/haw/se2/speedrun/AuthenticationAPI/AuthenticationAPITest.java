@@ -1,66 +1,44 @@
 package de.haw.se2.speedrun.AuthenticationAPI;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
+import de.haw.se2.speedrun.leaderboard.facade.api.BaseTest;
+import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
+import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@ActiveProfiles("test")
-public class AuthenticationAPITest {
-    private static String adminToken;
-    private static String speedrunnerToken;
+public class AuthenticationAPITest extends BaseTest {
+    private static final String adminEmail = "admin@admin.de";
+    private static final String adminPassword = "123456Aa";
+    private static final String speedrunnerEmail = "fastjoe@gmail.com";
+    private static final String speedrunnerPassword = "123456Aa";
     private static final String AUTHENTICATION_URL = "/rest/auth";
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
-    private ObjectMapper objectMapper;
-    @BeforeEach
-    public void setUpBeforeClass() throws Exception {
-        String adminDetails = """
-                {
-                  "email": "admin@admin.de",
-                  "password": "123456Aa"
-                }""";
-        String speedrunnerDetails = """
-                {
-                  "email": "fastjoe@gmail.com",
-                  "password": "123456Aa"
-                }""";
-        String token = mockMvc.perform(post(AUTHENTICATION_URL+ "/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(adminDetails))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        adminToken = objectMapper.readTree(token).get("accessToken").asText();
-
-        token = mockMvc.perform(post(AUTHENTICATION_URL+ "/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(speedrunnerDetails))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        speedrunnerToken = objectMapper.readTree(token).get("accessToken").asText();
-
+    public AuthenticationAPITest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder) {
+        super(speedrunnerRepository, administratorRepository, gameRepository, leaderboardRepository, runRepository, passwordEncoder);
     }
+
     @Test
     public void authAdmin() throws Exception {
+        String adminToken = getAccessToken(adminEmail, adminPassword,mockMvc);
         mockMvc.perform(get(AUTHENTICATION_URL)
                 .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,6 +51,7 @@ public class AuthenticationAPITest {
 
     @Test
     public void authSpeedrunner() throws Exception {
+        String speedrunnerToken = getAccessToken(speedrunnerEmail, speedrunnerPassword, mockMvc);
         mockMvc.perform(get(AUTHENTICATION_URL)
                         .header("Authorization", "Bearer " + speedrunnerToken)
                         .contentType(MediaType.APPLICATION_JSON)
