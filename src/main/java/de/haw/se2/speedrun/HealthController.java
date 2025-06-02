@@ -130,7 +130,7 @@ public class HealthController {
         administratorRepository.save(admin);
     }
 
-    private Leaderboard addLeaderboards(String categoryId, String lable) {
+    private Leaderboard addLeaderboard(String categoryId, String lable) {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category(categoryId, lable));
         leaderboard.setRuns(getEntrys());
@@ -139,14 +139,17 @@ public class HealthController {
     }
 
     private void addGames() {
+        final String any_percent = "any_percent";
+        final String any_percent_symbol = "Any %";
+
         Game game0 = new Game();
         game0.setName("Minecraft");
         game0.setSlug("minecraft");
         game0.setImageUrl("/games/minecraft.avif");
         game0.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("any_percent_glitchless", "Any % Glitchless"),
-                addLeaderboards("all_achievements", "All Achievements")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("any_percent_glitchless", "Any % Glitchless"),
+                addLeaderboard("all_achievements", "All Achievements")
         ));
 
         Game game1 = new Game();
@@ -154,11 +157,11 @@ public class HealthController {
         game1.setSlug("cuphead");
         game1.setImageUrl("/games/cuphead.png");
         game1.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("low_percent", "Low %"),
-                addLeaderboards("all_flags", "All Flags"),
-                addLeaderboards("full_clear", "Full Clear"),
-                addLeaderboards("no_hit", "No Hit")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("low_percent", "Low %"),
+                addLeaderboard("all_flags", "All Flags"),
+                addLeaderboard("full_clear", "Full Clear"),
+                addLeaderboard("no_hit", "No Hit")
         ));
 
         Game game2 = new Game();
@@ -166,10 +169,10 @@ public class HealthController {
         game2.setSlug("mario-kart-8-deluxe");
         game2.setImageUrl("/games/marioKart8Deluxe.png");
         game2.setLeaderboards(List.of(
-                addLeaderboards("48_tracks", "48 Tracks"),
-                addLeaderboards("48_tracks_dlc", "48 Tracks DLC"),
-                addLeaderboards("96_tracks", "96 Tracks"),
-                addLeaderboards("bonus_tracks", "Bonus Tracks")
+                addLeaderboard("48_tracks", "48 Tracks"),
+                addLeaderboard("48_tracks_dlc", "48 Tracks DLC"),
+                addLeaderboard("96_tracks", "96 Tracks"),
+                addLeaderboard("bonus_tracks", "Bonus Tracks")
         ));
 
         Game game3 = new Game();
@@ -177,11 +180,11 @@ public class HealthController {
         game3.setSlug("hollow-knight");
         game3.setImageUrl("/games/hollowKnight.png");
         game3.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("all_skills", "All Skills"),
-                addLeaderboards("112_percent", "112%"),
-                addLeaderboards("true_ending", "True Ending"),
-                addLeaderboards("low_percent", "Low %")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("all_skills", "All Skills"),
+                addLeaderboard("112_percent", "112%"),
+                addLeaderboard("true_ending", "True Ending"),
+                addLeaderboard("low_percent", "Low %")
         ));
 
         Game game4 = new Game();
@@ -189,10 +192,10 @@ public class HealthController {
         game4.setSlug("portal-2");
         game4.setImageUrl("/games/portal2.png");
         game4.setLeaderboards(List.of(
-                addLeaderboards("single_player", "Single Player"),
-                addLeaderboards("coop", "Coop"),
-                addLeaderboards("solo_coop", "Solo Co-Op"),
-                addLeaderboards("least_portals", "Least Portals")
+                addLeaderboard("single_player", "Single Player"),
+                addLeaderboard("coop", "Coop"),
+                addLeaderboard("solo_coop", "Solo Co-Op"),
+                addLeaderboard("least_portals", "Least Portals")
 
         ));
 
@@ -201,11 +204,11 @@ public class HealthController {
         game5.setSlug("the-legend-of-zelda-breath-of-the-wild");
         game5.setImageUrl("/games/tlozbotw.png");
         game5.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("all_main_quests", "All Main Quests"),
-                addLeaderboards("all_dungeons", "All Dungeons"),
-                addLeaderboards("all_shrines", "All Shrines"),
-                addLeaderboards("100_percent", "100%")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("all_main_quests", "All Main Quests"),
+                addLeaderboard("all_dungeons", "All Dungeons"),
+                addLeaderboard("all_shrines", "All Shrines"),
+                addLeaderboard("100_percent", "100%")
         ));
 
         Game game6 = new Game();
@@ -213,10 +216,10 @@ public class HealthController {
         game6.setSlug("the-simpsons-hit-and-run");
         game6.setImageUrl("/games/theSimpsonsHitAndRun.png");
         game6.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("100_percent", "100%"),
-                addLeaderboards("all_story_missions", "All Story Missions"),
-                addLeaderboards("no_mission_warps", "No Mission Warps")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("100_percent", "100%"),
+                addLeaderboard("all_story_missions", "All Story Missions"),
+                addLeaderboard("no_mission_warps", "No Mission Warps")
         ));
 
         Game game7 = new Game();
@@ -224,11 +227,11 @@ public class HealthController {
         game7.setSlug("super-mario-64");
         game7.setImageUrl("/games/superMario64.png");
         game7.setLeaderboards(List.of(
-                addLeaderboards("120_star", "120 Star"),
-                addLeaderboards("70_star", "70 Star"),
-                addLeaderboards("16_star", "16 Star"),
-                addLeaderboards("1_star", "1 Star"),
-                addLeaderboards("0_star", "0 Star")
+                addLeaderboard("120_star", "120 Star"),
+                addLeaderboard("70_star", "70 Star"),
+                addLeaderboard("16_star", "16 Star"),
+                addLeaderboard("1_star", "1 Star"),
+                addLeaderboard("0_star", "0 Star")
         ));
 
         Game game8 = new Game();
@@ -236,10 +239,10 @@ public class HealthController {
         game8.setSlug("dark-souls-3");
         game8.setImageUrl("/games/darkSouls3.png");
         game8.setLeaderboards(List.of(
-                addLeaderboards("any_percent", "Any %"),
-                addLeaderboards("all_bosses", "All Bosses"),
-                addLeaderboards("no_hit", "No Hit"),
-                addLeaderboards("no_death", "No Death")
+                addLeaderboard(any_percent, any_percent_symbol),
+                addLeaderboard("all_bosses", "All Bosses"),
+                addLeaderboard("no_hit", "No Hit"),
+                addLeaderboard("no_death", "No Death")
         ));
 
         Game game9 = new Game();
@@ -247,8 +250,8 @@ public class HealthController {
         game9.setSlug("getting-over-it-with-bennett-foddy");
         game9.setImageUrl("/games/goiwbf.png");
         game9.setLeaderboards(List.of(
-                addLeaderboards("glitchless", "Glitchless"),
-                addLeaderboards("snake", "Snake")
+                addLeaderboard("glitchless", "Glitchless"),
+                addLeaderboard("snake", "Snake")
         ));
 
         gameRepository.saveAll(List.of(game0, game1, game2, game3, game4, game5, game6, game7, game8, game9));
