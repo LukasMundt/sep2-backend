@@ -1,39 +1,51 @@
-package de.haw.se2.speedrun;
+package de.haw.se2.speedrun.leaderboard.facade.api;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Administrator;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
-@RestController
-public class HealthController {
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-    private final Random rng;
+public abstract class BaseTest
+{
 
-    @Autowired
-    public HealthController(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository,
-                            GameRepository gameRepository, LeaderboardRepository leaderboardRepository,
-                            RunRepository runRepository, PasswordEncoder passwordEncoder) {
+    protected final RunRepository runRepository;
+
+    protected final SpeedrunnerRepository speedrunnerRepository;
+    protected final AdministratorRepository administratorRepository;
+
+    protected final PasswordEncoder passwordEncoder;
+
+    protected final GameRepository gameRepository;
+
+    protected final LeaderboardRepository leaderboardRepository;
+
+    protected final Random rng;
+
+    public BaseTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository,
+                          GameRepository gameRepository, LeaderboardRepository leaderboardRepository,
+                          RunRepository runRepository, PasswordEncoder passwordEncoder)
+    {
         this.speedrunnerRepository = speedrunnerRepository;
         this.administratorRepository = administratorRepository;
         this.gameRepository = gameRepository;
@@ -43,31 +55,17 @@ public class HealthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/up")
-    public ResponseEntity<String> home() {
-        return ResponseEntity.ok("OK");
-    }
-
-    private final RunRepository runRepository;
-
-    private final SpeedrunnerRepository speedrunnerRepository;
-    private final AdministratorRepository administratorRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
-    private final GameRepository gameRepository;
-
-    final LeaderboardRepository leaderboardRepository;
-
-    @GetMapping("/insertSampleData")
-    public ResponseEntity<String> insertSampleData() {
+    @BeforeEach
+    public void setUP()
+    {
         addThreeUsers();
+        getEntrys();
         addGames();
-        return ResponseEntity.ok("OK");
     }
 
-    //Scary deletion block. Use at own risk ( ⚆ _ ⚆ )
-    public void deleteSampleData() {
+    @AfterEach
+    public void tearDown()
+    {
         runRepository.deleteAll();
         leaderboardRepository.deleteAll();
         gameRepository.deleteAll();
@@ -75,12 +73,29 @@ public class HealthController {
         speedrunnerRepository.deleteAll();
     }
 
-    private List<Run> getEntrys(){
+    protected String getAccessToken(String email, String password, MockMvc mvc) throws Exception {
+        var result = mvc.perform(post("/rest/auth/login")
+                .content("{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        var lambdaContext = new Object() {
+            String token;
+        };
+
+        result.andExpect(status().isOk()).andExpect(r -> {
+            lambdaContext.token = r.getResponse().getContentAsString().split(",")[0].split(":")[1].replace("\"", "");
+        });
+
+        return lambdaContext.token;
+    }
+
+    protected List<Run> getEntrys(){
         Run run1 = new Run();
         Run run2 = new Run();
         run1.setDate(new Date());
         run2.setDate(new Date());
-        run1.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
+        run1.setRuntime(new de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
         run2.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
 
         Optional<Speedrunner> fastJoe = speedrunnerRepository.findByUsername("Fast Joe");
@@ -93,28 +108,32 @@ public class HealthController {
         run2.setSpeedrunner(slowBob.get());
         run1.setVerified(true);
         run2.setVerified(true);
-        runRepository.saveAll(List.of(run1, run2));
+        runRepository.saveAllAndFlush(List.of(run1, run2));
         return runRepository.findAll();
     }
 
-    private Leaderboard addLeaderboards() {
+    protected Leaderboard addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category("any_percent", "Any %"));
-        leaderboard.setRuns(getEntrys());
+        leaderboard.setRuns(new ArrayList<>());
         leaderboardRepository.save(leaderboard);
-        return leaderboard;
+        var leaderboar = leaderboardRepository.findAll().getFirst();
+        var r = runRepository.findAll();
+        leaderboar.getRuns().addAll(r);
+        return leaderboardRepository.findAll().getFirst();
     }
 
-    private void addGames() {
+    protected void addGames() {
+        addLeaderboards();
         Game game1 = new Game();
         game1.setName("Minecraft");
         game1.setSlug("minecraft");
         game1.setImageUrl("/games/minecraft.avif");
         game1.setLeaderboards(leaderboardRepository.findAll());
-        gameRepository.save(game1);
+        gameRepository.saveAndFlush(game1);
     }
 
-    private void addThreeUsers(){
+    protected void addThreeUsers(){
         String passwordEncrypted = passwordEncoder.encode("123456Aa");
 
         Speedrunner speedrunner1 = new Speedrunner();
@@ -132,7 +151,7 @@ public class HealthController {
         speedrunner1.setRight(Right.SPEEDRUNNER);
         speedrunner2.setRight(Right.SPEEDRUNNER);
         admin.setRight(Right.ADMIN);
-        speedrunnerRepository.saveAll(List.of(speedrunner1, speedrunner2));
-        administratorRepository.save(admin);
+        speedrunnerRepository.saveAllAndFlush(List.of(speedrunner1, speedrunner2));
+        administratorRepository.saveAndFlush(admin);
     }
 }
