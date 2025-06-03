@@ -8,5 +8,4 @@ import java.util.UUID;
 public interface RunReviewUseCase {
     List<RunReview> getUnreviewedRuns(String gameSlug, String categoryId);
     void verifyRun(UUID runId);
-    void deleteUnreviewedRun(UUID uuid);
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
@@ -50,8 +51,8 @@ public class RunsFacadeImpl implements RunsFacade {
 
     @Override
     public ResponseEntity<Void> restApiGamesUuidDelete(String uuid) {
-        //TODO fill with code
-        return RunsFacade.super.restApiGamesUuidDelete(uuid);
+        runUseCase.deleteRun(UUID.fromString(uuid));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

@@ -57,7 +57,7 @@ public class RunUseCaseImpl implements RunUseCase {
 
     @Transactional
     @Override
-    public void addUnverifiedRun(String gameSlug, String categoryId, Date date, Runtime runtime) {
+    public void addUnverifiedRun(String gameSlug, String categoryId, Date date, String videoLink, Runtime runtime) {
         Game game = utilities.getGame(gameSlug);
         Leaderboard leaderboard = utilities.getLeaderboard(game, categoryId);
         Speedrunner speedrunner = getSpeedrunner();
@@ -72,7 +72,7 @@ public class RunUseCaseImpl implements RunUseCase {
 
         if(otherRunsFromSpeedrunner.isEmpty()) {
             //Speedrunner never submitted a run
-            addRun(leaderboard, speedrunner, date, runtime);
+            addRun(leaderboard, speedrunner, date, videoLink, runtime);
             return;
         }
 
@@ -83,27 +83,29 @@ public class RunUseCaseImpl implements RunUseCase {
             throw new NotAcceptableStatusException("Speedrunner already has a faster time on the leaderboard or submitted a faster time!");
         } else {
             if(unsubmittedRun.isEmpty()){
-                addRun(leaderboard, speedrunner, date, runtime);
+                addRun(leaderboard, speedrunner, date, videoLink, runtime);
             } else {
                 leaderboard.getRuns().remove(unsubmittedRun.get());
-                addRun(leaderboard, speedrunner, date, runtime);
+                addRun(leaderboard, speedrunner, date, videoLink, runtime);
             }
         }
     }
 
+    @Override
     @Transactional
-    public void deleteRun(String runUUID){
-        Run run = utilities.getRun(UUID.fromString(runUUID));
+    public void deleteRun(UUID runId){
+        Run run = utilities.getRun(runId);
         Leaderboard leaderboard = utilities.getLeaderboardByRun(run);
         leaderboard.getRuns().remove(run);
     }
 
-    private void addRun(Leaderboard leaderboard, Speedrunner speedrunner, Date date, Runtime runtime) {
+    private void addRun(Leaderboard leaderboard, Speedrunner speedrunner, Date date, String videoLink, Runtime runtime) {
         Run runToAdd = new Run();
         runToAdd.setDate(date);
         runToAdd.setRuntime(runtime);
         runToAdd.setVerified(false);
         runToAdd.setSpeedrunner(speedrunner);
+        runToAdd.setVideoLink(videoLink);
 
         leaderboard.getRuns().add(runToAdd);
     }

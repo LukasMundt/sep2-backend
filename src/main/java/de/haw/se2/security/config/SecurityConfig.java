@@ -75,6 +75,8 @@ public class SecurityConfig {
                         .requestMatchers("/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/rest/api/games/*/categories").hasAuthority(ADMIN_ROLE)
                         .requestMatchers("/rest/api/games/*/categories/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers("/rest/api/reviews/unreviewed/*").hasAnyAuthority(ADMIN_ROLE)
+                        .requestMatchers("/rest/api/games/*").hasAuthority(ADMIN_ROLE)
 
                         // ab in die firewall mit dem rest alla
                         .anyRequest().authenticated()

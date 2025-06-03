@@ -3,6 +3,7 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
+import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,13 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
 
     private final RunReviewUseCase runReviewUseCase;
     private final CustomizedModelMapper mapper;
+    private final RunUseCase runUseCase;
 
     @Autowired
-    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper mapper) {
+    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper mapper, RunUseCase runUseCase) {
         this.runReviewUseCase = runReviewUseCase;
         this.mapper = mapper;
+        this.runUseCase = runUseCase;
     }
 
     @Override
@@ -39,8 +42,8 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
 
     @Override
     public ResponseEntity<Void> restApiReviewsUnreviewedUuidDelete(String uuid) {
-        runReviewUseCase.deleteUnreviewedRun(UUID.fromString(uuid));
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        runUseCase.deleteRun(UUID.fromString(uuid));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
@@ -48,6 +51,4 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
         runReviewUseCase.verifyRun(UUID.fromString(uuid));
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

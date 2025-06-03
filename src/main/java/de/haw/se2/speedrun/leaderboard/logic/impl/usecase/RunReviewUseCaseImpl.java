@@ -71,12 +71,6 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
         run.setVerified(true);
     }
 
-    @Transactional
-    @Override
-    public void deleteUnreviewedRun(UUID uuid) {
-
-    }
-
     private void addThisFasterRunToSlowerRuns(UUID speedrunnerId, Run run, Leaderboard leaderboard) {
         List<Run> runs = leaderboard.getRuns();
         runs.stream()
