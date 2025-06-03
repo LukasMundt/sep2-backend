@@ -44,8 +44,7 @@ public class RunsFacadeImpl implements RunsFacade {
     @Override
     public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunSubmit runSubmit) {
         Runtime runtime = mapper.map(runSubmit.getRuntime(), Runtime.class);
-        //TODO videoLink in runsubmit beachten
-        runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runtime);
+        runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runSubmit.getVideoLink(), runtime);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
