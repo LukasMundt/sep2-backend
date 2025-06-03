@@ -4,8 +4,8 @@ import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,23 +19,24 @@ import org.springframework.web.server.NotAcceptableStatusException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Component
 public class RunUseCaseImpl implements RunUseCase {
 
-    private final GameRepository gameRepository;
     private final SpeedrunnerRepository speedrunnerRepository;
+    private final Utilities utilities;
 
     @Autowired
-    public RunUseCaseImpl(GameRepository gameRepository, SpeedrunnerRepository speedrunnerRepository) {
-        this.gameRepository = gameRepository;
+    public RunUseCaseImpl(SpeedrunnerRepository speedrunnerRepository, Utilities utilities) {
         this.speedrunnerRepository = speedrunnerRepository;
+        this.utilities = utilities;
     }
 
     @Override
     public List<Run> getVerifiedLeaderboardRuns(String gameSlug, String categoryId) {
-        Game game = getGame(gameSlug);
+        Game game = utilities.getGame(gameSlug);
 
         List<Leaderboard> categoryLeaderboards =  game.getLeaderboards()
                 .stream()
@@ -56,9 +57,9 @@ public class RunUseCaseImpl implements RunUseCase {
 
     @Transactional
     @Override
-    public void addUnverifiedRun(String gameSlug, String categoryId, Date date, String videoLink, Runtime runtime) {
-        Game game = getGame(gameSlug);
-        Leaderboard leaderboard = getLeaderboard(game, categoryId);
+    public void addUnverifiedRun(String gameSlug, String categoryId, Date date, Runtime runtime) {
+        Game game = utilities.getGame(gameSlug);
+        Leaderboard leaderboard = utilities.getLeaderboard(game, categoryId);
         Speedrunner speedrunner = getSpeedrunner();
         List<Run> runs = leaderboard.getRuns();
 
@@ -71,7 +72,7 @@ public class RunUseCaseImpl implements RunUseCase {
 
         if(otherRunsFromSpeedrunner.isEmpty()) {
             //Speedrunner never submitted a run
-            addRun(leaderboard, speedrunner, date, videoLink, runtime);
+            addRun(leaderboard, speedrunner, date, runtime);
             return;
         }
 
@@ -82,45 +83,29 @@ public class RunUseCaseImpl implements RunUseCase {
             throw new NotAcceptableStatusException("Speedrunner already has a faster time on the leaderboard or submitted a faster time!");
         } else {
             if(unsubmittedRun.isEmpty()){
-                addRun(leaderboard, speedrunner, date, videoLink, runtime);
+                addRun(leaderboard, speedrunner, date, runtime);
             } else {
                 leaderboard.getRuns().remove(unsubmittedRun.get());
-                addRun(leaderboard, speedrunner, date, videoLink, runtime);
+                addRun(leaderboard, speedrunner, date, runtime);
             }
         }
     }
 
-    private void addRun(Leaderboard leaderboard, Speedrunner speedrunner, Date date, String videoLink, Runtime runtime) {
+    @Transactional
+    public void deleteRun(String runUUID){
+        Run run = utilities.getRun(UUID.fromString(runUUID));
+        Leaderboard leaderboard = utilities.getLeaderboardByRun(run);
+        leaderboard.getRuns().remove(run);
+    }
+
+    private void addRun(Leaderboard leaderboard, Speedrunner speedrunner, Date date, Runtime runtime) {
         Run runToAdd = new Run();
         runToAdd.setDate(date);
         runToAdd.setRuntime(runtime);
         runToAdd.setVerified(false);
         runToAdd.setSpeedrunner(speedrunner);
-        runToAdd.setVideoLink(videoLink);
 
         leaderboard.getRuns().add(runToAdd);
-    }
-
-    private Game getGame(String gameSlug) {
-        Optional<Game> game = gameRepository.findBySlug(gameSlug);
-        if(game.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Game '%s' not found", gameSlug));
-        }
-
-        return game.get();
-    }
-
-    private Leaderboard getLeaderboard(Game game, String categoryId) {
-        Optional<Leaderboard> leaderboard = game.getLeaderboards()
-                .stream()
-                .filter(l -> l.getCategory().getCategoryId().equalsIgnoreCase(categoryId))
-                .findFirst();
-
-        if(leaderboard.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Leaderboard '%s' not found", categoryId));
-        }
-
-        return leaderboard.get();
     }
 
     private Speedrunner getSpeedrunner() {
