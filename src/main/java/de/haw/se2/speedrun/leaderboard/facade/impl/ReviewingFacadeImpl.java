@@ -39,8 +39,8 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
 
     @Override
     public ResponseEntity<Void> restApiReviewsUnreviewedUuidDelete(String uuid) {
-        //TODO fill with code
-        return ReviewingFacade.super.restApiReviewsUnreviewedUuidDelete(uuid);
+        runReviewUseCase.deleteUnreviewedRun(UUID.fromString(uuid));
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
