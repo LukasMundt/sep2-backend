@@ -5,36 +5,33 @@
  */
 package de.haw.se2.speedrun.openapitools.api;
 
-import de.haw.se2.speedrun.openapitools.model.RunDto;
-import de.haw.se2.speedrun.openapitools.model.RunSubmit;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
+import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import de.haw.se2.speedrun.openapitools.model.RunDto;
+import de.haw.se2.speedrun.openapitools.model.RunSubmit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-27T20:21:07.566967269Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-03T06:27:08.812291795Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "runs", description = "All about the runs.")
 public interface RunsApi {
@@ -77,7 +74,7 @@ public interface RunsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } }, { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } } ]";
+                    String exampleString = "[ { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\" }, { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -127,6 +124,42 @@ public interface RunsApi {
         @Parameter(name = "gameSlug", description = "the game of the leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("gameSlug") String gameSlug,
         @Parameter(name = "categoryId", description = "the category of the leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("categoryId") String categoryId,
         @Parameter(name = "RunSubmit", description = "", required = true) @Valid @RequestBody RunSubmit runSubmit
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * DELETE /rest/api/games/{uuid} : Deletes an existing run by uuid.
+     * Deletes an existing run by uuid. Only users with admin rights are allowed to delete a run.
+     *
+     * @param uuid uuid of the game (required)
+     * @return Returned if the run is successfully deleted. (status code 204)
+     *         or Returned if the caller is not authenticated. (status code 401)
+     *         or Returned if the uuid is not found. (status code 404)
+     */
+    @Operation(
+        operationId = "restApiGamesUuidDelete",
+        summary = "Deletes an existing run by uuid.",
+        description = "Deletes an existing run by uuid. Only users with admin rights are allowed to delete a run.",
+        tags = { "runs" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Returned if the run is successfully deleted."),
+            @ApiResponse(responseCode = "401", description = "Returned if the caller is not authenticated."),
+            @ApiResponse(responseCode = "404", description = "Returned if the uuid is not found.")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/rest/api/games/{uuid}"
+    )
+    
+    default ResponseEntity<Void> restApiGamesUuidDelete(
+        @Parameter(name = "uuid", description = "uuid of the game", required = true, in = ParameterIn.PATH) @PathVariable("uuid") String uuid
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

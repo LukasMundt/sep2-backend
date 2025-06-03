@@ -38,8 +38,16 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
     }
 
     @Override
-    public ResponseEntity<Void> restApiReviewsVerifyPatch(String body) {
-        runReviewUseCase.verifyRun(UUID.fromString(body));
+    public ResponseEntity<Void> restApiReviewsUnreviewedUuidDelete(String uuid) {
+        //TODO fill with code
+        return ReviewingFacade.super.restApiReviewsUnreviewedUuidDelete(uuid);
+    }
+
+    @Override
+    public ResponseEntity<Void> restApiReviewsUnreviewedUuidPatch(String uuid) {
+        runReviewUseCase.verifyRun(UUID.fromString(uuid));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }
