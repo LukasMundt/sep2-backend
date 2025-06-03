@@ -25,6 +25,7 @@ import java.util.*;
 @RestController
 public class HealthController {
 
+    private static final String URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     private final Random rng;
 
     @Autowired
@@ -69,6 +70,9 @@ public class HealthController {
         Run run1 = new Run();
         Run run2 = new Run();
         Run run3 = new Run();
+        run1.setVideoLink(URL);
+        run2.setVideoLink(URL);
+        run3.setVideoLink(URL);
         run1.setDate(new Date());
         run2.setDate(new Date());
         run3.setDate(new Date());

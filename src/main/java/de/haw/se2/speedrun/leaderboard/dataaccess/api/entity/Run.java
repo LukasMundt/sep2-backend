@@ -2,6 +2,7 @@ package de.haw.se2.speedrun.leaderboard.dataaccess.api.entity;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
@@ -34,6 +35,10 @@ public class Run {
     @NotNull
     @ManyToOne
     private Speedrunner speedrunner;
+
+    @NotEmpty
+    @NonNull
+    private String videoLink;
 
     private boolean isVerified;
 }
