@@ -30,7 +30,7 @@ public class RunsFacadeImpl implements RunsFacade {
     }
 
     @Override
-    public ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdLeaderboardGet(String gameSlug, String categoryId) {
+    public ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdRunsGet(String gameSlug, String categoryId) {
         List<Run> runs = runUseCase.getVerifiedLeaderboardRuns(gameSlug, categoryId);
 
         List<RunDto> dtos = runs
@@ -41,16 +41,15 @@ public class RunsFacadeImpl implements RunsFacade {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-
     @Override
-    public ResponseEntity<Void> restApiGamesGameSlugCategoryIdSubmitPost(String gameSlug, String categoryId, RunSubmit runSubmit) {
+    public ResponseEntity<Void> restApiGamesGameSlugCategoryIdRunsPost(String gameSlug, String categoryId, RunSubmit runSubmit) {
         Runtime runtime = mapper.map(runSubmit.getRuntime(), Runtime.class);
         runUseCase.addUnverifiedRun(gameSlug, categoryId, runSubmit.getDate(), runSubmit.getVideoLink(), runtime);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Void> restApiGamesUuidDelete(String uuid) {
+    public ResponseEntity<Void> restApiRunsUuidDelete(String uuid) {
         runUseCase.deleteRun(UUID.fromString(uuid));
         return new ResponseEntity<>(HttpStatus.OK);
     }

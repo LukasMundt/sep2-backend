@@ -28,7 +28,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.List;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-03T06:27:08.812291795Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-05T18:48:11.037630545Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "reviewing", description = "All about the admin review process.")
 public interface ReviewingApi {
@@ -74,7 +74,7 @@ public interface ReviewingApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\" }, \"uuid\" : \"uuid\" }, { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\" }, \"uuid\" : \"uuid\" } ]";
+                    String exampleString = "[ { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\", \"uuid\" : \"uuid\" } }, { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\", \"uuid\" : \"uuid\" } } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

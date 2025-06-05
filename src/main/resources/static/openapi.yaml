@@ -3,7 +3,7 @@ info:
   title: Speedruns - OpenAPI 3.0
   description: |-
   
-  version: 0.2.4
+  version: 0.2.5
 
 tags:
   - name: games
@@ -58,14 +58,14 @@ paths:
 
         '404':
           description: Returned if the game slug were not found.
-  /rest/api/games/{gameSlug}/{categoryId}/leaderboard:
+  /rest/api/games/{gameSlug}/{categoryId}/runs:
     get:
       tags:
         - runs
       summary: Get leaderboard by game slug and category.
       description: Get leaderboard by game slug and category. The leaderboard is already sorted by runtime.
       parameters:
-        - name: gameSlug 
+        - name: gameSlug
           in: path
           description: the game of the leaderboard
           required: true
@@ -88,7 +88,6 @@ paths:
                   $ref: "#/components/schemas/RunDto"
         '404':
           description: Returned if the game slug or category were not found.
-  /rest/api/games/{gameSlug}/{categoryId}/submit:
     post: 
       tags:
         - runs
@@ -126,7 +125,7 @@ paths:
           description: Returned if the speedrunner already has a faster run time on the leaderboard
         '422':
           description: Returned if the runtime doesn’t fulfill the requirements.
-  /rest/api/games/{uuid}:
+  /rest/api/runs/{uuid}:
     delete: 
       tags:
         - runs
@@ -423,6 +422,8 @@ components:
     RunDto:
       type: object
       properties:
+        uuid:
+          type: string
         speedrunner:
           type: string
           description: Username of the speedrunner's account.
@@ -435,6 +436,7 @@ components:
           type: string
           format: URL
       required:
+        - uuid
         - speedrunner
         - date
         - runtime
@@ -461,14 +463,11 @@ components:
           type: string
         categoryLabel:
           type: string
-        uuid:
-          type: string
         run:
           $ref: '#/components/schemas/RunDto'
       required:
         - gameName
         - categoryLabel
-        - uuid
         - run
           
     RunSubmit:
