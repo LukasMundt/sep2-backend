@@ -3,7 +3,7 @@ info:
   title: Speedruns - OpenAPI 3.0
   description: |-
   
-  version: 0.2.3
+  version: 0.2.5
 
 tags:
   - name: games
@@ -58,14 +58,14 @@ paths:
 
         '404':
           description: Returned if the game slug were not found.
-  /rest/api/games/{gameSlug}/{categoryId}/leaderboard:
+  /rest/api/games/{gameSlug}/{categoryId}/runs:
     get:
       tags:
         - runs
       summary: Get leaderboard by game slug and category.
       description: Get leaderboard by game slug and category. The leaderboard is already sorted by runtime.
       parameters:
-        - name: gameSlug 
+        - name: gameSlug
           in: path
           description: the game of the leaderboard
           required: true
@@ -88,7 +88,6 @@ paths:
                   $ref: "#/components/schemas/RunDto"
         '404':
           description: Returned if the game slug or category were not found.
-  /rest/api/games/{gameSlug}/{categoryId}/submit:
     post: 
       tags:
         - runs
@@ -126,6 +125,28 @@ paths:
           description: Returned if the speedrunner already has a faster run time on the leaderboard
         '422':
           description: Returned if the runtime doesn’t fulfill the requirements.
+  /rest/api/runs/{uuid}:
+    delete: 
+      tags:
+        - runs
+      summary: Deletes an existing run by uuid.
+      description: Deletes an existing run by uuid. Only users with admin rights are allowed to delete a run.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: uuid 
+          in: path
+          description: uuid of the game
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Returned if the run is successfully deleted.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '404':
+          description: Returned if the uuid is not found.
 
   /rest/api/games/{gameSlug}/categories:
     get:
@@ -236,7 +257,28 @@ paths:
                   $ref: "#/components/schemas/RunReview"
         '401':
           description: Returned if the caller is not authenticated.
-  /rest/api/reviews/verify:
+  /rest/api/reviews/unreviewed/{uuid}:
+    delete:
+      tags:
+        - reviewing
+      summary: Deletes a unreviewed run.
+      description: Deletes a unreviewed run. Only users with admin rights are allowed to delete a run.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of the game
+          required: true
+          schema:
+              type: string
+      responses:
+        '204':
+          description: Returned if the run is successfully deleted.
+        '401':
+          description: Returned if the caller is not authenticated.
+        '404':
+          description: Returned if the uuid is not found.
     patch:
       tags:
         - reviewing
@@ -244,14 +286,13 @@ paths:
       description: Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid of the game
+          required: true
+          schema:
               type: string
-              description: uuid of the game
-              example: uuid
               
 
       responses:
@@ -261,6 +302,8 @@ paths:
           description: Returned if the caller is not authenticated.
         '404':
           description: Returned if the uuid is not found.
+          
+        
   /rest/auth:
     get:
       tags:
@@ -379,6 +422,8 @@ components:
     RunDto:
       type: object
       properties:
+        uuid:
+          type: string
         speedrunner:
           type: string
           description: Username of the speedrunner's account.
@@ -387,10 +432,15 @@ components:
           format: date-time
         runtime: 
           $ref: '#/components/schemas/Runtime'
+        videoLink:
+          type: string
+          format: URL
       required:
+        - uuid
         - speedrunner
         - date
         - runtime
+        - videoLink
     GameDto:
       type: object
       properties:
@@ -413,14 +463,11 @@ components:
           type: string
         categoryLabel:
           type: string
-        uuid:
-          type: string
         run:
           $ref: '#/components/schemas/RunDto'
       required:
         - gameName
         - categoryLabel
-        - uuid
         - run
           
     RunSubmit:
@@ -431,9 +478,13 @@ components:
           format: date-time
         runtime: 
           $ref: '#/components/schemas/Runtime'
+        videoLink:
+          type: string
+          format: URL
       required:
         - date
         - runtime
+        - videoLink
     
     #Other
     Category:
@@ -494,8 +545,10 @@ components:
           type: string
         password:
           type: string
+          format: password
         email:
           type: string
+          format: email
       required:
         - username
         - password
@@ -505,8 +558,10 @@ components:
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
+          format: password
       required:
         - email
         - password

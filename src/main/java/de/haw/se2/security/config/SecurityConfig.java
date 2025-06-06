@@ -53,7 +53,6 @@ public class SecurityConfig {
                                 "/insertSampleData",
                                 "/up",
                                 "/rest/api/games/*/categories",
-                                "/rest/api/games/*/*/leaderboard",
                                 "/rest/auth/register",
                                 "/rest/auth/login",
                                 "/rest/api/games/*",
@@ -64,17 +63,20 @@ public class SecurityConfig {
                                 "/rest/rss/getFeed/*",
                                 "/"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rest/api/games/*/*/runs").permitAll()
 
                         //User access
-                        .requestMatchers("/rest/api/games/*/*/submit").hasAuthority(USER_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/rest/api/games/*/*/runs").hasAuthority(USER_ROLE)
                         .requestMatchers("/getFeedUrl").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
                         .requestMatchers("/rest/auth", "/rest/auth/logout").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
 
                         //Admin access
-                        .requestMatchers("/rest/api/reviews/verify").hasAuthority(ADMIN_ROLE)
-                        .requestMatchers("/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.PATCH, "/rest/api/reviews/unreviewed/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/rest/api/games/*/categories").hasAuthority(ADMIN_ROLE)
                         .requestMatchers("/rest/api/games/*/categories/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers("/rest/api/reviews/unreviewed/*").hasAnyAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.DELETE, "/rest/api/runs/*").hasAuthority(ADMIN_ROLE)
 
                         // ab in die firewall mit dem rest alla
                         .anyRequest().authenticated()
@@ -84,12 +86,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
 
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/rest/auth/login", "/rest/auth/register"))
-
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-
                 .httpBasic(Customizer.withDefaults())
-
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 )
@@ -98,7 +96,6 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 );
-
 
         return http.build();
     }

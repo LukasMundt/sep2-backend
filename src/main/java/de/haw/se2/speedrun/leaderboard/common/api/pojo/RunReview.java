@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 public class RunReview {
@@ -16,9 +14,6 @@ public class RunReview {
 
     @NonNull
     private String categoryLabel;
-
-    @NonNull
-    private UUID uuid;
 
     @NonNull
     private Run run;

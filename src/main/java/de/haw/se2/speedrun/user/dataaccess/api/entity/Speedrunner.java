@@ -1,7 +1,10 @@
 package de.haw.se2.speedrun.user.dataaccess.api.entity;
 
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

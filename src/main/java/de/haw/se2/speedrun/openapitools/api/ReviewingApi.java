@@ -6,34 +6,29 @@
 package de.haw.se2.speedrun.openapitools.api;
 
 import de.haw.se2.speedrun.openapitools.model.RunReview;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
+import jakarta.annotation.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-27T20:21:07.566967269Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-05T18:48:11.037630545Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 @Validated
 @Tag(name = "reviewing", description = "All about the admin review process.")
 public interface ReviewingApi {
@@ -79,7 +74,7 @@ public interface ReviewingApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } }, \"uuid\" : \"uuid\" }, { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 } }, \"uuid\" : \"uuid\" } ]";
+                    String exampleString = "[ { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\", \"uuid\" : \"uuid\" } }, { \"gameName\" : \"gameName\", \"categoryLabel\" : \"categoryLabel\", \"run\" : { \"date\" : \"2000-01-23T04:56:07.000+00:00\", \"speedrunner\" : \"speedrunner\", \"runtime\" : { \"milliseconds\" : 5, \"hours\" : 0, \"seconds\" : 1, \"minutes\" : 6 }, \"videoLink\" : \"videoLink\", \"uuid\" : \"uuid\" } } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -91,16 +86,52 @@ public interface ReviewingApi {
 
 
     /**
-     * PATCH /rest/api/reviews/verify : Verifies a unreviewed run.
+     * DELETE /rest/api/reviews/unreviewed/{uuid} : Deletes a unreviewed run.
+     * Deletes a unreviewed run. Only users with admin rights are allowed to delete a run.
+     *
+     * @param uuid uuid of the game (required)
+     * @return Returned if the run is successfully deleted. (status code 204)
+     *         or Returned if the caller is not authenticated. (status code 401)
+     *         or Returned if the uuid is not found. (status code 404)
+     */
+    @Operation(
+        operationId = "restApiReviewsUnreviewedUuidDelete",
+        summary = "Deletes a unreviewed run.",
+        description = "Deletes a unreviewed run. Only users with admin rights are allowed to delete a run.",
+        tags = { "reviewing" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Returned if the run is successfully deleted."),
+            @ApiResponse(responseCode = "401", description = "Returned if the caller is not authenticated."),
+            @ApiResponse(responseCode = "404", description = "Returned if the uuid is not found.")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/rest/api/reviews/unreviewed/{uuid}"
+    )
+    
+    default ResponseEntity<Void> restApiReviewsUnreviewedUuidDelete(
+        @Parameter(name = "uuid", description = "uuid of the game", required = true, in = ParameterIn.PATH) @PathVariable("uuid") String uuid
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PATCH /rest/api/reviews/unreviewed/{uuid} : Verifies a unreviewed run.
      * Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.
      *
-     * @param body  (required)
+     * @param uuid uuid of the game (required)
      * @return Returned if the run is successfully verified. (status code 200)
      *         or Returned if the caller is not authenticated. (status code 401)
      *         or Returned if the uuid is not found. (status code 404)
      */
     @Operation(
-        operationId = "restApiReviewsVerifyPatch",
+        operationId = "restApiReviewsUnreviewedUuidPatch",
         summary = "Verifies a unreviewed run.",
         description = "Verifies a unreviewed run. Only users with admin rights are allowed to verify a run.",
         tags = { "reviewing" },
@@ -115,12 +146,11 @@ public interface ReviewingApi {
     )
     @RequestMapping(
         method = RequestMethod.PATCH,
-        value = "/rest/api/reviews/verify",
-        consumes = { "application/json" }
+        value = "/rest/api/reviews/unreviewed/{uuid}"
     )
     
-    default ResponseEntity<Void> restApiReviewsVerifyPatch(
-        @Parameter(name = "body", description = "", required = true) @Valid @RequestBody String body
+    default ResponseEntity<Void> restApiReviewsUnreviewedUuidPatch(
+        @Parameter(name = "uuid", description = "uuid of the game", required = true, in = ParameterIn.PATH) @PathVariable("uuid") String uuid
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

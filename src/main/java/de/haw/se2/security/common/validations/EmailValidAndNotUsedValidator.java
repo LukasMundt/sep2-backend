@@ -5,17 +5,13 @@ import de.haw.se2.security.common.validations.exceptions.EmailInvalidException;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 
+@RequiredArgsConstructor
 public class EmailValidAndNotUsedValidator implements ConstraintValidator<EmailValidAndNotUsed, String> {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public EmailValidAndNotUsedValidator(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {

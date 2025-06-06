@@ -2,7 +2,9 @@ package de.haw.se2.speedrun.leaderboard.dataaccess.api.entity;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.hibernate.annotations.BatchSize;
 import org.jetbrains.annotations.NotNull;
 

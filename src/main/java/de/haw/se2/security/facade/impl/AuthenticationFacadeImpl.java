@@ -12,7 +12,7 @@ import de.haw.se2.speedrun.openapitools.model.RegisterError;
 import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +32,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
+@RequiredArgsConstructor
 public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     private final AuthenticationManager authenticationManager;
@@ -40,14 +41,6 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     private final CustomizedModelMapper mapper;
 
     private static final int HOUR_IN_SECONDS = 60 * 60;
-
-    @Autowired
-    public AuthenticationFacadeImpl(AuthenticationManager authenticationManager, JwtEncoder jwtEncoder, RegisterUseCase registerUseCase, CustomizedModelMapper mapper) {
-        this.authenticationManager = authenticationManager;
-        this.jwtEncoder = jwtEncoder;
-        this.registerUseCase = registerUseCase;
-        this.mapper = mapper;
-    }
 
     @Override
     public ResponseEntity<List<String>> restAuthGet(){
