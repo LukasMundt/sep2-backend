@@ -20,6 +20,7 @@ public class CustomizedModelMapper extends org.modelmapper.ModelMapper {
 
     private void configureSpeedrunner() {
         this.typeMap(Run.class, RunDto.class)
+                .addMapping(Run::getId, RunDto::setUuid)
                 .addMapping(source -> source.getSpeedrunner().getUsername(), RunDto::setSpeedrunner);
     }
 
