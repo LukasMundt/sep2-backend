@@ -55,8 +55,6 @@ public class HealthController {
 
     private final GameRepository gameRepository;
 
-    private final Random random = new Random();
-
     final LeaderboardRepository leaderboardRepository;
 
     @GetMapping("/insertSampleData")
@@ -98,7 +96,7 @@ public class HealthController {
         List<Run> runs = new ArrayList<>(List.of(run1, run2, run3));
         Collections.shuffle(runs);
 
-        if (random.nextBoolean()) {
+        if (rng.nextBoolean()) {
             runRepository.saveAll(runs.subList(0, 2));
             return runs.subList(0, 2);
         } else {
