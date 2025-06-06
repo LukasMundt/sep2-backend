@@ -18,8 +18,5 @@ public class RunReview {
     private String categoryLabel;
 
     @NonNull
-    private UUID uuid;
-
-    @NonNull
     private Run run;
 }
