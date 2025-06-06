@@ -37,7 +37,6 @@ public class RunReviewUseCaseImpl implements RunReviewUseCase {
                 .map(r -> {
                     RunReview runReview = new RunReview();
                     runReview.setRun(r);
-                    runReview.setUuid(r.getId());
                     runReview.setGameName(gameSlug);
                     runReview.setCategoryLabel(categoryId);
                     return runReview;
