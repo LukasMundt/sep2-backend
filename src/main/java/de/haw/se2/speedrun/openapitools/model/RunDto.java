@@ -1,16 +1,14 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import jakarta.annotation.Generated;
+import java.util.Objects;
 
 /**
  * RunDto

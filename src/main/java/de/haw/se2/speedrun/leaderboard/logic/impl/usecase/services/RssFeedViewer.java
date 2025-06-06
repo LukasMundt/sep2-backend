@@ -15,8 +15,8 @@ import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,19 +24,13 @@ import java.io.StringWriter;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class RssFeedViewer {
 
     public static final String NOT_FOUND = " not found";
     private final SpeedrunnerRepository speedrunnerRepository;
     private final RunRepository runRepository;
     private final Utilities utilities;
-
-    @Autowired
-    public RssFeedViewer(SpeedrunnerRepository speedrunnerRepository, RunRepository runRepository, Utilities utilities) {
-        this.speedrunnerRepository = speedrunnerRepository;
-        this.runRepository = runRepository;
-        this.utilities = utilities;
-    }
 
     @SneakyThrows
     public String buildFeed(String id) {

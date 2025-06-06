@@ -2,11 +2,13 @@ package de.haw.se2.speedrun.leaderboard.dataaccess.api.entity;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Date;
 import java.util.UUID;

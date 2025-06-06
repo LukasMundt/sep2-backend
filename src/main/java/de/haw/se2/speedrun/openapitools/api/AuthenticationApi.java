@@ -5,6 +5,10 @@
  */
 package de.haw.se2.speedrun.openapitools.api;
 
+import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
+import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
+import de.haw.se2.speedrun.openapitools.model.RegisterError;
+import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -15,10 +19,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
-import de.haw.se2.speedrun.openapitools.model.LoginCredentials;
-import de.haw.se2.speedrun.openapitools.model.RegisterCredentials;
-import de.haw.se2.speedrun.openapitools.model.RegisterError;
-import de.haw.se2.speedrun.openapitools.model.TokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

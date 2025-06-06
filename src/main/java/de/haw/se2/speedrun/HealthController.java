@@ -2,19 +2,19 @@ package de.haw.se2.speedrun;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Administrator;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,23 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 public class HealthController {
 
     private static final String URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    private final Random rng;
-
-    @Autowired
-    public HealthController(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository,
-                            GameRepository gameRepository, LeaderboardRepository leaderboardRepository,
-                            RunRepository runRepository, PasswordEncoder passwordEncoder) {
-        this.speedrunnerRepository = speedrunnerRepository;
-        this.administratorRepository = administratorRepository;
-        this.gameRepository = gameRepository;
-        this.leaderboardRepository = leaderboardRepository;
-        this.runRepository = runRepository;
-        this.rng = new Random();
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final Random rng = new Random();
 
     @GetMapping("/up")
     public ResponseEntity<String> home() {

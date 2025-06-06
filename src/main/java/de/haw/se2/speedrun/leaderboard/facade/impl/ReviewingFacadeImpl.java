@@ -5,7 +5,7 @@ import de.haw.se2.speedrun.leaderboard.facade.api.ReviewingFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunReview;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,18 +16,12 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
+@RequiredArgsConstructor
 public class ReviewingFacadeImpl implements ReviewingFacade {
 
     private final RunReviewUseCase runReviewUseCase;
     private final CustomizedModelMapper mapper;
     private final RunUseCase runUseCase;
-
-    @Autowired
-    public ReviewingFacadeImpl(RunReviewUseCase runReviewUseCase, CustomizedModelMapper mapper, RunUseCase runUseCase) {
-        this.runReviewUseCase = runReviewUseCase;
-        this.mapper = mapper;
-        this.runUseCase = runUseCase;
-    }
 
     @Override
     public ResponseEntity<List<RunReview>> restApiReviewsUnreviewedGameSlugCategoryIdGet(String gameSlug, String categoryId) {

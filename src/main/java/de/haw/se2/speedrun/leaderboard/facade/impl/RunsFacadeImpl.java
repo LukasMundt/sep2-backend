@@ -7,7 +7,7 @@ import de.haw.se2.speedrun.leaderboard.facade.api.RunsFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.openapitools.model.RunDto;
 import de.haw.se2.speedrun.openapitools.model.RunSubmit;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,16 +18,11 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
+@RequiredArgsConstructor
 public class RunsFacadeImpl implements RunsFacade {
 
     private final CustomizedModelMapper mapper;
     private final RunUseCase runUseCase;
-
-    @Autowired
-    public RunsFacadeImpl(CustomizedModelMapper mapper, RunUseCase runUseCase) {
-        this.mapper = mapper;
-        this.runUseCase = runUseCase;
-    }
 
     @Override
     public ResponseEntity<List<RunDto>> restApiGamesGameSlugCategoryIdRunsGet(String gameSlug, String categoryId) {

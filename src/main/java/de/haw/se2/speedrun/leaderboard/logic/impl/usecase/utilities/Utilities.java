@@ -7,13 +7,14 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class Utilities {
 
     public static final String NOT_FOUND = " not found";
@@ -21,13 +22,6 @@ public class Utilities {
     private final RunRepository runRepository;
     private final LeaderboardRepository leaderboardRepository;
     private final GameRepository gameRepository;
-
-    @Autowired
-    protected Utilities(RunRepository runRepository, LeaderboardRepository leaderboardRepository, GameRepository gameRepository) {
-        this.runRepository = runRepository;
-        this.leaderboardRepository = leaderboardRepository;
-        this.gameRepository = gameRepository;
-    }
 
     public Run getRun(UUID runId) {
         Optional<Run> run = runRepository.getRunById(runId);

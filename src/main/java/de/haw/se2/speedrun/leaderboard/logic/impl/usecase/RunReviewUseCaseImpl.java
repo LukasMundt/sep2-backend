@@ -8,7 +8,7 @@ import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunReviewUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -17,14 +17,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class RunReviewUseCaseImpl implements RunReviewUseCase {
 
     private final Utilities utilities;
-
-    @Autowired
-    public RunReviewUseCaseImpl(Utilities utilities) {
-        this.utilities = utilities;
-    }
 
     @Override
     public List<RunReview> getUnreviewedRuns(String gameSlug, String categoryId) {

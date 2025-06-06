@@ -4,7 +4,7 @@ import de.haw.se2.speedrun.common.CustomizedModelMapper;
 import de.haw.se2.speedrun.leaderboard.facade.api.CategoriesFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.CategoryUseCase;
 import de.haw.se2.speedrun.openapitools.model.Category;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,16 +14,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("${openapi.speedrunsOpenAPI30.base-path:}")
+@RequiredArgsConstructor
 public class CategoriesFacadeImpl implements CategoriesFacade {
 
     private final CustomizedModelMapper mapper;
     private final CategoryUseCase categoryUseCase;
-
-    @Autowired
-    public CategoriesFacadeImpl(CustomizedModelMapper modelMapper, CategoryUseCase categoryUseCase) {
-        this.mapper = modelMapper;
-        this.categoryUseCase = categoryUseCase;
-    }
 
     @Override
     public ResponseEntity<List<Category>> restApiGamesGameSlugCategoriesGet(String gameSlug) {

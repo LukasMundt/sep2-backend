@@ -1,13 +1,12 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.lang.Nullable;
-import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
 import jakarta.annotation.Generated;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * TokenResponse

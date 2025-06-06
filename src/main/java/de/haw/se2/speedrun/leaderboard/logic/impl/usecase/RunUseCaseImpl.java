@@ -10,7 +10,7 @@ import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -23,16 +23,11 @@ import java.util.UUID;
 
 
 @Component
+@RequiredArgsConstructor
 public class RunUseCaseImpl implements RunUseCase {
 
     private final SpeedrunnerRepository speedrunnerRepository;
     private final Utilities utilities;
-
-    @Autowired
-    public RunUseCaseImpl(SpeedrunnerRepository speedrunnerRepository, Utilities utilities) {
-        this.speedrunnerRepository = speedrunnerRepository;
-        this.utilities = utilities;
-    }
 
     @Override
     public List<Run> getVerifiedLeaderboardRuns(String gameSlug, String categoryId) {

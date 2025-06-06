@@ -7,7 +7,7 @@ import de.haw.se2.speedrun.leaderboard.logic.api.usecase.CategoryUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class CategoryUseCaseImpl implements CategoryUseCase {
 
     private final Utilities utilities;
-
-    @Autowired
-    public CategoryUseCaseImpl(Utilities utilities) {
-        this.utilities = utilities;
-    }
 
     @Override
     public List<Category> getCategories(String gameSlug) {

@@ -4,22 +4,17 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.GameUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class GameUseCaseImpl implements GameUseCase {
 
     private final GameRepository gameRepository;
     private final Utilities utilities;
-
-    @Autowired
-    public GameUseCaseImpl(GameRepository gameRepository, Utilities utilities) {
-        this.gameRepository = gameRepository;
-        this.utilities = utilities;
-    }
 
     @Override
     public List<Game> getAllGames() {
