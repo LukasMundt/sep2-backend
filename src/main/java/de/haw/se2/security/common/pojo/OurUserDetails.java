@@ -15,7 +15,7 @@ import static de.haw.se2.speedrun.user.common.api.datatype.Right.ADMIN;
 
 public class OurUserDetails implements UserDetails {
 
-    private transient final User user;
+    private final transient User user;
 
     public OurUserDetails(User user) {
         this.user = user;
