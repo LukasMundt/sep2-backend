@@ -71,8 +71,8 @@ public class SecurityConfig {
                         .requestMatchers("/rest/auth", "/rest/auth/logout").hasAnyAuthority(USER_ROLE, ADMIN_ROLE)
 
                         //Admin access
-                        .requestMatchers("/rest/api/reviews/verify").hasAuthority(ADMIN_ROLE)
-                        .requestMatchers("/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.PATCH, "/rest/api/reviews/unreviewed/*").hasAuthority(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/rest/api/reviews/unreviewed/*/*").hasAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/rest/api/games/*/categories").hasAuthority(ADMIN_ROLE)
                         .requestMatchers("/rest/api/games/*/categories/*").hasAuthority(ADMIN_ROLE)
                         .requestMatchers("/rest/api/reviews/unreviewed/*").hasAnyAuthority(ADMIN_ROLE)
