@@ -1,9 +1,7 @@
 package de.haw.se2.security.logic.impl;
 
 import de.haw.se2.security.common.pojo.RegisterCredentials;
-import de.haw.se2.security.logic.api.RegisterUseCase;
 import de.haw.se2.speedrun.Se2SpeedrunApplication;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
