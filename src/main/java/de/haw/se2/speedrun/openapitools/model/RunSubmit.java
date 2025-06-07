@@ -1,34 +1,28 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import java.net.URI;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.Date;
-import de.haw.se2.speedrun.openapitools.model.Runtime;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.Nullable;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * RunSubmit
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-27T20:21:07.566967269Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-05T18:48:11.037630545Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class RunSubmit {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private Date date;
 
   private Runtime runtime;
+
+  private String videoLink;
 
   public RunSubmit() {
     super();
@@ -37,9 +31,10 @@ public class RunSubmit {
   /**
    * Constructor with only required parameters
    */
-  public RunSubmit(Date date, Runtime runtime) {
+  public RunSubmit(Date date, Runtime runtime, String videoLink) {
     this.date = date;
     this.runtime = runtime;
+    this.videoLink = videoLink;
   }
 
   public RunSubmit date(Date date) {
@@ -82,6 +77,26 @@ public class RunSubmit {
     this.runtime = runtime;
   }
 
+  public RunSubmit videoLink(String videoLink) {
+    this.videoLink = videoLink;
+    return this;
+  }
+
+  /**
+   * Get videoLink
+   * @return videoLink
+   */
+  @NotNull 
+  @Schema(name = "videoLink", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("videoLink")
+  public String getVideoLink() {
+    return videoLink;
+  }
+
+  public void setVideoLink(String videoLink) {
+    this.videoLink = videoLink;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -92,12 +107,13 @@ public class RunSubmit {
     }
     RunSubmit runSubmit = (RunSubmit) o;
     return Objects.equals(this.date, runSubmit.date) &&
-        Objects.equals(this.runtime, runSubmit.runtime);
+        Objects.equals(this.runtime, runSubmit.runtime) &&
+        Objects.equals(this.videoLink, runSubmit.videoLink);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(date, runtime);
+    return Objects.hash(date, runtime, videoLink);
   }
 
   @Override
@@ -106,6 +122,7 @@ public class RunSubmit {
     sb.append("class RunSubmit {\n");
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    runtime: ").append(toIndentedString(runtime)).append("\n");
+    sb.append("    videoLink: ").append(toIndentedString(videoLink)).append("\n");
     sb.append("}");
     return sb.toString();
   }

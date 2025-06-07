@@ -1,33 +1,23 @@
 package de.haw.se2.speedrun.openapitools.model;
 
-import java.net.URI;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import de.haw.se2.speedrun.openapitools.model.RunDto;
-import org.springframework.lang.Nullable;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
 
 /**
  * RunReview
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-27T20:21:07.566967269Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-05T18:48:11.037630545Z[Etc/UTC]", comments = "Generator version: 7.14.0-SNAPSHOT")
 public class RunReview {
 
   private String gameName;
 
   private String categoryLabel;
-
-  private String uuid;
 
   private RunDto run;
 
@@ -38,10 +28,9 @@ public class RunReview {
   /**
    * Constructor with only required parameters
    */
-  public RunReview(String gameName, String categoryLabel, String uuid, RunDto run) {
+  public RunReview(String gameName, String categoryLabel, RunDto run) {
     this.gameName = gameName;
     this.categoryLabel = categoryLabel;
-    this.uuid = uuid;
     this.run = run;
   }
 
@@ -85,26 +74,6 @@ public class RunReview {
     this.categoryLabel = categoryLabel;
   }
 
-  public RunReview uuid(String uuid) {
-    this.uuid = uuid;
-    return this;
-  }
-
-  /**
-   * Get uuid
-   * @return uuid
-   */
-  @NotNull 
-  @Schema(name = "uuid", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("uuid")
-  public String getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(String uuid) {
-    this.uuid = uuid;
-  }
-
   public RunReview run(RunDto run) {
     this.run = run;
     return this;
@@ -136,13 +105,12 @@ public class RunReview {
     RunReview runReview = (RunReview) o;
     return Objects.equals(this.gameName, runReview.gameName) &&
         Objects.equals(this.categoryLabel, runReview.categoryLabel) &&
-        Objects.equals(this.uuid, runReview.uuid) &&
         Objects.equals(this.run, runReview.run);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gameName, categoryLabel, uuid, run);
+    return Objects.hash(gameName, categoryLabel, run);
   }
 
   @Override
@@ -151,7 +119,6 @@ public class RunReview {
     sb.append("class RunReview {\n");
     sb.append("    gameName: ").append(toIndentedString(gameName)).append("\n");
     sb.append("    categoryLabel: ").append(toIndentedString(categoryLabel)).append("\n");
-    sb.append("    uuid: ").append(toIndentedString(uuid)).append("\n");
     sb.append("    run: ").append(toIndentedString(run)).append("\n");
     sb.append("}");
     return sb.toString();

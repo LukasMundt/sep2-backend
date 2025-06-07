@@ -2,19 +2,19 @@ package de.haw.se2.speedrun;
 
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
+import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Administrator;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,22 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 public class HealthController {
 
-    private final Random rng;
-
-    @Autowired
-    public HealthController(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository,
-                            GameRepository gameRepository, LeaderboardRepository leaderboardRepository,
-                            RunRepository runRepository, PasswordEncoder passwordEncoder) {
-        this.speedrunnerRepository = speedrunnerRepository;
-        this.administratorRepository = administratorRepository;
-        this.gameRepository = gameRepository;
-        this.leaderboardRepository = leaderboardRepository;
-        this.runRepository = runRepository;
-        this.rng = new Random();
-        this.passwordEncoder = passwordEncoder;
-    }
+    private static final String URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    private final Random rng = new Random();
 
     @GetMapping("/up")
     public ResponseEntity<String> home() {
@@ -54,8 +43,6 @@ public class HealthController {
 
     private final GameRepository gameRepository;
 
-    private final Random random = new Random();
-
     final LeaderboardRepository leaderboardRepository;
 
     @GetMapping("/insertSampleData")
@@ -69,6 +56,9 @@ public class HealthController {
         Run run1 = new Run();
         Run run2 = new Run();
         Run run3 = new Run();
+        run1.setVideoLink(URL);
+        run2.setVideoLink(URL);
+        run3.setVideoLink(URL);
         run1.setDate(new Date());
         run2.setDate(new Date());
         run3.setDate(new Date());
@@ -94,7 +84,7 @@ public class HealthController {
         List<Run> runs = new ArrayList<>(List.of(run1, run2, run3));
         Collections.shuffle(runs);
 
-        if (random.nextBoolean()) {
+        if (rng.nextBoolean()) {
             runRepository.saveAll(runs.subList(0, 2));
             return runs.subList(0, 2);
         } else {

@@ -2,7 +2,7 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.leaderboard.facade.api.RssFeedFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
+@RequiredArgsConstructor
 public class RssFeedFacadeImpl implements RssFeedFacade {
 
     private final RssFeedUseCase rssFeedUseCase;
-
-    @Autowired
-    public RssFeedFacadeImpl(RssFeedUseCase rssFeedUseCase) {
-        this.rssFeedUseCase = rssFeedUseCase;
-    }
 
     @Override
     public ResponseEntity<String> restRssGetFeedUrlGet() {

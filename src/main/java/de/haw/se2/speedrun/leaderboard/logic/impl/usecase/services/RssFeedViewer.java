@@ -9,15 +9,14 @@ import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,22 +24,13 @@ import java.io.StringWriter;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class RssFeedViewer {
 
     public static final String NOT_FOUND = " not found";
     private final SpeedrunnerRepository speedrunnerRepository;
     private final RunRepository runRepository;
-    private final LeaderboardRepository leaderboardRepository;
-    private final GameRepository gameRepository;
-
-    @Autowired
-    public RssFeedViewer(SpeedrunnerRepository speedrunnerRepository, RunRepository runRepository,
-                         LeaderboardRepository leaderboardRepository, GameRepository gameRepository) {
-        this.speedrunnerRepository = speedrunnerRepository;
-        this.runRepository = runRepository;
-        this.leaderboardRepository = leaderboardRepository;
-        this.gameRepository = gameRepository;
-    }
+    private final Utilities utilities;
 
     @SneakyThrows
     public String buildFeed(String id) {
@@ -78,9 +68,9 @@ public class RssFeedViewer {
         List<Item> items = new ArrayList<>();
         for (Run fasterRun : otherRuns) {
             try {
-                Leaderboard leaderboard = getLeaderboard(fasterRun);
+                Leaderboard leaderboard = utilities.getLeaderboardByRun(fasterRun);
                 Run ownSlowerRun = getOwnRun(speedrunner, leaderboard);
-                Game game = getGame(leaderboard);
+                Game game = utilities.getGame(leaderboard);
                 items.add(formatItem(fasterRun, ownSlowerRun, game, leaderboard, speedrunner));
             } catch (Exception ignored) {
                 // Skip old Leaderboards/Run/Games that aren't found in DB. Probably already deleted
@@ -131,24 +121,6 @@ public class RssFeedViewer {
         }
 
         return speedrunner.get();
-    }
-
-    private Leaderboard getLeaderboard(Run run) {
-        Optional<Leaderboard> leaderboard = leaderboardRepository.findLeaderboardByRunsContaining(run);
-        if (leaderboard.isEmpty()) {
-            throw new EntityNotFoundException("Run with id " + run.getId() + NOT_FOUND);
-        }
-
-        return leaderboard.get();
-    }
-
-    private Game getGame(Leaderboard leaderboard) {
-        Optional<Game> game = gameRepository.findGameByLeaderboardsContaining(leaderboard);
-        if (game.isEmpty()) {
-            throw new EntityNotFoundException("Game of Leaderboard with id " + leaderboard.getId() + NOT_FOUND);
-        }
-
-        return game.get();
     }
 
     private List<Run> getOtherRuns(Speedrunner speedrunner) {
