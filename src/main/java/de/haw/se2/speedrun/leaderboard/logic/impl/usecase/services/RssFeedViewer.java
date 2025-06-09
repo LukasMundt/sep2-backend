@@ -34,7 +34,7 @@ public class RssFeedViewer {
     private final Utilities utilities;
 
     //Providing fallback value, if environment variable is not set
-    @Value("${URL_TO_SITE:https://speedrun.lukas-mundt.de/}")
+    @Value("https://${APP_DOMAIN:speedrun.lukas-mundt.de}")
     private String urlToSite;
 
     @SneakyThrows

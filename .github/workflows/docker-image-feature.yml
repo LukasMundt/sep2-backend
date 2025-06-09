@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: ${{ env.TAG }}
           build-args: |
-            BUILD_CLOUDRON_APP_DOMAIN=${{ env.SUBDOMAIN }}
+            APP_DOMAIN=${{ env.SUBDOMAIN }}
           outputs: type=docker
 
       - name: Deploy to Cloudron
