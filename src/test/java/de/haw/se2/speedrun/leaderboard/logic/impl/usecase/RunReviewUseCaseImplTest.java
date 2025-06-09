@@ -1,5 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
+import de.haw.se2.speedrun.Se2SpeedrunApplication;
 import org.junit.jupiter.api.Test;
 
 
@@ -15,13 +16,16 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+@ActiveProfiles("test")
+@SpringBootTest(classes = Se2SpeedrunApplication.class)
 class RunReviewUseCaseImplTest {
 
     private GameRepository gameRepository;
@@ -61,7 +65,7 @@ class RunReviewUseCaseImplTest {
         List<RunReview> result = runReviewUseCase.getUnreviewedRuns(gameSlug, categoryId);
 
         assertEquals(1, result.size());
-        assertEquals(run1.getId(), result.get(0).getUuid());
+        assertEquals(run1.getId(), result.getFirst().getUuid());
     }
 
     @Test
