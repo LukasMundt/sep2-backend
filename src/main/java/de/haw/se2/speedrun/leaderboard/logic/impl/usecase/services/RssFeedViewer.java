@@ -17,6 +17,7 @@ import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -31,6 +32,10 @@ public class RssFeedViewer {
     private final SpeedrunnerRepository speedrunnerRepository;
     private final RunRepository runRepository;
     private final Utilities utilities;
+
+    //Providing fallback value, if environment variable is not set
+    @Value("${URL_TO_SITE:https://speedrun.lukas-mundt.de/}")
+    private String urlToSite;
 
     @SneakyThrows
     public String buildFeed(String id) {
@@ -56,7 +61,7 @@ public class RssFeedViewer {
     private Channel buildFeedMetaData() {
         Channel feed = new Channel("rss_2.0");
         feed.setDescription("Updates about your Runs");
-        feed.setLink("http//localhost");//TODO: Add permanent address to our frontend!
+        feed.setLink(urlToSite);
         feed.setEncoding("UTF-8");
         feed.setTitle("Updates about your Runs");
         feed.setLanguage("de");
@@ -98,7 +103,7 @@ public class RssFeedViewer {
         Content content = new Content();
         content.setValue(contentString);
         item.setContent(content);
-        item.setAuthor("Speedruns.com");//TODO: Dürfen wir das?
+        item.setAuthor(urlToSite);
         item.setPubDate(new Date());
         return item;
     }
