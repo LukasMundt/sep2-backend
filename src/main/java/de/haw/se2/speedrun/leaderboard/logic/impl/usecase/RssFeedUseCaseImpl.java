@@ -24,8 +24,7 @@ public class RssFeedUseCaseImpl implements RssFeedUseCase{
     @Override
     public String getFeedUrl() {
         String id = getUserId();
-        String baseUrl = "{ \"url\": \"/rest/rss/getFeed/\" }";
-        return baseUrl + id;
+        return "{ \"url\": \"/rest/rss/getFeed/" + id + "\" } ";
     }
 
     @SneakyThrows
