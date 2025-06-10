@@ -58,34 +58,6 @@ public class CategoriesFacadeTest extends BaseTest {
                 .andExpect(status().isNotFound());
     }
 
-    /*
-    @Test
-    public void testGetCategoryNotAuthenticated2() throws Exception {
-        // [GIVEN]
-        String gameSlug = "minecraft";
-        String categoryId = "nonexistent_category";
-
-        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
-
-        // [WHEN & THEN]
-        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
-                .header("Authorization", "Bearer " + token))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetCategoryNotAuthenticated() throws Exception {
-        // [GIVEN]
-        String gameSlug = "minecraft";
-        String categoryId = "any_percent";
-
-        // [WHEN & THEN]
-        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId))
-                .andExpect(status().isNotFound());
-    }
-
-     */
-
     @Test
     public void testAddCategoryBadRequest() throws Exception {
         // [GIVEN]
@@ -101,31 +73,6 @@ public class CategoriesFacadeTest extends BaseTest {
                         .content(invalidRequestBody))
                 .andExpect(status().isBadRequest());
     }
-
-    /*
-    @Test
-    public void testDeleteCategoryBadRequest() throws Exception {
-        // [GIVEN]
-        String gameSlug = "minecraft";
-        String categoryId = "";
-
-        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
-
-        // Ensure the category exists before deletion attempt
-        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
-                .andExpect(status().isOk());
-
-        // [WHEN & THEN] Delete the category
-        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}", gameSlug, categoryId)
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isBadRequest());
-
-        // Ensure the category still exists after broken deletion attempt
-        mvc.perform(get("/rest/api/games/{gameSlug}/categories", gameSlug))
-                .andExpect(status().isOk());
-    }
-
-     */
 
     @Test
     public void testDeleteCategoryIdNotFound() throws Exception {

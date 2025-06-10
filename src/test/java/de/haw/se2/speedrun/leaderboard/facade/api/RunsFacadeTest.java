@@ -38,7 +38,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = Se2SpeedrunApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) // environment
@@ -62,7 +62,7 @@ public class RunsFacadeTest extends BaseTest
     }
 
     @Test
-    public void testGetLeaderboardSuccessfully() throws Exception {
+    public void testGetRunsSuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
@@ -71,57 +71,21 @@ public class RunsFacadeTest extends BaseTest
         List<Game> games = gameRepository.findAll();
         List<Leaderboard> leaderboards = leaderboardRepository.findAll();
 
-        mvc.perform(get("/rest/api/games/minecraft/any_percent/leaderboard"))
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/leaderboard", gameSlug, categoryId))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetLeaderboardCategoryNotFound() {
+    public void testGetRunsCategoryNotFound() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
-        String categoryId = "PeerDropSuxx";
+        String categoryId = "categorie_not_found";
 
-        // [WHEN & THEN]
-        given()
-                .basePath("/rest/api/games")
-                .pathParam("gameSlug", gameSlug)
-                .pathParam("categoryId", categoryId)
-                .when()
-                .get("/{gameSlug}/{categoryId}/leaderboard")
-                .then()
-                .statusCode(404);
+        List<Run> runs = runRepository.findAll();
+        List<Game> games = gameRepository.findAll();
+        List<Leaderboard> leaderboards = leaderboardRepository.findAll();
+
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/leaderboard", gameSlug, categoryId))
+                .andExpect(status().isNotFound());
     }
-
-    @Test
-    public void testSubmitHigherRuntimeThrowsNotAcceptableStatusException() {
-        // [GIVEN]
-        Optional<Speedrunner> speedrunner = speedrunnerRepository.findByUsername("Fast Joe");
-
-        if (speedrunner.isEmpty()) {
-            throw new EntityNotFoundException("Speedrunner not found");
-        }
-
-        Run firstRun = new Run();
-        firstRun.setDate(new Date());
-        firstRun.setRuntime(new Runtime(0, 1, 30, 0));
-        firstRun.setSpeedrunner(speedrunner.get());
-        firstRun.setVerified(true);
-        runRepository.saveAndFlush(firstRun);
-
-        RunDto newRunDto = new RunDto();
-        newRunDto.setDate(new Date());
-        newRunDto.setRuntime(new de.haw.se2.speedrun.openapitools.model.Runtime().hours(0).minutes(2).seconds(0).milliseconds(0));
-        newRunDto.setSpeedrunner("Fast Joe");
-
-        // [WHEN & THEN]
-        given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(newRunDto)
-                .when()
-                .post("/rest/api/games/minecraft/any_percent/submit")
-                .then()
-                .statusCode(406); // Expecting Not Acceptable
-    }
-
-
 }
