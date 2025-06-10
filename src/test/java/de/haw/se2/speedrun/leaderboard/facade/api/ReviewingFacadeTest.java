@@ -77,7 +77,20 @@ public class ReviewingFacadeTest extends BaseTest {
     @Test
     public void testDeleteUnreviewedRunUnauthorised() throws Exception {
         // [GIVEN]
-        String uuid = "";
+        String gameSlug = "minecraft";
+        String categoryId = "any_percent";
+        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+
+        var result = get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameSlug, categoryId)
+                .header("Authorization", "Bearer " + token);
+
+        var lambdaContext = new Object() {
+            String token;
+        };
+
+        result.andExpect(status().isOk()).andExpect(r -> {
+            lambdaContext.token = r.getResponse().getContentAsString().split(",")[0].split(":")[1].replace("\"", "");
+        });
 
         // [WHEN & THEN]
         mvc.perform(delete("/rest/api/reviews/unreviewed/{uuid}", uuid))
