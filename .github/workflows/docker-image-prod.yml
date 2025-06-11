@@ -28,7 +28,7 @@ jobs:
           push: true
           tags: ${{ env.TAG }}
           build-args: |
-            BUILD_CLOUDRON_APP_DOMAIN=${{ vars.CLOUDRON_APP_DOMAIN }}
+            APP_DOMAIN=${{ vars.CLOUDRON_APP_DOMAIN }}
       - name: Deploy on Cloudron
         uses: rossmaclean/cloudron-deploy-action@v0.0.26
         with: 

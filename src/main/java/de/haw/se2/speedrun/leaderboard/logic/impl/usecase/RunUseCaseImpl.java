@@ -7,7 +7,7 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RunUseCase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
-import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
+import de.haw.se2.speedrun.user.logic.api.usecase.SpeedrunnerUseCase;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RunUseCaseImpl implements RunUseCase {
 
-    private final SpeedrunnerRepository speedrunnerRepository;
     private final Utilities utilities;
+    private final SpeedrunnerUseCase speedrunnerUseCase;
 
     @Override
     public List<Run> getVerifiedLeaderboardRuns(String gameSlug, String categoryId) {
@@ -107,14 +107,6 @@ public class RunUseCaseImpl implements RunUseCase {
 
     private Speedrunner getSpeedrunner() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String speedrunnerUsername = authentication.getName();
-        Optional<Speedrunner> speedrunner = speedrunnerRepository.findByEmail(speedrunnerUsername);
-
-        if(speedrunner.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Speedrunner '%s' not found", speedrunnerUsername));
-        }
-
-        return speedrunner.get();
+        return speedrunnerUseCase.getSpeedrunnerByEmail(authentication.getName());
     }
 }

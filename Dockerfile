@@ -1,5 +1,7 @@
 FROM gradle:8.13-jdk21-corretto AS builder
 
+ARG APP_DOMAIN
+
 WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradlew ./
@@ -8,6 +10,8 @@ COPY src ./src
 
 RUN rm ./src/main/resources/application.properties
 RUN mv ./src/main/resources/application.properties.deploy ./src/main/resources/application.properties
+
+ENV APP_DOMAIN=${APP_DOMAIN}
 
 RUN ./gradlew build -x test --no-daemon
 

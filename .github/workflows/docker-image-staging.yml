@@ -28,7 +28,7 @@ jobs:
           push: true
           tags: ${{ env.TAG }}
           build-args: |
-            BUILD_CLOUDRON_APP_DOMAIN=${{ vars.CLOUDRON_APP_DOMAIN_STAGING }}
+            APP_DOMAIN=${{ vars.CLOUDRON_APP_DOMAIN_STAGING }}
             STAGING=true
           outputs: type=docker
       - name: Deploy on Cloudron

@@ -74,3 +74,10 @@ sonar {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+val appDomain: String? = System.getenv("APP_DOMAIN")
+if (appDomain != null) {
+	println(">> Using APP_DOMAIN: $appDomain")
+} else {
+	println(">> APP_DOMAIN environment variable not set.")
+}
