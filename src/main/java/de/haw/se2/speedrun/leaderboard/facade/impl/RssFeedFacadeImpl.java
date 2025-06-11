@@ -2,6 +2,7 @@ package de.haw.se2.speedrun.leaderboard.facade.impl;
 
 import de.haw.se2.speedrun.leaderboard.facade.api.RssFeedFacade;
 import de.haw.se2.speedrun.leaderboard.logic.api.usecase.RssFeedUseCase;
+import de.haw.se2.speedrun.openapitools.model.RssFeedUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class RssFeedFacadeImpl implements RssFeedFacade {
     private final RssFeedUseCase rssFeedUseCase;
 
     @Override
-    public ResponseEntity<String> restRssGetFeedUrlGet() {
-        return new ResponseEntity<>(rssFeedUseCase.getFeedUrl(), HttpStatus.OK);
+    public ResponseEntity<RssFeedUrl> restRssGetFeedUrlGet() {
+        return new ResponseEntity<>(new RssFeedUrl(rssFeedUseCase.getFeedUrl()), HttpStatus.OK);
     }
 
     @Override
