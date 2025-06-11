@@ -3,7 +3,7 @@ info:
   title: Speedruns - OpenAPI 3.0
   description: |-
   
-  version: 0.2.5
+  version: 0.2.6
 
 tags:
   - name: games
@@ -388,8 +388,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                  
+                $ref: "#/components/schemas/RssFeedUrl"
         '401':
           description: Returned if the caller is not authenticated.
   /rest/rss/getFeed/{id}:
@@ -565,6 +564,14 @@ components:
       required:
         - email
         - password
+    RssFeedUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://speedrun.lukas-mundt.de/rest/rss"
+      required:
+        - url
   securitySchemes:
     bearerAuth:
       type: http
