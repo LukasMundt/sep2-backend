@@ -67,10 +67,6 @@ class RunsFacadeTest extends BaseTest
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
 
-        List<Run> runs = runRepository.findAll();
-        List<Game> games = gameRepository.findAll();
-        List<Leaderboard> leaderboards = leaderboardRepository.findAll();
-
         mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/runs", gameSlug, categoryId))
                 .andExpect(status().isOk());
     }
@@ -80,10 +76,6 @@ class RunsFacadeTest extends BaseTest
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "categorie_not_found";
-
-        List<Run> runs = runRepository.findAll();
-        List<Game> games = gameRepository.findAll();
-        List<Leaderboard> leaderboards = leaderboardRepository.findAll();
 
         mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/runs", gameSlug, categoryId))
                 .andExpect(status().isNotFound());
