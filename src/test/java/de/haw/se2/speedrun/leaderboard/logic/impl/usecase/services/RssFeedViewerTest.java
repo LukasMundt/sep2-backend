@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services;
 
 
+import com.rometools.rome.io.FeedException;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,11 +39,14 @@ class RssFeedViewerTest extends BaseTest {
     private RunRepository runRepository;
     private LeaderboardRepository leaderboardRepository;
     private GameRepository gameRepository;
-    @Autowired
-    private RssFeedViewer rssFeedViewer;
+    private RssFeedViewer rssFeedViewer_spring;
+    private Utilities utilities;
+    private RssFeedViewer rssFeedViewer_mock;
 
-    public RssFeedViewerTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public RssFeedViewerTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder, RssFeedViewer rssFeedViewer_spring) {
         super(speedrunnerRepository, administratorRepository, gameRepository, leaderboardRepository, runRepository, passwordEncoder);
+        this.rssFeedViewer_spring = rssFeedViewer_spring;
     }
 
     @BeforeEach
@@ -50,9 +55,11 @@ class RssFeedViewerTest extends BaseTest {
         runRepository = mock(RunRepository.class);
         leaderboardRepository = mock(LeaderboardRepository.class);
         gameRepository = mock(GameRepository.class);
+        utilities = mock(Utilities.class);
+        rssFeedViewer_mock = new RssFeedViewer(speedrunnerRepository, runRepository, utilities);
     }
     @Test
-    void buildFeed_returnsFeed_whenRunsExist() {
+    void buildFeed_returnsFeed_whenRunsExist() throws FeedException, IOException {
         UUID speedrunnerId = UUID.randomUUID();
         Speedrunner speedrunner = new Speedrunner();
         speedrunner.setId(speedrunnerId);
@@ -89,7 +96,7 @@ class RssFeedViewerTest extends BaseTest {
         when(leaderboardRepository.findLeaderboardByRunsContaining(fasterRun)).thenReturn(Optional.of(leaderboard));
         when(gameRepository.findGameByLeaderboardsContaining(leaderboard)).thenReturn(Optional.of(game));
 
-        String feed = rssFeedViewer.buildFeed(speedrunnerId.toString());
+        String feed = rssFeedViewer_mock.buildFeed(speedrunnerId.toString());
 
         assertNotNull(feed);
         assertTrue(feed.contains("Du wurdest überboten!"));
@@ -99,7 +106,7 @@ class RssFeedViewerTest extends BaseTest {
     }
 
     @Test
-    void buildFeed_returnsEmptyFeed_whenNoRuns() {
+    void buildFeed_returnsEmptyFeed_whenNoRuns() throws FeedException, IOException {
         UUID speedrunnerId = UUID.randomUUID();
         Speedrunner speedrunner = new Speedrunner();
         speedrunner.setId(speedrunnerId);
@@ -108,7 +115,7 @@ class RssFeedViewerTest extends BaseTest {
         when(speedrunnerRepository.findById(speedrunnerId)).thenReturn(Optional.of(speedrunner));
         when(runRepository.findAllById(any())).thenReturn(Collections.emptyList());
 
-        String feed = rssFeedViewer.buildFeed(speedrunnerId.toString());
+        String feed = rssFeedViewer_mock.buildFeed(speedrunnerId.toString());
 
         assertNotNull(feed);
         assertTrue(feed.contains("Updates about your Runs"));
@@ -119,16 +126,16 @@ class RssFeedViewerTest extends BaseTest {
         UUID speedrunnerId = UUID.randomUUID();
         when(speedrunnerRepository.findById(speedrunnerId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> rssFeedViewer.buildFeed(speedrunnerId.toString()));
+        assertThrows(EntityNotFoundException.class, () -> rssFeedViewer_spring.buildFeed(speedrunnerId.toString()));
     }
 
     @Test
     void buildFeed_throwsException_whenSpeedrunnerIdIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> rssFeedViewer.buildFeed(null));
+        assertThrows(IllegalArgumentException.class, () -> rssFeedViewer_spring.buildFeed(null));
     }
 
     @Test
     void buildFeed_throwsException_whenSpeedrunnerIdIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> rssFeedViewer.buildFeed(""));
+        assertThrows(IllegalArgumentException.class, () -> rssFeedViewer_spring.buildFeed(""));
     }
 }

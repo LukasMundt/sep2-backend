@@ -1,5 +1,6 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
+import com.rometools.rome.io.FeedException;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,7 +61,7 @@ class RssFeedUseCaseImplTest {
         securityContextHolderMockedStatic = Mockito.mockStatic(SecurityContextHolder.class);
         securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(userUseCase.findUserByEmail(email)).thenReturn(user);
 
         String url = rssFeedUseCase.getFeedUrl();
 
@@ -78,7 +80,7 @@ class RssFeedUseCaseImplTest {
     }
 
     @Test
-    void getFeedView_delegatesToRssFeedViewer() {
+    void getFeedView_delegatesToRssFeedViewer() throws FeedException, IOException {
         String id = "123";
         String expectedFeed = "<rss>feed</rss>";
         when(rssFeedViewer.buildFeed(id)).thenReturn(expectedFeed);
@@ -101,7 +103,9 @@ class RssFeedUseCaseImplTest {
         securityContextHolderMockedStatic = Mockito.mockStatic(SecurityContextHolder.class);
         securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(userUseCase.findUserByEmail(email)).thenAnswer(invocation -> {
+            throw new InsufficientAuthenticationException("User not found");
+        });
 
         assertThrows(InsufficientAuthenticationException.class, () -> rssFeedUseCase.getFeedUrl());
     }
@@ -119,7 +123,7 @@ class RssFeedUseCaseImplTest {
     }
 
     @Test
-    void getFeedView_throwsException_whenRssFeedViewerThrows() {
+    void getFeedView_throwsException_whenRssFeedViewerThrows() throws FeedException, IOException {
         String id = "invalid";
         when(rssFeedViewer.buildFeed(id)).thenThrow(new RuntimeException("Feed error"));
 
