@@ -1,5 +1,6 @@
-package de.haw.se2.speedrun.AuthenticationAPI;
+package de.haw.se2.security.facade.api.AuthenticationAPI;
 
+import de.haw.se2.speedrun.Se2SpeedrunApplication;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = Se2SpeedrunApplication.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class LoginAPITest extends BaseTest {
