@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,4 +47,8 @@ public class ReviewingFacadeImpl implements ReviewingFacade {
         runReviewUseCase.verifyRun(UUID.fromString(uuid));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void handleIllegalArgumentException() {}
 }

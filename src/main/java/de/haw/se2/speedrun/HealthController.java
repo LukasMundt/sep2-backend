@@ -52,6 +52,15 @@ public class HealthController {
         return ResponseEntity.ok("OK");
     }
 
+    //Scary deletion block. Use at own risk ( ⚆ _ ⚆ )
+    public void deleteSampleData() {
+        runRepository.deleteAll();
+        leaderboardRepository.deleteAll();
+        gameRepository.deleteAll();
+        administratorRepository.deleteAll();
+        speedrunnerRepository.deleteAll();
+    }
+
     private List<Run> getEntrys(){
         Run run1 = new Run();
         Run run2 = new Run();
@@ -86,10 +95,10 @@ public class HealthController {
 
         if (rng.nextBoolean()) {
             runRepository.saveAll(runs.subList(0, 2));
-            return runs.subList(0, 2);
+            return runRepository.findAll();
         } else {
             runRepository.saveAll(runs);
-            return runs;
+            return runRepository.findAll();
         }
     }
 
@@ -115,6 +124,9 @@ public class HealthController {
         speedrunner1.setRight(Right.SPEEDRUNNER);
         speedrunner2.setRight(Right.SPEEDRUNNER);
         speedrunner3.setRight(Right.SPEEDRUNNER);
+        speedrunner1.setNewFasterPlayers(new ArrayList<>());
+        speedrunner2.setNewFasterPlayers(new ArrayList<>());
+        speedrunner3.setNewFasterPlayers(new ArrayList<>());
         admin.setRight(Right.ADMIN);
         speedrunnerRepository.saveAll(List.of(speedrunner1, speedrunner2, speedrunner3));
         administratorRepository.save(admin);
