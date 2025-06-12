@@ -2,6 +2,7 @@ package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,9 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class GameUseCaseImplTest {
+
+    @Mock
+    private Utilities utilities;
 
     @Mock
     private GameRepository gameRepository;
@@ -70,10 +74,9 @@ class GameUseCaseImplTest {
 
     @Test
     void getGameBySlug() {
-        Mockito.when(gameRepository.findBySlug(any(String.class))).thenAnswer(invocation -> {
+        Mockito.when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
             String slug = invocation.getArgument(0);
-            Game foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
-            return Optional.ofNullable(foundGame);
+            return games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
         });
 
         String gameSlug = "game1";
@@ -100,16 +103,5 @@ class GameUseCaseImplTest {
         assertEquals(gameSlug, game.getSlug());
         assertEquals("name4", game.getName());
 
-    }
-
-    @Test
-    void getGameBySlugThrowsExceptionForNonExistingGame() {
-        Mockito.when(gameRepository.findBySlug(any(String.class))).thenAnswer(invocation -> {
-            String slug = invocation.getArgument(0);
-            Game foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
-            return Optional.ofNullable(foundGame);
-        });
-        String nonExistingSlug = "non-existing-game";
-        assertThrows(EntityNotFoundException.class, () -> gameUseCase.getGameBySlug(nonExistingSlug));
     }
 }

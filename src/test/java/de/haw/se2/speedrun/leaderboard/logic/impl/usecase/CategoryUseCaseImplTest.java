@@ -4,6 +4,7 @@ import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 class CategoryUseCaseImplTest {
 
     @Mock
-    private GameRepository gameRepository;
+    private Utilities utilities;
 
     @InjectMocks
     private CategoryUseCaseImpl categoryUseCase;
@@ -91,10 +92,10 @@ class CategoryUseCaseImplTest {
         game4.setLeaderboards(leaderboards4);
 
         Set<Game> games = new HashSet<>(Arrays.asList(game1, game2, game3, game4));
-        Mockito.when(gameRepository.findBySlug(any(String.class))).thenAnswer(invocation -> {
+        Mockito.when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
             String slug = invocation.getArgument(0);
             Game foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
-            return Optional.ofNullable(foundGame);
+            return foundGame;
         });
     }
 
@@ -163,12 +164,5 @@ class CategoryUseCaseImplTest {
 
     }
 
-    @Test
-    void gameNotFound() {
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.addCategory("nonexistentGame", category1));
 
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.getCategories("nonexistentGame"));
-
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.deleteCategory("nonexistentGame", category1.getCategoryId()));
-    }
 }
