@@ -95,6 +95,8 @@ class RssFeedViewerTest extends BaseTest {
         when(runRepository.findAllById(any())).thenReturn(List.of(fasterRun));
         when(leaderboardRepository.findLeaderboardByRunsContaining(fasterRun)).thenReturn(Optional.of(leaderboard));
         when(gameRepository.findGameByLeaderboardsContaining(leaderboard)).thenReturn(Optional.of(game));
+        when(utilities.getGame(any(Leaderboard.class))).thenReturn(game);
+        when(utilities.getLeaderboardByRun(any(Run.class))).thenReturn(leaderboard);
 
         String feed = rssFeedViewer_mock.buildFeed(speedrunnerId.toString());
 
