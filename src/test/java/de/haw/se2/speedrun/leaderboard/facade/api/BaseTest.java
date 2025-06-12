@@ -16,7 +16,6 @@ import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,7 +89,7 @@ public abstract class BaseTest
         return lambdaContext.token;
     }
 
-    protected List<Run> getEntrys(){
+    protected void getEntrys(){
         Run run1 = new Run();
         Run run2 = new Run();
         run1.setDate(new Date());
@@ -111,10 +110,9 @@ public abstract class BaseTest
         run1.setVerified(true);
         run2.setVerified(true);
         runRepository.saveAllAndFlush(List.of(run1, run2));
-        return runRepository.findAll();
     }
 
-    protected Leaderboard addLeaderboards() {
+    protected void addLeaderboards() {
         Leaderboard leaderboard = new Leaderboard();
         leaderboard.setCategory(new Category("any_percent", "Any %"));
         leaderboard.setRuns(new ArrayList<>());
@@ -122,7 +120,6 @@ public abstract class BaseTest
         var leaderboar = leaderboardRepository.findAll().getFirst();
         var r = runRepository.findAll();
         leaderboar.getRuns().addAll(r);
-        return leaderboardRepository.findAll().getFirst();
     }
 
     protected void addGames() {
@@ -140,6 +137,8 @@ public abstract class BaseTest
 
         Speedrunner speedrunner1 = new Speedrunner();
         Speedrunner speedrunner2 = new Speedrunner();
+        speedrunner1.setNewFasterPlayers(new ArrayList<>());
+        speedrunner2.setNewFasterPlayers(new ArrayList<>());
         Administrator admin = new Administrator();
         speedrunner1.setUsername("Fast Joe");
         speedrunner2.setUsername("Slow Bob");

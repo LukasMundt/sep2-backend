@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @AutoConfigureMockMvc
-public class ReviewingFacadeTest extends BaseTest {
+class ReviewingFacadeTest extends BaseTest {
 
     @Autowired
     private MockMvc mvc;
@@ -39,7 +40,7 @@ public class ReviewingFacadeTest extends BaseTest {
     }
 
     @Test
-    public void testGetUnreviewedSuccessfully() throws Exception {
+    void testGetUnreviewedSuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
@@ -52,7 +53,7 @@ public class ReviewingFacadeTest extends BaseTest {
     }
 
     @Test
-    public void testGetUnreviewedRunsUnauthorised() throws Exception {
+    void testGetUnreviewedRunsUnauthorised() throws Exception {
     // [GIVEN]
     String gameSlug = "minecraft";
     String categoryId = "any_percent";
@@ -63,7 +64,7 @@ public class ReviewingFacadeTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteUnreviewedRunUUIDNotFound() throws Exception {
+    void testDeleteUnreviewedRunUUIDNotFound() throws Exception {
         // [GIVEN]
         String uuid = "wrong-uuid";
         String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
@@ -74,43 +75,45 @@ public class ReviewingFacadeTest extends BaseTest {
                 .andExpect(status().isNotFound());
     }
 
-    //@Test
-    //public void testDeleteUnreviewedRunUnauthorised() throws Exception {
-    //    // [GIVEN]
-    //    String gameSlug = "minecraft";
-    //    String categoryId = "any_percent";
-    //    String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
-//
-    //    var result = get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameSlug, categoryId)
-    //            .header("Authorization", "Bearer " + token);
-//
-    //    var lambdaContext = new Object() {
-    //        String token;
-    //    };
-//
-    //    result.andExpect(status().isOk()).andExpect(r -> {
-    //        lambdaContext.token = r.getResponse().getContentAsString().split(",")[0].split(":")[1].replace("\"", "");
-    //    });
-//
-    //    // [WHEN & THEN]
-    //    mvc.perform(delete("/rest/api/reviews/unreviewed/{uuid}", uuid))
-    //            .andExpect(status().isUnauthorized());
-    //}
-
     @Test
-    public void testDeleteUnreviewedRunSuccessfully() throws Exception {
+    void testDeleteUnreviewedRunUnauthorised() throws Exception {
         // [GIVEN]
-        String uuid = "";
-        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+        String gameId = "minecraft";
+        String categoryId = "any_percent";
+        String adminToken = getAccessToken("admin@admin.de", "123456Aa", mvc);
+        addUnreviewedRun();
+        var r = mvc.perform(get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameId, categoryId)
+                        .header("Authorization", "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        var uuid = r.andReturn().getResponse().getContentAsString().split(",")[2].split(":")[2].replace("\"", "");
 
         // [WHEN & THEN]
-        mvc.perform(delete("/rest/api/games/{gameSlug}/{categoryId}/leaderboard/", uuid)
-                        .header("Authorization", "Bearer " + token))
+        mvc.perform(delete("/rest/api/reviews/unreviewed/{uuid}", uuid))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testDeleteUnreviewedRunSuccessfully() throws Exception {
+        // [GIVEN]
+        String gameId = "minecraft";
+        String categoryId = "any_percent";
+        String adminToken = getAccessToken("admin@admin.de", "123456Aa", mvc);
+        addUnreviewedRun();
+        var r = mvc.perform(get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameId, categoryId)
+                        .header("Authorization", "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        var uuid = r.andReturn().getResponse().getContentAsString().split(",")[2].split(":")[2].replace("\"", "");
+
+        // [WHEN & THEN]
+        mvc.perform(delete("/rest/api/reviews/unreviewed/{uuid}", uuid)
+                        .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testPatchUnreviewedRunNotFound() throws Exception {
+    void testPatchUnreviewedRunNotFound() throws Exception {
         // [GIVEN]
         String uuid = "wrong-uuid";
         String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
@@ -122,24 +125,59 @@ public class ReviewingFacadeTest extends BaseTest {
     }
 
     @Test
-    public void testPatchUnreviewedRunUnauthorised() throws Exception {
+    void testPatchUnreviewedRunUnauthorised() throws Exception {
         // [GIVEN]
-        String uuid = "";
+        String gameId = "minecraft";
+        String categoryId = "any_percent";
+        String adminToken = getAccessToken("admin@admin.de", "123456Aa", mvc);
+        addUnreviewedRun();
+        var r = mvc.perform(get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameId, categoryId)
+                .header("Authorization", "Bearer " + adminToken)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        var uuid = r.andReturn().getResponse().getContentAsString().split(",")[2].split(":")[2].replace("\"", "");
 
-        // [WHEN & THEN]
         mvc.perform(patch("/rest/api/reviews/unreviewed/{uuid}", uuid))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
-    public void testPatchUnreviewedRunSuccessfully() throws Exception {
+    void testPatchUnreviewedRunSuccessfully() throws Exception {
         // [GIVEN]
-        String uuid = "";
-        String token = super.getAccessToken("admin@admin.de", "123456Aa", mvc);
+        String gameId = "minecraft";
+        String categoryId = "any_percent";
+        String adminToken = getAccessToken("admin@admin.de", "123456Aa", mvc);
+        addUnreviewedRun();
+        var r = mvc.perform(get("/rest/api/reviews/unreviewed/{gameSlug}/{categoryId}", gameId, categoryId)
+                        .header("Authorization", "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        var uuid = r.andReturn().getResponse().getContentAsString().split(",")[2].split(":")[2].replace("\"", "");
 
         // [WHEN & THEN]
         mvc.perform(patch("/rest/api/reviews/unreviewed/{uuid}", uuid)
-                        .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk());
+    }
+
+    private void addUnreviewedRun() throws Exception {
+        String token = getAccessToken("fastjoe@gmail.com", "123456Aa", mvc);
+
+        // [WHEN & THEN]
+        String gameId = "minecraft";
+        String categoryId = "any_percent";
+        mvc.perform(post("/rest/api/games/{gameSlug}/{categoryId}/runs", gameId, categoryId)
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "  \"date\": \"2025-06-12T08:56:35.580Z\"," +
+                        "  \"runtime\": {" +
+                        "    \"hours\": 0," +
+                        "    \"minutes\": 0," +
+                        "    \"seconds\": 0," +
+                        "    \"milliseconds\": 0" +
+                        "  }," +
+                        "  \"videoLink\": \"string\"" +
+                        "}")).andExpect(status().isOk());
     }
 }

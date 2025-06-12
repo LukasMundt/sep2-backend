@@ -124,6 +124,9 @@ public class HealthController {
         speedrunner1.setRight(Right.SPEEDRUNNER);
         speedrunner2.setRight(Right.SPEEDRUNNER);
         speedrunner3.setRight(Right.SPEEDRUNNER);
+        speedrunner1.setNewFasterPlayers(new ArrayList<>());
+        speedrunner2.setNewFasterPlayers(new ArrayList<>());
+        speedrunner3.setNewFasterPlayers(new ArrayList<>());
         admin.setRight(Right.ADMIN);
         speedrunnerRepository.saveAll(List.of(speedrunner1, speedrunner2, speedrunner3));
         administratorRepository.save(admin);
