@@ -38,11 +38,11 @@ public class RssFeedViewer {
     @Value("${APP_DOMAIN:speedrun.lukas-mundt.de}")
     private String appDomain;
 
-    private String urlToSite;
+    private String urlToSite = "https://";
 
     @PostConstruct
     public void init() {
-        this.urlToSite = "https://" + this.appDomain;
+        this.urlToSite = this.urlToSite + this.appDomain;
     }
 
     public String buildFeed(String id) throws FeedException, IOException {
