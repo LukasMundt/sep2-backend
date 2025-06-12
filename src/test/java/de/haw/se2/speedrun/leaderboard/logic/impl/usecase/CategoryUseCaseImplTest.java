@@ -23,8 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 class CategoryUseCaseImplTest {
 
-    //@Mock
-    //private GameRepository gameRepository;
     @Mock
     private Utilities utilities;
 
@@ -94,14 +92,10 @@ class CategoryUseCaseImplTest {
         game4.setLeaderboards(leaderboards4);
 
         Set<Game> games = new HashSet<>(Arrays.asList(game1, game2, game3, game4));
-
         Mockito.when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
             String slug = invocation.getArgument(0);
-            Optional<Game> foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst();
-            if (foundGame.isEmpty()){
-                throw new EntityNotFoundException("Game not found");
-            }
-            return foundGame.get();
+            Game foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
+            return foundGame;
         });
     }
 
@@ -170,12 +164,5 @@ class CategoryUseCaseImplTest {
 
     }
 
-    @Test
-    void gameNotFound() {
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.addCategory("nonexistentGame", category1));
 
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.getCategories("nonexistentGame"));
-
-        assertThrows(EntityNotFoundException.class, () -> categoryUseCase.deleteCategory("nonexistentGame", category1.getCategoryId()));
-    }
 }

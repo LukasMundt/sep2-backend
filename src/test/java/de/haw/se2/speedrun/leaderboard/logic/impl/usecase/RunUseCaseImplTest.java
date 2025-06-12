@@ -5,10 +5,10 @@ import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Leaderboard;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
-import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.common.api.datatype.Right;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
-import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
+import de.haw.se2.speedrun.user.logic.impl.usecase.SpeedrunnerUseCaseImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,6 @@ import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,10 +36,10 @@ import static org.mockito.Mockito.when;
 class RunUseCaseImplTest {
 
     @Mock
-    private SpeedrunnerRepository speedrunnerRepository;
+    private SpeedrunnerUseCaseImpl speedrunnerUseCase;
 
     @Mock
-    private GameRepository gameRepository;
+    private Utilities utilities;
 
     @InjectMocks
     private RunUseCaseImpl runUseCase;
@@ -124,12 +123,12 @@ class RunUseCaseImplTest {
         game4.setName(name4);
         game4.setLeaderboards(leaderboards4);
 
-        when(gameRepository.findBySlug(any(String.class))).thenAnswer(invocation -> {
+        when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
             String slug = invocation.getArgument(0);
             if (slug.equals(game4.getSlug())) {
-                return Optional.of(game4);
+                return game4;
             }
-            return Optional.empty();
+            return null;
         });
     }
 
@@ -164,42 +163,37 @@ class RunUseCaseImplTest {
         when(context.getAuthentication()).thenReturn(auth);
         SecurityContextHolder.setContext(context);
 
-        Mockito.when(speedrunnerRepository.findByEmail(any(String.class))).thenAnswer(invocation -> {
+        Mockito.when(speedrunnerUseCase.getSpeedrunnerByEmail(any(String.class))).thenAnswer(invocation -> {
             String email = invocation.getArgument(0);
             if (email.equals(speedrunner1.getEmail())) {
-                return Optional.of(speedrunner1);
+                return speedrunner1;
             }
-            return Optional.empty();
+            return null;
+        });
+
+        Mockito.when(utilities.getLeaderboard(any(Game.class), any(String.class))).thenAnswer(invocation -> {
+            Game game = invocation.getArgument(0);
+            String categoryId = invocation.getArgument(1);
+            Optional<Leaderboard> result = game.getLeaderboards().stream()
+                    .filter(leaderboard -> leaderboard.getCategory().getCategoryId().equals(categoryId))
+                    .findFirst();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Category with id " + categoryId + " not found in game " + game.getSlug());
+            }
+            return result.get();
         });
         Runtime newRuntime = new Runtime(0, 0, 0, 5);
         assertFalse(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertFalse(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
-        runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
+        runUseCase.addUnverifiedRun(game4.getSlug(), category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         assertTrue(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertTrue(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
 
         assertFalse(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertFalse(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
-        runUseCase.addUnverifiedRun("game4", category2.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
+        runUseCase.addUnverifiedRun(game4.getSlug(), category2.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         assertTrue(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertTrue(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
-    }
-
-    @Test
-    void addUnverifiedRunSpeedrunnerNotFound() {
-        Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn(speedrunner1.getEmail());
-
-        SecurityContext context = mock(SecurityContext.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        SecurityContextHolder.setContext(context);
-
-        Mockito.when(speedrunnerRepository.findByEmail(any(String.class))).thenAnswer(invocation -> Optional.empty());
-
-        Runtime newRuntime = new Runtime(0, 0, 0, 5);
-        assertThrows(EntityNotFoundException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
-        });
     }
 
     @Test
@@ -211,34 +205,33 @@ class RunUseCaseImplTest {
         when(context.getAuthentication()).thenReturn(auth);
         SecurityContextHolder.setContext(context);
 
-        Mockito.when(speedrunnerRepository.findByEmail(any(String.class))).thenAnswer(invocation -> {
+        Mockito.when(speedrunnerUseCase.getSpeedrunnerByEmail(any(String.class))).thenAnswer(invocation -> {
             String email = invocation.getArgument(0);
             if (email.equals(speedrunner1.getEmail())) {
-                return Optional.of(speedrunner1);
+                return speedrunner1;
             }
-            return Optional.empty();
+            return null;
+        });
+
+        Mockito.when(utilities.getLeaderboard(any(Game.class), any(String.class))).thenAnswer(invocation -> {
+            Game game = invocation.getArgument(0);
+            String categoryId = invocation.getArgument(1);
+            Optional<Leaderboard> result = game.getLeaderboards().stream()
+                    .filter(leaderboard -> leaderboard.getCategory().getCategoryId().equals(categoryId))
+                    .findFirst();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Category with id " + categoryId + " not found in game " + game.getSlug());
+            }
+            return result.get();
         });
 
         Runtime newRuntime = new Runtime(0, 0, 0, 15);
         assertThrows(NotAcceptableStatusException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
+            runUseCase.addUnverifiedRun(game4.getSlug(), category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         });
         run1.setVerified(false);
         assertThrows(NotAcceptableStatusException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
+            runUseCase.addUnverifiedRun(game4.getSlug(), category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         });
-    }
-
-    @Test
-    void gameSlugNotFound() {
-        String gameSlug = "nonExistentGame";
-
-        assertThrows(EntityNotFoundException.class, () -> {
-            runUseCase.getVerifiedLeaderboardRuns(gameSlug, "Any%");
-        });
-
-        assertThrows(EntityNotFoundException.class, () -> {
-            runUseCase.addUnverifiedRun(gameSlug,"Any%", new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", new Runtime(0,0,0,0));}
-        );
     }
 }

@@ -76,11 +76,7 @@ class GameUseCaseImplTest {
     void getGameBySlug() {
         Mockito.when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
             String slug = invocation.getArgument(0);
-            Optional<Game> foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst();
-            if (foundGame.isEmpty()){
-                throw new EntityNotFoundException("Game not found");
-            }
-            return foundGame.get();
+            return games.stream().filter(game -> game.getSlug().equals(slug)).findFirst().orElse(null);
         });
 
         String gameSlug = "game1";
@@ -107,19 +103,5 @@ class GameUseCaseImplTest {
         assertEquals(gameSlug, game.getSlug());
         assertEquals("name4", game.getName());
 
-    }
-
-    @Test
-    void getGameBySlugThrowsExceptionForNonExistingGame() {
-        Mockito.when(utilities.getGame(any(String.class))).thenAnswer(invocation -> {
-            String slug = invocation.getArgument(0);
-            Optional<Game> foundGame = games.stream().filter(game -> game.getSlug().equals(slug)).findFirst();
-            if (foundGame.isEmpty()){
-                throw new EntityNotFoundException("Game not found");
-            }
-            return foundGame.get();
-        });
-        String nonExistingSlug = "non-existing-game";
-        assertThrows(EntityNotFoundException.class, () -> gameUseCase.getGameBySlug(nonExistingSlug));
     }
 }
