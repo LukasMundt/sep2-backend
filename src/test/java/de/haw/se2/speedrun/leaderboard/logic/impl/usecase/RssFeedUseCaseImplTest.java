@@ -59,7 +59,7 @@ class RssFeedUseCaseImplTest {
         securityContextHolderMockedStatic = Mockito.mockStatic(SecurityContextHolder.class);
         securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(userUseCase.findUserByEmail(email)).thenReturn(user);
 
         String url = rssFeedUseCase.getFeedUrl();
 
@@ -101,7 +101,9 @@ class RssFeedUseCaseImplTest {
         securityContextHolderMockedStatic = Mockito.mockStatic(SecurityContextHolder.class);
         securityContextHolderMockedStatic.when(SecurityContextHolder::getContext).thenReturn(securityContext);
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(userUseCase.findUserByEmail(email)).thenAnswer(invocation -> {
+            throw new InsufficientAuthenticationException("User not found");
+        });
 
         assertThrows(InsufficientAuthenticationException.class, () -> rssFeedUseCase.getFeedUrl());
     }
