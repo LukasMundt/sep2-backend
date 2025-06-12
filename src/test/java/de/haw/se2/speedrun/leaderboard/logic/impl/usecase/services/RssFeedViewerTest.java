@@ -9,8 +9,11 @@ import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Run;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.GameRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.LeaderboardRepository;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.repo.RunRepository;
+import de.haw.se2.speedrun.leaderboard.facade.api.BaseTest;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
+import de.haw.se2.speedrun.user.dataaccess.api.repo.AdministratorRepository;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,15 +24,25 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
-
-class RssFeedViewerTest {
+@SpringBootTest
+@ActiveProfiles("test")
+class RssFeedViewerTest extends BaseTest {
 
     private SpeedrunnerRepository speedrunnerRepository;
     private RunRepository runRepository;
     private LeaderboardRepository leaderboardRepository;
     private GameRepository gameRepository;
+    @Autowired
     private RssFeedViewer rssFeedViewer;
+
+    public RssFeedViewerTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder) {
+        super(speedrunnerRepository, administratorRepository, gameRepository, leaderboardRepository, runRepository, passwordEncoder);
+    }
 
     @BeforeEach
     void setUp() {
@@ -37,7 +50,6 @@ class RssFeedViewerTest {
         runRepository = mock(RunRepository.class);
         leaderboardRepository = mock(LeaderboardRepository.class);
         gameRepository = mock(GameRepository.class);
-        rssFeedViewer = new RssFeedViewer(speedrunnerRepository, runRepository, leaderboardRepository, gameRepository);
     }
     @Test
     void buildFeed_returnsFeed_whenRunsExist() {

@@ -3,6 +3,7 @@ package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services.RssFeedViewer;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.User;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.UserRepository;
+import de.haw.se2.speedrun.user.logic.api.usecase.UserUseCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,12 +25,14 @@ class RssFeedUseCaseImplTest {
     private RssFeedViewer rssFeedViewer;
     private RssFeedUseCaseImpl rssFeedUseCase;
     private MockedStatic<SecurityContextHolder> securityContextHolderMockedStatic;
+    private UserUseCase userUseCase;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         rssFeedViewer = mock(RssFeedViewer.class);
-        rssFeedUseCase = new RssFeedUseCaseImpl(userRepository, rssFeedViewer);
+        userUseCase = mock(UserUseCase.class);
+        rssFeedUseCase = new RssFeedUseCaseImpl(userUseCase, rssFeedViewer);
     }
 
     @AfterEach

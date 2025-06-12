@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase;
 
 import de.haw.se2.speedrun.Se2SpeedrunApplication;
+import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import org.junit.jupiter.api.Test;
 
 
@@ -38,7 +39,7 @@ class RunReviewUseCaseImplTest {
         gameRepository = mock(GameRepository.class);
         leaderboardRepository = mock(LeaderboardRepository.class);
         runRepository = mock(RunRepository.class);
-        runReviewUseCase = new RunReviewUseCaseImpl(gameRepository, leaderboardRepository, runRepository);
+        runReviewUseCase = new RunReviewUseCaseImpl(new Utilities(runRepository, leaderboardRepository, gameRepository));
     }
 
     @Test
@@ -65,7 +66,7 @@ class RunReviewUseCaseImplTest {
         List<RunReview> result = runReviewUseCase.getUnreviewedRuns(gameSlug, categoryId);
 
         assertEquals(1, result.size());
-        assertEquals(run1.getId(), result.getFirst().getUuid());
+        assertEquals(run1.getId(), result.getFirst().getRun().getId());
     }
 
     @Test

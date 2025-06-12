@@ -95,6 +95,8 @@ public abstract class BaseTest
         Run run2 = new Run();
         run1.setDate(new Date());
         run2.setDate(new Date());
+        run1.setVideoLink("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        run2.setVideoLink("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         run1.setRuntime(new de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
         run2.setRuntime(new Runtime(rng.nextInt(0, 4), rng.nextInt(0, 59), rng.nextInt(0, 59), rng.nextInt(0, 1000)));
 

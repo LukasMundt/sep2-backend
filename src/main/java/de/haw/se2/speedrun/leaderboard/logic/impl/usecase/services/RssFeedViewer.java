@@ -14,6 +14,7 @@ import de.haw.se2.speedrun.leaderboard.logic.impl.usecase.utilities.Utilities;
 import de.haw.se2.speedrun.user.common.api.datatype.FasterInformation;
 import de.haw.se2.speedrun.user.dataaccess.api.entity.Speedrunner;
 import de.haw.se2.speedrun.user.dataaccess.api.repo.SpeedrunnerRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -34,8 +35,15 @@ public class RssFeedViewer {
     private final Utilities utilities;
 
     //Providing fallback value, if environment variable is not set
-    @Value("https://${APP_DOMAIN:speedrun.lukas-mundt.de}")
+    @Value("${APP_DOMAIN:speedrun.lukas-mundt.de}")
+    private String appDomain;
+
     private String urlToSite;
+
+    @PostConstruct
+    public void init() {
+        this.urlToSite = "https://" + this.appDomain;
+    }
 
     @SneakyThrows
     public String buildFeed(String id) {

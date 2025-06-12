@@ -174,13 +174,13 @@ class RunUseCaseImplTest {
         Runtime newRuntime = new Runtime(0, 0, 0, 5);
         assertFalse(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertFalse(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
-        runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), newRuntime);
+        runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         assertTrue(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertTrue(runs1.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
 
         assertFalse(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertFalse(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
-        runUseCase.addUnverifiedRun("game4", category2.getCategoryId(), new Date(), newRuntime);
+        runUseCase.addUnverifiedRun("game4", category2.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         assertTrue(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && run.getRuntime().equals(newRuntime)));
         assertTrue(runs2.stream().anyMatch(run -> run.getSpeedrunner().equals(speedrunner1) && !run.isVerified()));
     }
@@ -198,7 +198,7 @@ class RunUseCaseImplTest {
 
         Runtime newRuntime = new Runtime(0, 0, 0, 5);
         assertThrows(EntityNotFoundException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), newRuntime);
+            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         });
     }
 
@@ -221,11 +221,11 @@ class RunUseCaseImplTest {
 
         Runtime newRuntime = new Runtime(0, 0, 0, 15);
         assertThrows(NotAcceptableStatusException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), newRuntime);
+            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         });
         run1.setVerified(false);
         assertThrows(NotAcceptableStatusException.class, () -> {
-            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), newRuntime);
+            runUseCase.addUnverifiedRun("game4", category1.getCategoryId(), new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", newRuntime);
         });
     }
 
@@ -238,7 +238,7 @@ class RunUseCaseImplTest {
         });
 
         assertThrows(EntityNotFoundException.class, () -> {
-            runUseCase.addUnverifiedRun(gameSlug,"Any%",new Date(),new Runtime(0,0,0,0));}
+            runUseCase.addUnverifiedRun(gameSlug,"Any%", new Date(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ", new Runtime(0,0,0,0));}
         );
     }
 }
