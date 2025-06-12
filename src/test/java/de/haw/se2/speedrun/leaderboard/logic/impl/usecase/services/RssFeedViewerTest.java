@@ -1,6 +1,7 @@
 package de.haw.se2.speedrun.leaderboard.logic.impl.usecase.services;
 
 
+import com.rometools.rome.io.FeedException;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Category;
 import de.haw.se2.speedrun.leaderboard.common.api.datatype.Runtime;
 import de.haw.se2.speedrun.leaderboard.dataaccess.api.entity.Game;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,11 +39,12 @@ class RssFeedViewerTest extends BaseTest {
     private RunRepository runRepository;
     private LeaderboardRepository leaderboardRepository;
     private GameRepository gameRepository;
-    @Autowired
     private RssFeedViewer rssFeedViewer;
 
-    public RssFeedViewerTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public RssFeedViewerTest(SpeedrunnerRepository speedrunnerRepository, AdministratorRepository administratorRepository, GameRepository gameRepository, LeaderboardRepository leaderboardRepository, RunRepository runRepository, PasswordEncoder passwordEncoder, RssFeedViewer rssFeedViewer) {
         super(speedrunnerRepository, administratorRepository, gameRepository, leaderboardRepository, runRepository, passwordEncoder);
+        this.rssFeedViewer = rssFeedViewer;
     }
 
     @BeforeEach
@@ -52,7 +55,7 @@ class RssFeedViewerTest extends BaseTest {
         gameRepository = mock(GameRepository.class);
     }
     @Test
-    void buildFeed_returnsFeed_whenRunsExist() {
+    void buildFeed_returnsFeed_whenRunsExist() throws FeedException, IOException {
         UUID speedrunnerId = UUID.randomUUID();
         Speedrunner speedrunner = new Speedrunner();
         speedrunner.setId(speedrunnerId);
@@ -99,7 +102,7 @@ class RssFeedViewerTest extends BaseTest {
     }
 
     @Test
-    void buildFeed_returnsEmptyFeed_whenNoRuns() {
+    void buildFeed_returnsEmptyFeed_whenNoRuns() throws FeedException, IOException {
         UUID speedrunnerId = UUID.randomUUID();
         Speedrunner speedrunner = new Speedrunner();
         speedrunner.setId(speedrunnerId);

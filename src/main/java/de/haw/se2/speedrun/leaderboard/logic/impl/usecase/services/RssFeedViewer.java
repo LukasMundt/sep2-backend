@@ -45,8 +45,7 @@ public class RssFeedViewer {
         this.urlToSite = "https://" + this.appDomain;
     }
 
-    @SneakyThrows
-    public String buildFeed(String id) {
+    public String buildFeed(String id) throws FeedException, IOException {
         Speedrunner speedrunner = getSpeedrunner(id);
         List<Run> otherRuns = getOtherRuns(speedrunner);
         if(otherRuns.isEmpty()) {
