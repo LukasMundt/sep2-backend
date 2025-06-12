@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @AutoConfigureMockMvc
-public class RunsFacadeTest extends BaseTest
+class RunsFacadeTest extends BaseTest
 {
 
     @Autowired
@@ -62,7 +62,7 @@ public class RunsFacadeTest extends BaseTest
     }
 
     @Test
-    public void testGetRunsSuccessfully() throws Exception {
+    void testGetRunsSuccessfully() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "any_percent";
@@ -71,12 +71,12 @@ public class RunsFacadeTest extends BaseTest
         List<Game> games = gameRepository.findAll();
         List<Leaderboard> leaderboards = leaderboardRepository.findAll();
 
-        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/leaderboard", gameSlug, categoryId))
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/runs", gameSlug, categoryId))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetRunsCategoryNotFound() throws Exception {
+    void testGetRunsCategoryNotFound() throws Exception {
         // [GIVEN]
         String gameSlug = "minecraft";
         String categoryId = "categorie_not_found";
