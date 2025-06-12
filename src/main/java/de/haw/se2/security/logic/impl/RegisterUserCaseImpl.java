@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
+
 @Validated
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class RegisterUserCaseImpl implements RegisterUseCase {
     @Override
     public void registerUser(@Valid RegisterCredentials registerCredentials) {
         Speedrunner speedrunner = new Speedrunner();
+        speedrunner.setNewFasterPlayers(new ArrayList<>());
         speedrunner.setEmail(registerCredentials.getEmail().toLowerCase());
         speedrunner.setUsername(registerCredentials.getUsername());
         speedrunner.setPassword(passwordEncoder.encode(registerCredentials.getPassword()));

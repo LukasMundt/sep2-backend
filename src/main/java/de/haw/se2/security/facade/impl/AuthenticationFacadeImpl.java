@@ -100,7 +100,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
         RegisterError registerError = new RegisterError();
         registerError.setUsernameError(e.getMessage());
 
-        return new ResponseEntity<>(registerError, HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(registerError, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(EmailInvalidException.class)
