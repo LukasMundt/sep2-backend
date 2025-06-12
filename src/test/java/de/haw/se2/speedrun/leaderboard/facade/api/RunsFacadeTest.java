@@ -85,7 +85,7 @@ public class RunsFacadeTest extends BaseTest
         List<Game> games = gameRepository.findAll();
         List<Leaderboard> leaderboards = leaderboardRepository.findAll();
 
-        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/leaderboard", gameSlug, categoryId))
+        mvc.perform(get("/rest/api/games/{gameSlug}/{categoryId}/runs", gameSlug, categoryId))
                 .andExpect(status().isNotFound());
     }
 }
